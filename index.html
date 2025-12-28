@@ -420,14 +420,57 @@
             background: rgba(74, 0, 255, 0.9);
         }
         
-        /* 游戏说明 */
-        .game-instructions {
+        /* 控制说明面板 */
+        .control-instructions {
             margin-top: 20px;
-            color: #b0b0ff;
-            font-size: 1rem;
-            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 0, 100, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            width: 90%;
             max-width: 600px;
-            line-height: 1.5;
+        }
+        
+        .control-title {
+            color: #ffcc00;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        .key {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #00d9ff;
+            margin-bottom: 5px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .function {
+            font-size: 0.85rem;
+            color: #b0b0ff;
+            text-align: center;
         }
         
         /* 华丽的Game Over效果 */
@@ -602,6 +645,10 @@
                 font-size: 1.2rem;
             }
             
+            .control-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
             .game-over-main {
                 font-size: 3.5rem;
                 top: 20%;
@@ -660,6 +707,20 @@
             
             .game-btn {
                 width: 200px;
+            }
+            
+            .control-grid {
+                grid-template-columns: repeat(2, 1fr);
+                font-size: 0.8rem;
+            }
+            
+            .key {
+                font-size: 0.8rem;
+                padding: 3px 6px;
+            }
+            
+            .function {
+                font-size: 0.75rem;
             }
             
             .game-over-main {
@@ -773,8 +834,39 @@
             </div>
         </div>
         
+        <!-- 贪吃蛇控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">向上移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">向下移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">向左移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">向右移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="game-instructions">
-            使用方向键控制蛇移动，吃到食物增加长度和得分，撞到墙壁或自己身体游戏结束。
+            使用方向键或WASD控制蛇移动，吃到食物增加长度和得分，撞到墙壁或自己身体游戏结束。
         </div>
     </div>
     
@@ -791,30 +883,77 @@
         </div>
         
         <div class="game-controls">
-            <div class="score-display" id="tetrisScore">得分: 0</div>
+            <div class="score-display" id="tetrisScore">得分: 0 | 等级: 1</div>
             
             <div class="control-buttons">
                 <div class="control-row">
-                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="tetrisRotateLeft">Q/↶</button>
+                    <div style="width: 10px;"></div>
                     <button class="control-btn" id="tetrisRotate">↻</button>
-                    <div style="width: 60px;"></div>
+                    <div style="width: 10px;"></div>
+                    <button class="control-btn" id="tetrisRotateRight">E/↷</button>
                 </div>
                 <div class="control-row">
                     <button class="control-btn" id="tetrisLeft">←</button>
-                    <div style="width: 60px;"></div>
+                    <div style="width: 10px;"></div>
+                    <button class="control-btn" id="tetrisDown">↓</button>
+                    <div style="width: 10px;"></div>
                     <button class="control-btn" id="tetrisRight">→</button>
                 </div>
                 <div class="control-row">
-                    <div style="width: 60px;"></div>
-                    <button class="control-btn" id="tetrisDown">↓</button>
-                    <div style="width: 60px;"></div>
+                    <div style="width: 80px;"></div>
+                    <button class="control-btn" id="tetrisHardDrop">硬降</button>
+                    <div style="width: 80px;"></div>
                 </div>
                 <button class="control-btn pause-btn" id="tetrisPause">暂停/继续</button>
             </div>
         </div>
         
+        <!-- 俄罗斯方块控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">左移</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">右移</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">加速下落</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">旋转方块</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Q / Z</div>
+                    <div class="function">逆时针旋转</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">E / X</div>
+                    <div class="function">顺时针旋转</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">硬降落</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
         <div class="game-instructions">
-            使用方向键控制方块移动和旋转，填满一行即可消除并得分，方块堆到顶部游戏结束。
+            使用方向键或WASD控制方块移动和旋转，填满一行即可消除并得分，方块堆到顶部游戏结束。
         </div>
     </div>
     
@@ -1452,29 +1591,38 @@
             }
             
             bindControls() {
-                // 绑定键盘控制
+                // 绑定键盘控制 - 添加WASD支持
                 document.addEventListener('keydown', (e) => {
                     if (currentGame !== 'snake') return;
                     
-                    switch(e.key) {
-                        case 'ArrowUp':
+                    switch(e.key.toLowerCase()) {
+                        case 'arrowup':
+                        case 'w':
                             if (this.direction !== 'down') this.nextDirection = 'up';
                             e.preventDefault();
                             break;
-                        case 'ArrowDown':
+                        case 'arrowdown':
+                        case 's':
                             if (this.direction !== 'up') this.nextDirection = 'down';
                             e.preventDefault();
                             break;
-                        case 'ArrowLeft':
+                        case 'arrowleft':
+                        case 'a':
                             if (this.direction !== 'right') this.nextDirection = 'left';
                             e.preventDefault();
                             break;
-                        case 'ArrowRight':
+                        case 'arrowright':
+                        case 'd':
                             if (this.direction !== 'left') this.nextDirection = 'right';
                             e.preventDefault();
                             break;
                         case ' ':
                             this.togglePause();
+                            e.preventDefault();
+                            break;
+                        case 'r':
+                        case 'r':
+                            if (this.gameOver) this.restart();
                             e.preventDefault();
                             break;
                     }
@@ -1526,6 +1674,11 @@
                     this.ctx.font = 'bold 40px "Microsoft YaHei"';
                     this.ctx.textAlign = 'center';
                     this.ctx.fillText('游戏暂停', this.canvas.width/2, this.canvas.height/2);
+                    
+                    // 添加继续提示
+                    this.ctx.fillStyle = '#00d9ff';
+                    this.ctx.font = 'bold 20px "Microsoft YaHei"';
+                    this.ctx.fillText('按空格键或点击暂停按钮继续', this.canvas.width/2, this.canvas.height/2 + 50);
                 }
             }
             
@@ -1748,18 +1901,29 @@
                 return false;
             }
             
-            // 旋转方块
-            rotatePiece() {
+            // 旋转方块 - 顺时针
+            rotatePiece(clockwise = true) {
                 const originalShape = this.currentPiece.shape;
                 const rows = originalShape.length;
                 const cols = originalShape[0].length;
                 
                 // 创建旋转后的形状
                 const rotatedShape = [];
-                for (let col = 0; col < cols; col++) {
-                    rotatedShape[col] = [];
-                    for (let row = 0; row < rows; row++) {
-                        rotatedShape[col][row] = originalShape[rows - 1 - row][col];
+                if (clockwise) {
+                    // 顺时针旋转
+                    for (let col = 0; col < cols; col++) {
+                        rotatedShape[col] = [];
+                        for (let row = 0; row < rows; row++) {
+                            rotatedShape[col][row] = originalShape[rows - 1 - row][col];
+                        }
+                    }
+                } else {
+                    // 逆时针旋转
+                    for (let col = 0; col < cols; col++) {
+                        rotatedShape[col] = [];
+                        for (let row = 0; row < rows; row++) {
+                            rotatedShape[col][row] = originalShape[row][cols - 1 - col];
+                        }
                     }
                 }
                 
@@ -1789,6 +1953,18 @@
                     return true;
                 }
                 return false;
+            }
+            
+            // 硬降落（直接落到底部）
+            hardDrop() {
+                let dropCount = 0;
+                while(this.movePiece(0, 1)) {
+                    dropCount++;
+                }
+                // 硬降落奖励分数
+                this.score += dropCount * 2;
+                this.updateScoreDisplay();
+                this.lockPiece();
             }
             
             // 固定方块到游戏板
@@ -1855,9 +2031,14 @@
                     this.level = Math.floor(this.score / 1000) + 1;
                     this.dropSpeed = Math.max(100, 500 - (this.level - 1) * 50);
                     
-                    this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.level}`;
+                    this.updateScoreDisplay();
                     this.needsRedraw = true;
                 }
+            }
+            
+            // 更新分数显示
+            updateScoreDisplay() {
+                this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.level}`;
             }
             
             update(timestamp) {
@@ -1895,46 +2076,57 @@
             }
             
             bindControls() {
-                // 绑定键盘控制
+                // 绑定键盘控制 - 添加WASD和Q/E支持
                 document.addEventListener('keydown', (e) => {
                     if (currentGame !== 'tetris') return;
                     
-                    switch(e.key) {
-                        case 'ArrowUp':
-                            this.rotatePiece();
+                    const key = e.key.toLowerCase();
+                    switch(key) {
+                        case 'arrowup':
+                        case 'w':
+                            this.rotatePiece(true);
                             e.preventDefault();
                             break;
-                        case 'ArrowDown':
+                        case 'arrowdown':
+                        case 's':
                             if (this.movePiece(0, 1)) {
                                 // 快速下落奖励分数
                                 this.score += 1;
-                                this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.level}`;
+                                this.updateScoreDisplay();
                             }
                             e.preventDefault();
                             break;
-                        case 'ArrowLeft':
+                        case 'arrowleft':
+                        case 'a':
                             this.movePiece(-1, 0);
                             e.preventDefault();
                             break;
-                        case 'ArrowRight':
+                        case 'arrowright':
+                        case 'd':
                             this.movePiece(1, 0);
+                            e.preventDefault();
+                            break;
+                        case 'q':
+                        case 'z':
+                            this.rotatePiece(false);
+                            e.preventDefault();
+                            break;
+                        case 'e':
+                        case 'x':
+                            this.rotatePiece(true);
                             e.preventDefault();
                             break;
                         case ' ':
                             // 硬降落（直接落到底部）
-                            let dropCount = 0;
-                            while(this.movePiece(0, 1)) {
-                                dropCount++;
-                            }
-                            // 硬降落奖励分数
-                            this.score += dropCount * 2;
-                            this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.level}`;
-                            this.lockPiece();
+                            this.hardDrop();
                             e.preventDefault();
                             break;
                         case 'p':
-                        case 'P':
                             this.togglePause();
+                            e.preventDefault();
+                            break;
+                        case 'r':
+                            if (this.gameOver) this.restart();
                             e.preventDefault();
                             break;
                     }
@@ -1942,13 +2134,21 @@
                 
                 // 绑定屏幕控制按钮
                 document.getElementById('tetrisRotate').addEventListener('click', () => {
-                    this.rotatePiece();
+                    this.rotatePiece(true);
+                });
+                
+                document.getElementById('tetrisRotateLeft').addEventListener('click', () => {
+                    this.rotatePiece(false);
+                });
+                
+                document.getElementById('tetrisRotateRight').addEventListener('click', () => {
+                    this.rotatePiece(true);
                 });
                 
                 document.getElementById('tetrisDown').addEventListener('click', () => {
                     if (this.movePiece(0, 1)) {
                         this.score += 1;
-                        this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.level}`;
+                        this.updateScoreDisplay();
                     }
                 });
                 
@@ -1958,6 +2158,10 @@
                 
                 document.getElementById('tetrisRight').addEventListener('click', () => {
                     this.movePiece(1, 0);
+                });
+                
+                document.getElementById('tetrisHardDrop').addEventListener('click', () => {
+                    this.hardDrop();
                 });
                 
                 document.getElementById('tetrisPause').addEventListener('click', () => {
@@ -1990,6 +2194,11 @@
                     this.ctx.font = 'bold 40px "Microsoft YaHei"';
                     this.ctx.textAlign = 'center';
                     this.ctx.fillText('游戏暂停', this.canvas.width/2, this.canvas.height/2);
+                    
+                    // 添加继续提示
+                    this.ctx.fillStyle = '#00d9ff';
+                    this.ctx.font = 'bold 20px "Microsoft YaHei"';
+                    this.ctx.fillText('按P键或点击暂停按钮继续', this.canvas.width/2, this.canvas.height/2 + 50);
                 }
             }
             
@@ -1999,7 +2208,7 @@
                 this.score = 0;
                 this.level = 1;
                 this.dropSpeed = 500;
-                this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.level}`;
+                this.updateScoreDisplay();
                 this.gameOver = false;
                 this.paused = false;
                 this.needsRedraw = true;
