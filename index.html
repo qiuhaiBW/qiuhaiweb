@@ -255,24 +255,27 @@
         .game-buttons {
             margin-top: 30px;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
+            max-width: 900px;
         }
         
         .game-btn {
             background: linear-gradient(135deg, rgba(255, 0, 100, 0.8), rgba(74, 0, 255, 0.8));
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 1rem;
+            border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s;
             box-shadow: 0 5px 15px rgba(255, 0, 100, 0.3);
             position: relative;
             overflow: hidden;
             z-index: 1;
+            flex: 1;
+            min-width: 140px;
         }
         
         .game-btn:hover {
@@ -576,6 +579,173 @@
             z-index: 9;
         }
         
+        /* 2048游戏特定样式 */
+        .game-2048-board {
+            display: grid;
+            gap: 10px;
+            background: rgba(255, 0, 100, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+        
+        .tile {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.15s;
+            color: white;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .tile-2 { background: #ff0064; }
+        .tile-4 { background: #ff4d94; }
+        .tile-8 { background: #4a00ff; }
+        .tile-16 { background: #6a34ff; }
+        .tile-32 { background: #00d9ff; }
+        .tile-64 { background: #33e4ff; }
+        .tile-128 { background: #ffcc00; }
+        .tile-256 { background: #ffd633; }
+        .tile-512 { background: #ff9900; }
+        .tile-1024 { background: #ffad33; }
+        .tile-2048 { 
+            background: #ff0000; 
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+        
+        /* 扫雷游戏特定样式 */
+        .minesweeper-board {
+            display: grid;
+            gap: 2px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 5px;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        
+        .mine-cell {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            font-weight: bold;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        
+        .mine-cell:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .mine-cell.revealed {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .mine-cell.flagged {
+            background: rgba(255, 0, 100, 0.5);
+        }
+        
+        .mine-cell.mine {
+            background: rgba(255, 0, 0, 0.7);
+        }
+        
+        .mine-cell.mine.revealed {
+            background: rgba(255, 0, 0, 0.9);
+        }
+        
+        .number-1 { color: #00d9ff; }
+        .number-2 { color: #00ff00; }
+        .number-3 { color: #ffff00; }
+        .number-4 { color: #ff9900; }
+        .number-5 { color: #ff0000; }
+        
+        /* 连连看游戏特定样式 */
+        .link-game-board {
+            display: grid;
+            gap: 5px;
+            background: rgba(255, 0, 100, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 700px;
+        }
+        
+        .link-cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            background: rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .link-cell.selected {
+            background: rgba(255, 0, 100, 0.5);
+            transform: scale(0.95);
+        }
+        
+        .link-cell.matched {
+            background: rgba(0, 255, 0, 0.3);
+            opacity: 0.5;
+        }
+        
+        /* 消消乐游戏特定样式 */
+        .match3-board {
+            display: grid;
+            gap: 5px;
+            background: rgba(255, 0, 100, 0.2);
+            padding: 10px;
+            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+        
+        .match3-cell {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            position: relative;
+        }
+        
+        .match3-cell.selected {
+            transform: scale(0.95);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        .gem-type-1 { background: #ff0064; }
+        .gem-type-2 { background: #4a00ff; }
+        .gem-type-3 { background: #00d9ff; }
+        .gem-type-4 { background: #ffcc00; }
+        .gem-type-5 { background: #ff00ff; }
+        .gem-type-6 { background: #00ff00; }
+        
         /* 弹幕游戏特定样式 */
         .boss-health-bar {
             width: 100%;
@@ -677,6 +847,24 @@
             100% { transform: translateY(0); }
         }
         
+        @keyframes tileAppear {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes tileMerge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes matchEffect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); opacity: 0.5; }
+        }
+        
         /* 响应式设计 */
         @media (max-width: 768px) {
             .main-title {
@@ -749,6 +937,36 @@
             .game-over-restart {
                 font-size: 1.5rem;
                 top: 70%;
+            }
+            
+            .game-btn {
+                min-width: 120px;
+                font-size: 0.9rem;
+                padding: 10px 15px;
+            }
+            
+            .tile {
+                width: 60px;
+                height: 60px;
+                font-size: 1.4rem;
+            }
+            
+            .mine-cell {
+                width: 25px;
+                height: 25px;
+                font-size: 0.8rem;
+            }
+            
+            .link-cell {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+            
+            .match3-cell {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
             }
         }
         
@@ -824,6 +1042,30 @@
                 font-size: 1.3rem;
                 top: 70%;
             }
+            
+            .tile {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .mine-cell {
+                width: 20px;
+                height: 20px;
+                font-size: 0.7rem;
+            }
+            
+            .link-cell {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
+            
+            .match3-cell {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -871,9 +1113,14 @@
         
         <!-- 游戏选择按钮 -->
         <div class="game-buttons">
-            <button class="game-btn" id="snakeGameBtn">贪吃蛇游戏</button>
+            <button class="game-btn" id="snakeGameBtn">贪吃蛇</button>
             <button class="game-btn" id="tetrisGameBtn">俄罗斯方块</button>
-            <button class="game-btn" id="danmakuGameBtn">弹幕射击</button>
+            <button class="game-btn" id="danmakuEasyBtn">弹幕射击(Easy)</button>
+            <button class="game-btn" id="danmakuHardBtn">弹幕射击(Hard)</button>
+            <button class="game-btn" id="game2048Btn">2048</button>
+            <button class="game-btn" id="minesweeperBtn">扫雷</button>
+            <button class="game-btn" id="linkGameBtn">连连看</button>
+            <button class="game-btn" id="match3Btn">消消乐</button>
         </div>
     </div>
     
@@ -1040,60 +1287,60 @@
         </div>
     </div>
     
-    <!-- 弹幕游戏容器 -->
-    <div class="game-container" id="danmakuGameContainer">
+    <!-- 弹幕游戏容器 (Easy) -->
+    <div class="game-container" id="danmakuEasyContainer">
         <div class="game-header">
-            <h2 class="game-title">弹幕射击</h2>
-            <button class="close-game" id="closeDanmakuGame">×</button>
+            <h2 class="game-title">弹幕射击 (Easy)</h2>
+            <button class="close-game" id="closeDanmakuEasy">×</button>
         </div>
         
         <div class="game-canvas-container">
             <!-- BOSS血条 -->
-            <div class="boss-health-bar" id="bossHealthBar">
-                <div class="boss-health-fill" id="bossHealthFill"></div>
-                <div class="boss-health-text" id="bossHealthText">BOSS: 100%</div>
+            <div class="boss-health-bar" id="bossHealthBarEasy">
+                <div class="boss-health-fill" id="bossHealthFillEasy"></div>
+                <div class="boss-health-text" id="bossHealthTextEasy">BOSS: 100%</div>
             </div>
-            <canvas id="danmakuCanvas" class="game-canvas" width="800" height="600"></canvas>
-            <div class="game-over-effect" id="danmakuGameOverEffect"></div>
+            <canvas id="danmakuCanvasEasy" class="game-canvas" width="600" height="500"></canvas>
+            <div class="game-over-effect" id="danmakuGameOverEffectEasy"></div>
         </div>
         
         <div class="game-controls">
-            <div class="score-display" id="danmakuScore">得分: 0 | 等级: 1</div>
+            <div class="score-display" id="danmakuScoreEasy">得分: 0 | 等级: 1</div>
             <div class="stats-display">
-                <div class="stat" id="danmakuLives">生命: 3</div>
-                <div class="stat" id="danmakuPower">火力: 1</div>
-                <div class="stat" id="danmakuBombs">炸弹: 3</div>
-                <div class="stat" id="danmakuStage">关卡: 1</div>
+                <div class="stat" id="danmakuLivesEasy">生命: 5</div>
+                <div class="stat" id="danmakuPowerEasy">火力: 1</div>
+                <div class="stat" id="danmakuBombsEasy">炸弹: 3</div>
+                <div class="stat" id="danmakuStageEasy">关卡: 1</div>
             </div>
             
             <div class="control-buttons">
                 <div class="control-row">
                     <div style="width: 60px;"></div>
-                    <button class="control-btn" id="danmakuUp">↑</button>
+                    <button class="control-btn" id="danmakuUpEasy">↑</button>
                     <div style="width: 60px;"></div>
                 </div>
                 <div class="control-row">
-                    <button class="control-btn" id="danmakuLeft">←</button>
+                    <button class="control-btn" id="danmakuLeftEasy">←</button>
                     <div style="width: 60px;"></div>
-                    <button class="control-btn" id="danmakuRight">→</button>
+                    <button class="control-btn" id="danmakuRightEasy">→</button>
                 </div>
                 <div class="control-row">
                     <div style="width: 60px;"></div>
-                    <button class="control-btn" id="danmakuDown">↓</button>
+                    <button class="control-btn" id="danmakuDownEasy">↓</button>
                     <div style="width: 60px;"></div>
                 </div>
                 <div class="control-row">
-                    <button class="control-btn special-btn" id="danmakuShoot">射击</button>
-                    <button class="control-btn special-btn" id="danmakuBomb">炸弹</button>
-                    <button class="control-btn special-btn" id="danmakuSlow">低速</button>
+                    <button class="control-btn special-btn" id="danmakuShootEasy">射击</button>
+                    <button class="control-btn special-btn" id="danmakuBombEasy">炸弹</button>
+                    <button class="control-btn special-btn" id="danmakuSlowEasy">低速</button>
                 </div>
-                <button class="control-btn pause-btn" id="danmakuPause">暂停/继续</button>
+                <button class="control-btn pause-btn" id="danmakuPauseEasy">暂停/继续</button>
             </div>
         </div>
         
         <!-- 弹幕游戏控制说明 -->
         <div class="control-instructions">
-            <div class="control-title">控制说明</div>
+            <div class="control-title">控制说明 (Easy模式)</div>
             <div class="control-grid">
                 <div class="control-item">
                     <div class="key">↑ / W</div>
@@ -1131,7 +1378,410 @@
         </div>
         
         <div class="game-instructions">
-            控制飞机躲避弹幕并射击敌机，收集道具增强火力，击败BOSS进入下一关。使用炸弹可以清除屏幕上的子弹。
+            控制飞机躲避弹幕并射击敌机，收集道具增强火力，击败BOSS进入下一关。Easy模式：敌人更少，子弹更慢，生命值更多。
+        </div>
+    </div>
+    
+    <!-- 弹幕游戏容器 (Hard) -->
+    <div class="game-container" id="danmakuHardContainer">
+        <div class="game-header">
+            <h2 class="game-title">弹幕射击 (Hard)</h2>
+            <button class="close-game" id="closeDanmakuHard">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <!-- BOSS血条 -->
+            <div class="boss-health-bar" id="bossHealthBarHard">
+                <div class="boss-health-fill" id="bossHealthFillHard"></div>
+                <div class="boss-health-text" id="bossHealthTextHard">BOSS: 100%</div>
+            </div>
+            <canvas id="danmakuCanvasHard" class="game-canvas" width="600" height="500"></canvas>
+            <div class="game-over-effect" id="danmakuGameOverEffectHard"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="danmakuScoreHard">得分: 0 | 等级: 1</div>
+            <div class="stats-display">
+                <div class="stat" id="danmakuLivesHard">生命: 3</div>
+                <div class="stat" id="danmakuPowerHard">火力: 1</div>
+                <div class="stat" id="danmakuBombsHard">炸弹: 3</div>
+                <div class="stat" id="danmakuStageHard">关卡: 1</div>
+            </div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="danmakuUpHard">↑</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="danmakuLeftHard">←</button>
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="danmakuRightHard">→</button>
+                </div>
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="danmakuDownHard">↓</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="danmakuShootHard">射击</button>
+                    <button class="control-btn special-btn" id="danmakuBombHard">炸弹</button>
+                    <button class="control-btn special-btn" id="danmakuSlowHard">低速</button>
+                </div>
+                <button class="control-btn pause-btn" id="danmakuPauseHard">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 弹幕游戏控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明 (Hard模式)</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">向上移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">向下移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">向左移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">向右移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Z / 空格</div>
+                    <div class="function">射击</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">X / Shift</div>
+                    <div class="function">炸弹/低速</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            控制飞机躲避弹幕并射击敌机，收集道具增强火力，击败BOSS进入下一关。Hard模式：敌人更多，子弹更快，挑战性更高。
+        </div>
+    </div>
+    
+    <!-- 2048游戏容器 -->
+    <div class="game-container" id="game2048Container">
+        <div class="game-header">
+            <h2 class="game-title">2048</h2>
+            <button class="close-game" id="closeGame2048">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <div id="game2048Board" class="game-2048-board"></div>
+            <div class="game-over-effect" id="game2048OverEffect"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="game2048Score">得分: 0</div>
+            <div class="stats-display">
+                <div class="stat" id="game2048Moves">步数: 0</div>
+                <div class="stat" id="game2048Best">最佳: 0</div>
+                <div class="stat" id="game2048Tile">最高方块: 0</div>
+            </div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="game2048Up">↑</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="game2048Left">←</button>
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="game2048Right">→</button>
+                </div>
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="game2048Down">↓</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="game2048Undo">撤销</button>
+                    <button class="control-btn special-btn" id="game2048New">新游戏</button>
+                </div>
+                <button class="control-btn pause-btn" id="game2048Pause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 2048控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">向上移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">向下移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">向左移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">向右移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">随机移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Z</div>
+                    <div class="function">撤销</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            使用方向键移动方块，相同数字的方块碰撞时会合并，目标是合成2048方块。每次移动后会在空白位置生成新的方块。
+        </div>
+    </div>
+    
+    <!-- 扫雷游戏容器 -->
+    <div class="game-container" id="minesweeperContainer">
+        <div class="game-header">
+            <h2 class="game-title">扫雷</h2>
+            <button class="close-game" id="closeMinesweeper">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <div id="minesweeperBoard" class="minesweeper-board"></div>
+            <div class="game-over-effect" id="minesweeperOverEffect"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="minesweeperScore">剩余地雷: 10</div>
+            <div class="stats-display">
+                <div class="stat" id="minesweeperTime">时间: 0</div>
+                <div class="stat" id="minesweeperFlags">旗帜: 0</div>
+                <div class="stat" id="minesweeperRevealed">已揭开: 0</div>
+            </div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="minesweeperEasy">初级</button>
+                    <button class="control-btn special-btn" id="minesweeperMedium">中级</button>
+                    <button class="control-btn special-btn" id="minesweeperHard">高级</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="minesweeperHint">提示</button>
+                    <button class="control-btn special-btn" id="minesweeperNew">新游戏</button>
+                </div>
+                <button class="control-btn pause-btn" id="minesweeperPause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 扫雷控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">左键点击</div>
+                    <div class="function">揭开方块</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">右键点击</div>
+                    <div class="function">标记旗帜</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">中键点击</div>
+                    <div class="function">快速揭开</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">切换标记</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">H</div>
+                    <div class="function">提示</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            点击方块揭开它，如果揭开的是地雷则游戏结束。数字表示周围8个格子中的地雷数量，使用右键标记可疑的地雷位置。
+        </div>
+    </div>
+    
+    <!-- 连连看游戏容器 -->
+    <div class="game-container" id="linkGameContainer">
+        <div class="game-header">
+            <h2 class="game-title">连连看</h2>
+            <button class="close-game" id="closeLinkGame">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <div id="linkGameBoard" class="link-game-board"></div>
+            <div class="game-over-effect" id="linkGameOverEffect"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="linkGameScore">得分: 0 | 剩余: 0</div>
+            <div class="stats-display">
+                <div class="stat" id="linkGameTime">时间: 0</div>
+                <div class="stat" id="linkGameMatches">已匹配: 0</div>
+                <div class="stat" id="linkGameHints">提示: 3</div>
+            </div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="linkGameHint">提示</button>
+                    <button class="control-btn special-btn" id="linkGameShuffle">洗牌</button>
+                    <button class="control-btn special-btn" id="linkGameNew">新游戏</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="linkGameEasy">简单</button>
+                    <button class="control-btn special-btn" id="linkGameMedium">中等</button>
+                    <button class="control-btn special-btn" id="linkGameHard">困难</button>
+                </div>
+                <button class="control-btn pause-btn" id="linkGamePause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 连连看控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">鼠标点击</div>
+                    <div class="function">选择方块</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">H / 提示按钮</div>
+                    <div class="function">显示提示</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">S</div>
+                    <div class="function">洗牌</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">取消选择</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            点击两个相同的方块，如果它们可以通过不超过两个拐角的直线连接，则消除这对方块。消除所有方块即可获胜。
+        </div>
+    </div>
+    
+    <!-- 消消乐游戏容器 -->
+    <div class="game-container" id="match3Container">
+        <div class="game-header">
+            <h2 class="game-title">消消乐</h2>
+            <button class="close-game" id="closeMatch3">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <div id="match3Board" class="match3-board"></div>
+            <div class="game-over-effect" id="match3OverEffect"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="match3Score">得分: 0</div>
+            <div class="stats-display">
+                <div class="stat" id="match3Time">时间: 60</div>
+                <div class="stat" id="match3Moves">剩余步数: 20</div>
+                <div class="stat" id="match3Target">目标: 1000</div>
+            </div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="match3Hint">提示</button>
+                    <button class="control-btn special-btn" id="match3Shuffle">洗牌</button>
+                    <button class="control-btn special-btn" id="match3New">新游戏</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="match3Easy">简单</button>
+                    <button class="control-btn special-btn" id="match3Medium">中等</button>
+                    <button class="control-btn special-btn" id="match3Hard">困难</button>
+                </div>
+                <button class="control-btn pause-btn" id="match3Pause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 消消乐控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">鼠标点击</div>
+                    <div class="function">选择宝石</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">鼠标拖拽</div>
+                    <div class="function">交换宝石</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">H / 提示按钮</div>
+                    <div class="function">显示提示</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">S</div>
+                    <div class="function">洗牌</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">取消选择</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            交换相邻的宝石，使三个或更多相同宝石连成一线即可消除。在规定时间内达到目标分数即可获胜。
         </div>
     </div>
     
@@ -1306,39 +1956,28 @@
             }
             
             // 检查元素的父元素是否在游戏容器内
-            const snakeContainer = document.getElementById('snakeGameContainer');
-            const tetrisContainer = document.getElementById('tetrisGameContainer');
-            const danmakuContainer = document.getElementById('danmakuGameContainer');
+            const gameContainers = [
+                'snakeGameContainer', 'tetrisGameContainer', 
+                'danmakuEasyContainer', 'danmakuHardContainer',
+                'game2048Container', 'minesweeperContainer',
+                'linkGameContainer', 'match3Container'
+            ];
             
-            // 如果游戏容器当前是显示的（通过检查display样式）
-            const snakeDisplay = snakeContainer.style.display;
-            const tetrisDisplay = tetrisContainer.style.display;
-            const danmakuDisplay = danmakuContainer.style.display;
-            
-            // 如果贪吃蛇游戏容器是显示的，检查元素是否在其中
-            if (snakeDisplay === 'flex' && snakeContainer.contains(element)) {
-                return true;
-            }
-            
-            // 如果俄罗斯方块游戏容器是显示的，检查元素是否在其中
-            if (tetrisDisplay === 'flex' && tetrisContainer.contains(element)) {
-                return true;
-            }
-            
-            // 如果弹幕游戏容器是显示的，检查元素是否在其中
-            if (danmakuDisplay === 'flex' && danmakuContainer.contains(element)) {
-                return true;
+            for (const containerId of gameContainers) {
+                const container = document.getElementById(containerId);
+                if (container && container.style.display === 'flex' && container.contains(element)) {
+                    return true;
+                }
             }
             
             return false;
         }
         
-        // 创建华丽的Game Over效果 - 修复重叠问题
+        // 创建华丽的Game Over效果
         function createGameOverEffect(gameType, score) {
-            const containerId = gameType === 'snake' ? 'snakeGameOverEffect' : 
-                              gameType === 'tetris' ? 'tetrisGameOverEffect' : 
-                              'danmakuGameOverEffect';
+            const containerId = `${gameType}OverEffect`;
             const container = document.getElementById(containerId);
+            if (!container) return;
             
             // 清空容器
             container.innerHTML = '';
@@ -1376,12 +2015,8 @@
             container.style.opacity = '1';
             
             // 添加点击重新开始事件
-            const canvas = gameType === 'snake' ? document.getElementById('snakeCanvas') : 
-                          gameType === 'tetris' ? document.getElementById('tetrisCanvas') : 
-                          document.getElementById('danmakuCanvas');
-            const game = gameType === 'snake' ? snakeGame : 
-                         gameType === 'tetris' ? tetrisGame : 
-                         danmakuGame;
+            const game = getGameInstance(gameType);
+            if (!game) return;
             
             const restartHandler = function() {
                 if (game.gameOver) {
@@ -1390,12 +2025,13 @@
                     setTimeout(() => {
                         container.innerHTML = '';
                     }, 500);
-                    canvas.removeEventListener('click', restartHandler);
+                    // 移除事件监听器
+                    container.removeEventListener('click', restartHandler);
                 }
             };
             
             setTimeout(() => {
-                canvas.addEventListener('click', restartHandler);
+                container.addEventListener('click', restartHandler);
             }, 500);
         }
         
@@ -1448,16 +2084,7 @@
         // 添加点击特效和音效
         document.addEventListener('click', function(e) {
             // 检查点击的是否在游戏容器内
-            const snakeContainer = document.getElementById('snakeGameContainer');
-            const tetrisContainer = document.getElementById('tetrisGameContainer');
-            const danmakuContainer = document.getElementById('danmakuGameContainer');
-            
-            // 如果任何一个游戏容器是显示的，则不播放音效
-            const isSnakeOpen = snakeContainer.style.display === 'flex';
-            const isTetrisOpen = tetrisContainer.style.display === 'flex';
-            const isDanmakuOpen = danmakuContainer.style.display === 'flex';
-            
-            if (isSnakeOpen || isTetrisOpen || isDanmakuOpen) {
+            if (isInGameContainer(e.target)) {
                 // 在游戏界面内点击，不播放音效
                 return;
             }
@@ -1466,7 +2093,8 @@
             const isControlBtn = e.target.closest('.control-btn') || 
                                  e.target.closest('.game-btn') || 
                                  e.target.closest('.close-game') ||
-                                 e.target.closest('.pause-btn');
+                                 e.target.closest('.pause-btn') ||
+                                 e.target.closest('.special-btn');
             
             // 如果是控制按钮，不播放音效
             if (isControlBtn) {
@@ -1566,9 +2194,22 @@
         // 游戏管理
         let currentGame = null;
         let gameInterval = null;
-        let tetrisAnimationFrame = null;
-        let danmakuAnimationFrame = null;
-        let lastTetrisUpdate = 0;
+        let animationFrame = null;
+        
+        // 获取游戏实例
+        function getGameInstance(gameType) {
+            switch(gameType) {
+                case 'snake': return snakeGame;
+                case 'tetris': return tetrisGame;
+                case 'danmakuEasy': return danmakuEasy;
+                case 'danmakuHard': return danmakuHard;
+                case 'game2048': return game2048;
+                case 'minesweeper': return minesweeperGame;
+                case 'linkGame': return linkGame;
+                case 'match3': return match3Game;
+                default: return null;
+            }
+        }
         
         // 贪吃蛇游戏
         class SnakeGame {
@@ -1815,7 +2456,6 @@
                             e.preventDefault();
                             break;
                         case 'r':
-                        case 'r':
                             if (this.gameOver) this.restart();
                             e.preventDefault();
                             break;
@@ -1902,7 +2542,7 @@
             }
         }
         
-        // 俄罗斯方块游戏 - 优化版
+        // 俄罗斯方块游戏
         class TetrisGame {
             constructor() {
                 this.canvas = document.getElementById('tetrisCanvas');
@@ -1983,7 +2623,7 @@
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
                 
-                // 绘制网格 - 只在游戏区域绘制
+                // 绘制网格
                 this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
                 this.ctx.lineWidth = 0.5;
                 
@@ -2095,7 +2735,7 @@
                 return false;
             }
             
-            // 旋转方块 - 顺时针
+            // 旋转方块
             rotatePiece(clockwise = true) {
                 const originalShape = this.currentPiece.shape;
                 const rows = originalShape.length;
@@ -2149,7 +2789,7 @@
                 return false;
             }
             
-            // 硬降落（直接落到底部）
+            // 硬降落
             hardDrop() {
                 let dropCount = 0;
                 while(this.movePiece(0, 1)) {
@@ -2241,7 +2881,7 @@
                         this.draw();
                     }
                     if (!this.gameOver) {
-                        tetrisAnimationFrame = requestAnimationFrame((ts) => this.update(ts));
+                        animationFrame = requestAnimationFrame((ts) => this.update(ts));
                     }
                     return;
                 }
@@ -2266,11 +2906,11 @@
                 }
                 
                 // 继续游戏循环
-                tetrisAnimationFrame = requestAnimationFrame((ts) => this.update(ts));
+                animationFrame = requestAnimationFrame((ts) => this.update(ts));
             }
             
             bindControls() {
-                // 绑定键盘控制 - 添加WASD和Q/E支持
+                // 绑定键盘控制
                 document.addEventListener('keydown', (e) => {
                     if (currentGame !== 'tetris') return;
                     
@@ -2311,7 +2951,7 @@
                             e.preventDefault();
                             break;
                         case ' ':
-                            // 硬降落（直接落到底部）
+                            // 硬降落
                             this.hardDrop();
                             e.preventDefault();
                             break;
@@ -2362,7 +3002,7 @@
                     this.togglePause();
                 });
                 
-                // 点击画布重新开始游戏（如果游戏结束）
+                // 点击画布重新开始游戏
                 this.canvas.addEventListener('click', () => {
                     if (this.gameOver) {
                         this.restart();
@@ -2410,38 +3050,38 @@
             }
             
             start() {
-                if (tetrisAnimationFrame) {
-                    cancelAnimationFrame(tetrisAnimationFrame);
+                if (animationFrame) {
+                    cancelAnimationFrame(animationFrame);
                 }
                 this.lastUpdate = 0;
-                tetrisAnimationFrame = requestAnimationFrame((ts) => this.update(ts));
+                animationFrame = requestAnimationFrame((ts) => this.update(ts));
             }
             
             stop() {
-                if (tetrisAnimationFrame) {
-                    cancelAnimationFrame(tetrisAnimationFrame);
-                    tetrisAnimationFrame = null;
+                if (animationFrame) {
+                    cancelAnimationFrame(animationFrame);
+                    animationFrame = null;
                 }
             }
         }
         
-        // 弹幕射击游戏
-        class DanmakuGame {
+        // 弹幕射击游戏 (Easy)
+        class DanmakuGameEasy {
             constructor() {
-                this.canvas = document.getElementById('danmakuCanvas');
+                this.canvas = document.getElementById('danmakuCanvasEasy');
                 this.ctx = this.canvas.getContext('2d');
-                this.scoreElement = document.getElementById('danmakuScore');
-                this.livesElement = document.getElementById('danmakuLives');
-                this.powerElement = document.getElementById('danmakuPower');
-                this.bombsElement = document.getElementById('danmakuBombs');
-                this.stageElement = document.getElementById('danmakuStage');
-                this.bossHealthBar = document.getElementById('bossHealthBar');
-                this.bossHealthFill = document.getElementById('bossHealthFill');
-                this.bossHealthText = document.getElementById('bossHealthText');
+                this.scoreElement = document.getElementById('danmakuScoreEasy');
+                this.livesElement = document.getElementById('danmakuLivesEasy');
+                this.powerElement = document.getElementById('danmakuPowerEasy');
+                this.bombsElement = document.getElementById('danmakuBombsEasy');
+                this.stageElement = document.getElementById('danmakuStageEasy');
+                this.bossHealthBar = document.getElementById('bossHealthBarEasy');
+                this.bossHealthFill = document.getElementById('bossHealthFillEasy');
+                this.bossHealthText = document.getElementById('bossHealthTextEasy');
                 
-                // 游戏状态
+                // 游戏状态 - Easy模式参数
                 this.score = 0;
-                this.lives = 3;
+                this.lives = 5; // 更多生命
                 this.power = 1;
                 this.bombs = 3;
                 this.stage = 1;
@@ -2451,19 +3091,19 @@
                 this.bossHealth = 0;
                 this.bossMaxHealth = 0;
                 
-                // 玩家属性
+                // 玩家属性 - 更容易控制
                 this.player = {
                     x: this.canvas.width / 2,
                     y: this.canvas.height - 100,
                     width: 40,
                     height: 60,
-                    speed: 5,
-                    slowSpeed: 2.5,
+                    speed: 6, // 更快移动
+                    slowSpeed: 3,
                     isSlow: false,
                     invincible: false,
                     invincibleTimer: 0,
                     shootTimer: 0,
-                    shootDelay: 10, // 射击间隔（帧数）
+                    shootDelay: 8, // 更快射击
                     bombTimer: 0
                 };
                 
@@ -2474,12 +3114,12 @@
                 this.powerUps = []; // 道具
                 this.effects = []; // 特效
                 
-                // 游戏计时
+                // 游戏计时 - 更慢的敌人生成
                 this.frameCount = 0;
                 this.enemySpawnTimer = 0;
-                this.enemySpawnDelay = 60; // 敌人生成间隔（帧数）
+                this.enemySpawnDelay = 90; // 更慢的敌人生成
                 this.bossSpawnTimer = 0;
-                this.bossSpawnDelay = 600; // BOSS生成间隔（帧数）
+                this.bossSpawnDelay = 900; // 更晚的BOSS出现
                 
                 // 控制状态
                 this.keys = {
@@ -2492,11 +3132,6 @@
                     slow: false
                 };
                 
-                // 性能优化
-                this.needsRedraw = true;
-                this.lastDraw = 0;
-                this.drawInterval = 1000 / 60; // 60 FPS
-                
                 // 绑定控制按钮事件
                 this.bindControls();
                 
@@ -2508,14 +3143,6 @@
             }
             
             draw() {
-                const now = Date.now();
-                if (now - this.lastDraw < this.drawInterval && !this.needsRedraw) {
-                    return;
-                }
-                
-                this.lastDraw = now;
-                this.needsRedraw = false;
-                
                 // 清空画布
                 this.ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
@@ -2540,17 +3167,12 @@
                 
                 // 绘制玩家
                 this.drawPlayer();
-                
-                // 绘制BOSS血条
-                if (this.bossActive) {
-                    this.drawBossHealth();
-                }
             }
             
             drawBackground() {
                 // 绘制星空背景
                 this.ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-                for (let i = 0; i < 50; i++) {
+                for (let i = 0; i < 30; i++) { // 更少的星星
                     const x = (this.frameCount + i * 50) % this.canvas.width;
                     const y = (i * 20 + this.frameCount / 2) % this.canvas.height;
                     const size = Math.sin(this.frameCount / 20 + i) * 1 + 1.5;
@@ -2558,26 +3180,6 @@
                     this.ctx.beginPath();
                     this.ctx.arc(x, y, size, 0, Math.PI * 2);
                     this.ctx.fill();
-                }
-                
-                // 绘制网格线
-                this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
-                this.ctx.lineWidth = 0.5;
-                
-                // 绘制列线
-                for (let x = 0; x <= this.canvas.width; x += 50) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(x, 0);
-                    this.ctx.lineTo(x, this.canvas.height);
-                    this.ctx.stroke();
-                }
-                
-                // 绘制行线
-                for (let y = 0; y <= this.canvas.height; y += 50) {
-                    this.ctx.beginPath();
-                    this.ctx.moveTo(0, y);
-                    this.ctx.lineTo(this.canvas.width, y);
-                    this.ctx.stroke();
                 }
             }
             
@@ -2592,9 +3194,9 @@
                 // 绘制玩家飞机主体
                 this.ctx.fillStyle = '#00d9ff';
                 this.ctx.beginPath();
-                this.ctx.moveTo(player.x, player.y - player.height / 2); // 顶部
-                this.ctx.lineTo(player.x - player.width / 2, player.y + player.height / 2); // 左下
-                this.ctx.lineTo(player.x + player.width / 2, player.y + player.height / 2); // 右下
+                this.ctx.moveTo(player.x, player.y - player.height / 2);
+                this.ctx.lineTo(player.x - player.width / 2, player.y + player.height / 2);
+                this.ctx.lineTo(player.x + player.width / 2, player.y + player.height / 2);
                 this.ctx.closePath();
                 this.ctx.fill();
                 
@@ -2606,21 +3208,6 @@
                 this.ctx.fillStyle = '#4a00ff';
                 this.ctx.fillRect(player.x - 25, player.y, 10, 5);
                 this.ctx.fillRect(player.x + 15, player.y, 10, 5);
-                
-                // 绘制低速移动时的焦点圈
-                if (player.isSlow) {
-                    this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
-                    this.ctx.lineWidth = 1;
-                    this.ctx.beginPath();
-                    this.ctx.arc(player.x, player.y, 30, 0, Math.PI * 2);
-                    this.ctx.stroke();
-                }
-                
-                // 绘制射击特效
-                if (this.keys.shoot && this.frameCount % 2 === 0) {
-                    this.ctx.fillStyle = '#ffcc00';
-                    this.ctx.fillRect(player.x - 2, player.y - 30, 4, 15);
-                }
             }
             
             drawBullets() {
@@ -2659,34 +3246,6 @@
                         this.ctx.beginPath();
                         this.ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
                         this.ctx.fill();
-                        
-                        // BOSS装饰
-                        this.ctx.fillStyle = '#ff9900';
-                        for (let i = 0; i < 8; i++) {
-                            const angle = (Math.PI * 2 / 8) * i + this.frameCount / 20;
-                            const px = enemy.x + Math.cos(angle) * enemy.radius * 0.7;
-                            const py = enemy.y + Math.sin(angle) * enemy.radius * 0.7;
-                            this.ctx.beginPath();
-                            this.ctx.arc(px, py, enemy.radius / 4, 0, Math.PI * 2);
-                            this.ctx.fill();
-                        }
-                    }
-                    
-                    // 绘制敌机生命值（仅限BOSS和中型敌机）
-                    if (enemy.type === 'boss' || enemy.type === 'medium') {
-                        const healthWidth = 40;
-                        const healthHeight = 5;
-                        const healthX = enemy.x - healthWidth / 2;
-                        const healthY = enemy.y - enemy.radius - 10;
-                        
-                        // 背景
-                        this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                        this.ctx.fillRect(healthX, healthY, healthWidth, healthHeight);
-                        
-                        // 生命值
-                        this.ctx.fillStyle = enemy.type === 'boss' ? '#ff0000' : '#ff9900';
-                        const currentHealthWidth = (enemy.health / enemy.maxHealth) * healthWidth;
-                        this.ctx.fillRect(healthX, healthY, currentHealthWidth, healthHeight);
                     }
                 }
             }
@@ -2700,19 +3259,11 @@
                         this.ctx.beginPath();
                         this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
                         this.ctx.fill();
-                    } else if (bullet.type === 'laser') {
-                        this.ctx.fillRect(bullet.x - 2, bullet.y - 10, 4, 20);
-                    } else if (bullet.type === 'ring') {
-                        this.ctx.beginPath();
-                        this.ctx.arc(bullet.x, bullet.y, bullet.radius, 0, Math.PI * 2);
-                        this.ctx.strokeStyle = bullet.color;
-                        this.ctx.lineWidth = 2;
-                        this.ctx.stroke();
                     }
                     
                     // 子弹发光效果
                     this.ctx.shadowColor = bullet.color;
-                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowBlur = 5; // 更弱的发光效果
                     this.ctx.beginPath();
                     this.ctx.arc(bullet.x, bullet.y, bullet.radius / 2, 0, Math.PI * 2);
                     this.ctx.fill();
@@ -2730,12 +3281,6 @@
                         this.ctx.beginPath();
                         this.ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
                         this.ctx.fill();
-                        
-                        // 内部装饰
-                        this.ctx.fillStyle = '#ffff00';
-                        this.ctx.beginPath();
-                        this.ctx.arc(powerUp.x, powerUp.y, powerUp.radius / 2, 0, Math.PI * 2);
-                        this.ctx.fill();
                     } else if (powerUp.type === 'life') {
                         // 生命值道具
                         this.ctx.fillStyle = '#ff0064';
@@ -2751,14 +3296,7 @@
                         this.ctx.beginPath();
                         this.ctx.arc(powerUp.x, powerUp.y, powerUp.radius, 0, Math.PI * 2);
                         this.ctx.fill();
-                        
-                        // 炸弹内部
-                        this.ctx.fillStyle = '#ffff00';
-                        this.ctx.fillRect(powerUp.x - 3, powerUp.y - 3, 6, 6);
                     }
-                    
-                    // 浮动动画
-                    powerUp.y += Math.sin(this.frameCount / 10 + powerUp.id) * 0.5;
                 }
             }
             
@@ -2776,34 +3314,13 @@
                         this.ctx.beginPath();
                         this.ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2);
                         this.ctx.fill();
-                    } else if (effect.type === 'hit') {
-                        // 击中特效
-                        const progress = (this.frameCount - effect.startFrame) / effect.duration;
-                        if (progress > 1) continue;
-                        
-                        const radius = effect.radius * (1 - progress);
-                        const alpha = 1 - progress;
-                        
-                        this.ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-                        this.ctx.beginPath();
-                        this.ctx.arc(effect.x, effect.y, radius, 0, Math.PI * 2);
-                        this.ctx.fill();
                     }
                 }
             }
             
-            drawBossHealth() {
-                // 更新BOSS血条显示
-                const healthPercent = (this.bossHealth / this.bossMaxHealth) * 100;
-                this.bossHealthFill.style.width = `${healthPercent}%`;
-                this.bossHealthText.textContent = `BOSS: ${Math.round(healthPercent)}%`;
-            }
-            
             update() {
                 if (this.gameOver || this.paused) {
-                    if (this.needsRedraw) {
-                        this.draw();
-                    }
+                    this.draw();
                     return;
                 }
                 
@@ -2843,7 +3360,6 @@
                 this.updateDisplay();
                 
                 // 绘制
-                this.needsRedraw = true;
                 this.draw();
             }
             
@@ -2893,7 +3409,7 @@
                 // 处理炸弹
                 if (this.keys.bomb && this.bombs > 0 && player.bombTimer <= 0) {
                     this.useBomb();
-                    player.bombTimer = 60; // 炸弹使用间隔
+                    player.bombTimer = 60;
                 }
                 
                 // 处理低速移动
@@ -2910,8 +3426,8 @@
                         x: player.x,
                         y: player.y - player.height / 2,
                         vx: 0,
-                        vy: -10,
-                        radius: 3,
+                        vy: -12, // 更快的子弹
+                        radius: 4, // 更大的子弹
                         damage: 1,
                         color: '#00d9ff'
                     });
@@ -2921,8 +3437,8 @@
                         x: player.x - 10,
                         y: player.y - player.height / 2,
                         vx: -0.5,
-                        vy: -10,
-                        radius: 3,
+                        vy: -12,
+                        radius: 4,
                         damage: 1,
                         color: '#00d9ff'
                     });
@@ -2930,8 +3446,8 @@
                         x: player.x + 10,
                         y: player.y - player.height / 2,
                         vx: 0.5,
-                        vy: -10,
-                        radius: 3,
+                        vy: -12,
+                        radius: 4,
                         damage: 1,
                         color: '#00d9ff'
                     });
@@ -2941,17 +3457,17 @@
                         x: player.x,
                         y: player.y - player.height / 2,
                         vx: 0,
-                        vy: -10,
-                        radius: 4,
-                        damage: 1,
+                        vy: -12,
+                        radius: 5,
+                        damage: 2, // 更高伤害
                         color: '#ffcc00'
                     });
                     this.bullets.push({
                         x: player.x - 15,
                         y: player.y - player.height / 2 + 10,
                         vx: -1,
-                        vy: -9,
-                        radius: 3,
+                        vy: -11,
+                        radius: 4,
                         damage: 1,
                         color: '#00d9ff'
                     });
@@ -2959,32 +3475,10 @@
                         x: player.x + 15,
                         y: player.y - player.height / 2 + 10,
                         vx: 1,
-                        vy: -9,
-                        radius: 3,
+                        vy: -11,
+                        radius: 4,
                         damage: 1,
                         color: '#00d9ff'
-                    });
-                }
-                
-                // 如果火力等级更高，增加额外子弹
-                if (this.power >= 4) {
-                    this.bullets.push({
-                        x: player.x - 25,
-                        y: player.y - player.height / 2 + 20,
-                        vx: -2,
-                        vy: -8,
-                        radius: 3,
-                        damage: 1,
-                        color: '#ff0064'
-                    });
-                    this.bullets.push({
-                        x: player.x + 25,
-                        y: player.y - player.height / 2 + 20,
-                        vx: 2,
-                        vy: -8,
-                        radius: 3,
-                        damage: 1,
-                        color: '#ff0064'
                     });
                 }
             }
@@ -3003,7 +3497,7 @@
                     if (enemy.type === 'small') {
                         this.score += 100;
                         this.createExplosion(enemy.x, enemy.y, 20);
-                        enemy.health = 0; // 立即消灭小型敌机
+                        enemy.health = 0;
                     } else {
                         // 对中型敌机和BOSS造成大量伤害
                         enemy.health -= 50;
@@ -3019,15 +3513,6 @@
                             }
                         }
                     }
-                }
-                
-                // 创建全屏爆炸特效
-                for (let i = 0; i < 20; i++) {
-                    this.createExplosion(
-                        Math.random() * this.canvas.width,
-                        Math.random() * this.canvas.height,
-                        30
-                    );
                 }
             }
             
@@ -3055,7 +3540,7 @@
                     enemy.x += enemy.vx;
                     enemy.y += enemy.vy;
                     
-                    // 敌人AI
+                    // 敌人AI - 更简单的移动模式
                     if (enemy.type === 'small') {
                         // 小型敌机简单移动
                         if (enemy.y > this.canvas.height + 50) {
@@ -3063,35 +3548,30 @@
                             continue;
                         }
                         
-                        // 随机射击
-                        if (Math.random() < 0.01) {
+                        // 随机射击 - 更少的射击频率
+                        if (Math.random() < 0.005) {
                             this.enemyShoot(enemy);
                         }
                     } else if (enemy.type === 'medium') {
                         // 中型敌机移动模式
-                        enemy.vy = Math.sin(this.frameCount / 30 + enemy.id) * 1;
+                        enemy.vy = Math.sin(this.frameCount / 50 + enemy.id) * 0.5; // 更慢的移动
                         
                         if (enemy.y > this.canvas.height + 100) {
                             this.enemies.splice(i, 1);
                             continue;
                         }
                         
-                        // 更频繁射击
-                        if (Math.random() < 0.02) {
+                        // 更少的射击频率
+                        if (Math.random() < 0.01) {
                             this.enemyShoot(enemy);
                         }
                     } else if (enemy.type === 'boss') {
                         // BOSS移动模式
-                        enemy.vx = Math.sin(this.frameCount / 60) * 2;
+                        enemy.vx = Math.sin(this.frameCount / 80) * 1; // 更慢的移动
                         
-                        // BOSS射击模式
-                        if (this.frameCount % 30 === 0) {
+                        // BOSS射击模式 - 更少的射击
+                        if (this.frameCount % 60 === 0) {
                             this.bossShoot(enemy);
-                        }
-                        
-                        // BOSS特殊攻击
-                        if (this.frameCount % 120 === 0) {
-                            this.bossSpecialAttack(enemy);
                         }
                     }
                     
@@ -3099,7 +3579,7 @@
                     if (enemy.health <= 0) {
                         this.createExplosion(enemy.x, enemy.y, enemy.type === 'boss' ? 50 : 20);
                         
-                        // 掉落道具
+                        // 掉落道具 - 更高的掉落率
                         this.dropPowerUp(enemy);
                         
                         // 从数组中移除
@@ -3117,9 +3597,9 @@
             }
             
             enemyShoot(enemy) {
-                // 敌人射击
+                // 敌人射击 - 更慢的子弹
                 const angle = Math.atan2(this.player.y - enemy.y, this.player.x - enemy.x);
-                const speed = 3;
+                const speed = 2; // 更慢的子弹
                 
                 this.enemyBullets.push({
                     x: enemy.x,
@@ -3134,12 +3614,12 @@
             }
             
             bossShoot(boss) {
-                // BOSS射击 - 环形弹幕
-                const bulletCount = 12 + this.stage * 2;
+                // BOSS射击 - 更简单的弹幕
+                const bulletCount = 8; // 更少的子弹
                 
                 for (let i = 0; i < bulletCount; i++) {
-                    const angle = (Math.PI * 2 / bulletCount) * i + this.frameCount / 30;
-                    const speed = 2;
+                    const angle = (Math.PI * 2 / bulletCount) * i + this.frameCount / 50;
+                    const speed = 1.5; // 更慢的子弹
                     
                     this.enemyBullets.push({
                         x: boss.x,
@@ -3149,25 +3629,7 @@
                         radius: 4,
                         damage: 2,
                         color: '#ff0000',
-                        type: 'ring'
-                    });
-                }
-            }
-            
-            bossSpecialAttack(boss) {
-                // BOSS特殊攻击 - 激光
-                for (let i = 0; i < 3; i++) {
-                    const offset = (i - 1) * 100;
-                    
-                    this.enemyBullets.push({
-                        x: boss.x + offset,
-                        y: boss.y + boss.radius,
-                        vx: 0,
-                        vy: 5,
-                        radius: 5,
-                        damage: 3,
-                        color: '#ff9900',
-                        type: 'laser'
+                        type: 'normal'
                     });
                 }
             }
@@ -3213,16 +3675,16 @@
             }
             
             spawnEnemies() {
-                // 敌人生成逻辑
+                // 敌人生成逻辑 - 更少的敌人
                 this.enemySpawnTimer++;
                 if (this.enemySpawnTimer >= this.enemySpawnDelay && !this.bossActive) {
                     this.enemySpawnTimer = 0;
                     
                     // 根据关卡调整敌人生成难度
-                    const enemyCount = Math.min(3 + Math.floor(this.stage / 2), 8);
+                    const enemyCount = Math.min(2 + Math.floor(this.stage / 3), 5); // 更少的敌人
                     
                     for (let i = 0; i < enemyCount; i++) {
-                        const type = Math.random() < 0.7 ? 'small' : 'medium';
+                        const type = Math.random() < 0.8 ? 'small' : 'medium'; // 更多的小型敌机
                         
                         if (type === 'small') {
                             // 小型敌机
@@ -3230,8 +3692,8 @@
                                 id: this.frameCount + i,
                                 x: Math.random() * (this.canvas.width - 100) + 50,
                                 y: -50,
-                                vx: (Math.random() - 0.5) * 2,
-                                vy: 1 + Math.random() * 1,
+                                vx: (Math.random() - 0.5) * 1.5, // 更慢的移动
+                                vy: 0.8 + Math.random() * 0.8, // 更慢的移动
                                 radius: 15,
                                 health: 1,
                                 maxHealth: 1,
@@ -3244,13 +3706,13 @@
                                 id: this.frameCount + i,
                                 x: Math.random() * (this.canvas.width - 100) + 50,
                                 y: -100,
-                                vx: (Math.random() - 0.5) * 1,
-                                vy: 0.5 + Math.random() * 0.5,
+                                vx: (Math.random() - 0.5) * 0.8, // 更慢的移动
+                                vy: 0.4 + Math.random() * 0.4, // 更慢的移动
                                 width: 40,
                                 height: 40,
                                 radius: 20,
-                                health: 5 + this.stage,
-                                maxHealth: 5 + this.stage,
+                                health: 3 + this.stage, // 更少的生命值
+                                maxHealth: 3 + this.stage,
                                 type: 'medium',
                                 color: '#ff9900'
                             });
@@ -3264,8 +3726,8 @@
                 if (!this.bossActive && this.frameCount - this.bossSpawnTimer > this.bossSpawnDelay) {
                     this.bossSpawnTimer = this.frameCount;
                     
-                    // 每3关出现一个BOSS
-                    if (this.stage % 3 === 0) {
+                    // 每5关出现一个BOSS
+                    if (this.stage % 5 === 0) {
                         this.bossActive = true;
                         
                         const boss = {
@@ -3274,9 +3736,9 @@
                             y: 100,
                             vx: 1,
                             vy: 0,
-                            radius: 60,
-                            health: 100 + (this.stage / 3) * 50,
-                            maxHealth: 100 + (this.stage / 3) * 50,
+                            radius: 50, // 更小的BOSS
+                            health: 80 + (this.stage / 5) * 30, // 更少的生命值
+                            maxHealth: 80 + (this.stage / 5) * 30,
                             type: 'boss',
                             color: '#ff0000'
                         };
@@ -3296,14 +3758,17 @@
                     const boss = this.enemies.find(e => e.type === 'boss');
                     if (boss) {
                         this.bossHealth = boss.health;
+                        const healthPercent = (this.bossHealth / this.bossMaxHealth) * 100;
+                        this.bossHealthFill.style.width = `${healthPercent}%`;
+                        this.bossHealthText.textContent = `BOSS: ${Math.round(healthPercent)}%`;
                     }
                 }
             }
             
             dropPowerUp(enemy) {
-                // 道具掉落逻辑
+                // 道具掉落逻辑 - 更高的掉落率
                 const dropChance = enemy.type === 'boss' ? 1.0 : 
-                                  enemy.type === 'medium' ? 0.3 : 0.1;
+                                  enemy.type === 'medium' ? 0.5 : 0.2; // 更高的掉落率
                 
                 if (Math.random() < dropChance) {
                     const types = ['power', 'life', 'bomb'];
@@ -3450,16 +3915,13 @@
                 // 如果生命值为0，游戏结束
                 if (this.lives <= 0) {
                     this.gameOver = true;
-                    createGameOverEffect('danmaku', this.score);
+                    createGameOverEffect('danmakuEasy', this.score);
                     return;
                 }
                 
                 // 设置无敌状态
                 player.invincible = true;
-                player.invincibleTimer = 120; // 2秒无敌时间（60FPS）
-                
-                // 重置火力（可选，根据游戏设计）
-                // this.power = Math.max(1, this.power - 1);
+                player.invincibleTimer = 120; // 2秒无敌时间
                 
                 // 更新显示
                 this.updateDisplay();
@@ -3474,415 +3936,5 @@
                     this.power = Math.min(5, this.power + 1);
                 } else if (powerUp.type === 'life') {
                     // 增加生命值
-                    this.lives = Math.min(5, this.lives + 1);
-                } else if (powerUp.type === 'bomb') {
-                    // 增加炸弹
-                    this.bombs = Math.min(5, this.bombs + 1);
-                }
-                
-                // 增加分数
-                this.score += 100;
-                
-                // 更新显示
-                this.updateDisplay();
-                
-                // 创建获取道具特效
-                this.createExplosion(powerUp.x, powerUp.y, 20);
-            }
-            
-            createExplosion(x, y, radius) {
-                this.effects.push({
-                    type: 'explosion',
-                    x: x,
-                    y: y,
-                    radius: radius,
-                    startFrame: this.frameCount,
-                    duration: 20
-                });
-            }
-            
-            createHitEffect(x, y) {
-                this.effects.push({
-                    type: 'hit',
-                    x: x,
-                    y: y,
-                    radius: 10,
-                    startFrame: this.frameCount,
-                    duration: 10
-                });
-            }
-            
-            cleanupObjects() {
-                // 清理超出屏幕的子弹
-                this.bullets = this.bullets.filter(bullet => 
-                    bullet.y > -20 && bullet.y < this.canvas.height + 20 &&
-                    bullet.x > -20 && bullet.x < this.canvas.width + 20
-                );
-                
-                // 清理超出屏幕的敌人子弹
-                this.enemyBullets = this.enemyBullets.filter(bullet => 
-                    bullet.y > -50 && bullet.y < this.canvas.height + 50 &&
-                    bullet.x > -50 && bullet.x < this.canvas.width + 50
-                );
-                
-                // 清理超出屏幕的敌人
-                this.enemies = this.enemies.filter(enemy => 
-                    enemy.y > -100 && enemy.y < this.canvas.height + 100
-                );
-                
-                // 清理超出屏幕的道具
-                this.powerUps = this.powerUps.filter(powerUp => 
-                    powerUp.y > -20 && powerUp.y < this.canvas.height + 20
-                );
-            }
-            
-            updateDisplay() {
-                this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.stage}`;
-                this.livesElement.textContent = `生命: ${this.lives}`;
-                this.powerElement.textContent = `火力: ${this.power}`;
-                this.bombsElement.textContent = `炸弹: ${this.bombs}`;
-                this.stageElement.textContent = `关卡: ${this.stage}`;
-                
-                // 更新BOSS血条
-                if (this.bossActive) {
-                    const healthPercent = (this.bossHealth / this.bossMaxHealth) * 100;
-                    this.bossHealthFill.style.width = `${healthPercent}%`;
-                    this.bossHealthText.textContent = `BOSS: ${Math.round(healthPercent)}%`;
-                }
-            }
-            
-            bindControls() {
-                // 绑定键盘控制
-                document.addEventListener('keydown', (e) => {
-                    if (currentGame !== 'danmaku') return;
-                    
-                    const key = e.key.toLowerCase();
-                    switch(key) {
-                        case 'arrowup':
-                        case 'w':
-                            this.keys.up = true;
-                            e.preventDefault();
-                            break;
-                        case 'arrowdown':
-                        case 's':
-                            this.keys.down = true;
-                            e.preventDefault();
-                            break;
-                        case 'arrowleft':
-                        case 'a':
-                            this.keys.left = true;
-                            e.preventDefault();
-                            break;
-                        case 'arrowright':
-                        case 'd':
-                            this.keys.right = true;
-                            e.preventDefault();
-                            break;
-                        case 'z':
-                        case ' ':
-                            this.keys.shoot = true;
-                            e.preventDefault();
-                            break;
-                        case 'x':
-                        case 'shift':
-                            this.keys.bomb = true;
-                            e.preventDefault();
-                            break;
-                        case 'p':
-                            this.togglePause();
-                            e.preventDefault();
-                            break;
-                        case 'r':
-                            if (this.gameOver) this.restart();
-                            e.preventDefault();
-                            break;
-                    }
-                });
-                
-                document.addEventListener('keyup', (e) => {
-                    if (currentGame !== 'danmaku') return;
-                    
-                    const key = e.key.toLowerCase();
-                    switch(key) {
-                        case 'arrowup':
-                        case 'w':
-                            this.keys.up = false;
-                            break;
-                        case 'arrowdown':
-                        case 's':
-                            this.keys.down = false;
-                            break;
-                        case 'arrowleft':
-                        case 'a':
-                            this.keys.left = false;
-                            break;
-                        case 'arrowright':
-                        case 'd':
-                            this.keys.right = false;
-                            break;
-                        case 'z':
-                        case ' ':
-                            this.keys.shoot = false;
-                            break;
-                        case 'x':
-                        case 'shift':
-                            this.keys.bomb = false;
-                            this.keys.slow = false;
-                            break;
-                    }
-                });
-                
-                // 绑定屏幕控制按钮
-                document.getElementById('danmakuUp').addEventListener('mousedown', () => this.keys.up = true);
-                document.getElementById('danmakuUp').addEventListener('mouseup', () => this.keys.up = false);
-                document.getElementById('danmakuUp').addEventListener('touchstart', () => this.keys.up = true);
-                document.getElementById('danmakuUp').addEventListener('touchend', () => this.keys.up = false);
-                
-                document.getElementById('danmakuDown').addEventListener('mousedown', () => this.keys.down = true);
-                document.getElementById('danmakuDown').addEventListener('mouseup', () => this.keys.down = false);
-                document.getElementById('danmakuDown').addEventListener('touchstart', () => this.keys.down = true);
-                document.getElementById('danmakuDown').addEventListener('touchend', () => this.keys.down = false);
-                
-                document.getElementById('danmakuLeft').addEventListener('mousedown', () => this.keys.left = true);
-                document.getElementById('danmakuLeft').addEventListener('mouseup', () => this.keys.left = false);
-                document.getElementById('danmakuLeft').addEventListener('touchstart', () => this.keys.left = true);
-                document.getElementById('danmakuLeft').addEventListener('touchend', () => this.keys.left = false);
-                
-                document.getElementById('danmakuRight').addEventListener('mousedown', () => this.keys.right = true);
-                document.getElementById('danmakuRight').addEventListener('mouseup', () => this.keys.right = false);
-                document.getElementById('danmakuRight').addEventListener('touchstart', () => this.keys.right = true);
-                document.getElementById('danmakuRight').addEventListener('touchend', () => this.keys.right = false);
-                
-                document.getElementById('danmakuShoot').addEventListener('mousedown', () => this.keys.shoot = true);
-                document.getElementById('danmakuShoot').addEventListener('mouseup', () => this.keys.shoot = false);
-                document.getElementById('danmakuShoot').addEventListener('touchstart', () => this.keys.shoot = true);
-                document.getElementById('danmakuShoot').addEventListener('touchend', () => this.keys.shoot = false);
-                
-                document.getElementById('danmakuBomb').addEventListener('mousedown', () => this.keys.bomb = true);
-                document.getElementById('danmakuBomb').addEventListener('mouseup', () => this.keys.bomb = false);
-                document.getElementById('danmakuBomb').addEventListener('touchstart', () => this.keys.bomb = true);
-                document.getElementById('danmakuBomb').addEventListener('touchend', () => this.keys.bomb = false);
-                
-                document.getElementById('danmakuSlow').addEventListener('mousedown', () => this.keys.slow = true);
-                document.getElementById('danmakuSlow').addEventListener('mouseup', () => this.keys.slow = false);
-                document.getElementById('danmakuSlow').addEventListener('touchstart', () => this.keys.slow = true);
-                document.getElementById('danmakuSlow').addEventListener('touchend', () => this.keys.slow = false);
-                
-                document.getElementById('danmakuPause').addEventListener('click', () => {
-                    this.togglePause();
-                });
-                
-                // 点击画布重新开始游戏（如果游戏结束）
-                this.canvas.addEventListener('click', () => {
-                    if (this.gameOver) {
-                        this.restart();
-                        document.getElementById('danmakuGameOverEffect').style.opacity = '0';
-                        setTimeout(() => {
-                            document.getElementById('danmakuGameOverEffect').innerHTML = '';
-                        }, 500);
-                    }
-                });
-            }
-            
-            togglePause() {
-                this.paused = !this.paused;
-                this.needsRedraw = true;
-                this.draw();
-                
-                // 绘制暂停文字
-                if (this.paused) {
-                    this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-                    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-                    
-                    this.ctx.fillStyle = '#4a00ff';
-                    this.ctx.font = 'bold 40px "Microsoft YaHei"';
-                    this.ctx.textAlign = 'center';
-                    this.ctx.fillText('游戏暂停', this.canvas.width/2, this.canvas.height/2);
-                    
-                    // 添加继续提示
-                    this.ctx.fillStyle = '#00d9ff';
-                    this.ctx.font = 'bold 20px "Microsoft YaHei"';
-                    this.ctx.fillText('按P键或点击暂停按钮继续', this.canvas.width/2, this.canvas.height/2 + 50);
-                }
-            }
-            
-            restart() {
-                // 重置游戏状态
-                this.score = 0;
-                this.lives = 3;
-                this.power = 1;
-                this.bombs = 3;
-                this.stage = 1;
-                this.gameOver = false;
-                this.paused = false;
-                this.bossActive = false;
-                this.bossHealth = 0;
-                this.bossMaxHealth = 0;
-                
-                // 重置玩家
-                this.player.x = this.canvas.width / 2;
-                this.player.y = this.canvas.height - 100;
-                this.player.invincible = false;
-                this.player.invincibleTimer = 0;
-                this.player.shootTimer = 0;
-                this.player.bombTimer = 0;
-                this.player.isSlow = false;
-                
-                // 清空游戏对象
-                this.bullets = [];
-                this.enemies = [];
-                this.enemyBullets = [];
-                this.powerUps = [];
-                this.effects = [];
-                
-                // 重置计时器
-                this.frameCount = 0;
-                this.enemySpawnTimer = 0;
-                this.bossSpawnTimer = 0;
-                
-                // 隐藏BOSS血条
-                this.bossHealthBar.style.display = 'none';
-                
-                // 更新显示
-                this.updateDisplay();
-                
-                // 绘制
-                this.needsRedraw = true;
-                this.draw();
-            }
-            
-            start() {
-                if (danmakuAnimationFrame) {
-                    cancelAnimationFrame(danmakuAnimationFrame);
-                }
-                
-                const gameLoop = () => {
-                    this.update();
-                    danmakuAnimationFrame = requestAnimationFrame(gameLoop);
-                };
-                
-                danmakuAnimationFrame = requestAnimationFrame(gameLoop);
-            }
-            
-            stop() {
-                if (danmakuAnimationFrame) {
-                    cancelAnimationFrame(danmakuAnimationFrame);
-                    danmakuAnimationFrame = null;
-                }
-            }
-        }
-        
-        // 游戏实例
-        let snakeGame, tetrisGame, danmakuGame;
-        
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            createStars();
-            createFloatingParticles();
-            
-            // 初始化游戏实例
-            snakeGame = new SnakeGame();
-            tetrisGame = new TetrisGame();
-            danmakuGame = new DanmakuGame();
-            
-            // 游戏按钮事件
-            document.getElementById('snakeGameBtn').addEventListener('click', function() {
-                openGame('snake');
-            });
-            
-            document.getElementById('tetrisGameBtn').addEventListener('click', function() {
-                openGame('tetris');
-            });
-            
-            document.getElementById('danmakuGameBtn').addEventListener('click', function() {
-                openGame('danmaku');
-            });
-            
-            // 关闭游戏按钮事件
-            document.getElementById('closeSnakeGame').addEventListener('click', function() {
-                closeGame('snake');
-            });
-            
-            document.getElementById('closeTetrisGame').addEventListener('click', function() {
-                closeGame('tetris');
-            });
-            
-            document.getElementById('closeDanmakuGame').addEventListener('click', function() {
-                closeGame('danmaku');
-            });
-            
-            // 自动播放一个音效（延迟一点时间）
-            setTimeout(() => {
-                // 检查用户是否已经与页面交互过
-                if (document.querySelector('.container')) {
-                    // 在页面加载后自动播放一个轻微的音效
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 523.25; // C5
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
-                    
-                    oscillator.start();
-                    oscillator.stop(audioContext.currentTime + 0.6);
-                }
-            }, 1500);
-        });
-        
-        // 打开游戏
-        function openGame(game) {
-            currentGame = game;
-            
-            if (game === 'snake') {
-                document.getElementById('snakeGameContainer').style.display = 'flex';
-                snakeGame.start();
-            } else if (game === 'tetris') {
-                document.getElementById('tetrisGameContainer').style.display = 'flex';
-                tetrisGame.start();
-            } else if (game === 'danmaku') {
-                document.getElementById('danmakuGameContainer').style.display = 'flex';
-                danmakuGame.start();
-            }
-        }
-        
-        // 关闭游戏
-        function closeGame(game) {
-            currentGame = null;
-            
-            if (game === 'snake') {
-                document.getElementById('snakeGameContainer').style.display = 'none';
-                snakeGame.stop();
-                // 隐藏Game Over效果
-                document.getElementById('snakeGameOverEffect').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('snakeGameOverEffect').innerHTML = '';
-                }, 500);
-            } else if (game === 'tetris') {
-                document.getElementById('tetrisGameContainer').style.display = 'none';
-                tetrisGame.stop();
-                // 隐藏Game Over效果
-                document.getElementById('tetrisGameOverEffect').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('tetrisGameOverEffect').innerHTML = '';
-                }, 500);
-            } else if (game === 'danmaku') {
-                document.getElementById('danmakuGameContainer').style.display = 'none';
-                danmakuGame.stop();
-                // 隐藏Game Over效果和BOSS血条
-                document.getElementById('danmakuGameOverEffect').style.opacity = '0';
-                document.getElementById('bossHealthBar').style.display = 'none';
-                setTimeout(() => {
-                    document.getElementById('danmakuGameOverEffect').innerHTML = '';
-                }, 500);
-            }
-        }
-    </script>
-</body>
-</html>
+                    this.lives = Math.min(8, this.lives + 1); // 更高的生命上限
+               
