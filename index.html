@@ -1092,48 +1092,47 @@
         </div>
         
         <!-- 弹幕游戏控制说明 -->
-        <div class="control-instructions">
-            <div class="control-title">控制说明</div>
-            <div class="control-grid">
-                <div class="control-item">
-                    <div class="key">↑ / W</div>
-                    <div class="function">向上移动</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">↓ / S</div>
-                    <div class="function">向下移动</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">← / A</div>
-                    <div class="function">向左移动</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">→ / D</div>
-                    <div class="function">向右移动</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">Z / 空格</div>
-                    <div class="function">射击</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">X / Shift</div>
-                    <div class="function">炸弹/低速</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">P</div>
-                    <div class="function">暂停/继续</div>
-                </div>
-                <div class="control-item">
-                    <div class="key">R</div>
-                    <div class="function">重新开始</div>
-                </div>
-            </div>
+<div class="control-instructions">
+    <div class="control-title">控制说明</div>
+    <div class="control-grid">
+        <div class="control-item">
+            <div class="key">↑ / W</div>
+            <div class="function">向上移动</div>
         </div>
-        
-        <div class="game-instructions">
-            控制飞机躲避弹幕并射击敌机，收集道具增强火力，击败BOSS进入下一关。使用炸弹可以清除屏幕上的子弹。
+        <div class="control-item">
+            <div class="key">↓ / S</div>
+            <div class="function">向下移动</div>
+        </div>
+        <div class="control-item">
+            <div class="key">← / A</div>
+            <div class="function">向左移动</div>
+        </div>
+        <div class="control-item">
+            <div class="key">→ / D</div>
+            <div class="function">向右移动</div>
+        </div>
+        <div class="control-item">
+            <div class="key">Z / 空格</div>
+            <div class="function">射击</div>
+        </div>
+        <div class="control-item">
+            <div class="key">X</div>
+            <div class="function">炸弹</div>
+        </div>
+        <div class="control-item">
+            <div class="key">Shift</div>
+            <div class="function">低速</div>
+        </div>
+        <div class="control-item">
+            <div class="key">P</div>
+            <div class="function">暂停/继续</div>
+        </div>
+        <div class="control-item">
+            <div class="key">R</div>
+            <div class="function">重新开始</div>
         </div>
     </div>
+</div>
     
     <!-- 添加音效相关脚本 -->
     <script>
@@ -1570,6 +1569,24 @@
         let danmakuAnimationFrame = null;
         let lastTetrisUpdate = 0;
         
+        // 添加全局按键状态跟踪 - 修复按键冲突
+        const activeKeyListeners = new Set();
+        
+        // 辅助函数：激活指定游戏的按键监听器
+        function enableGameKeyListeners(gameType) {
+            // 清除所有活动监听器
+            activeKeyListeners.clear();
+            
+            // 根据游戏类型添加对应的监听器
+            if (gameType === 'snake') {
+                activeKeyListeners.add('snake');
+            } else if (gameType === 'tetris') {
+                activeKeyListeners.add('tetris');
+            } else if (gameType === 'danmaku') {
+                activeKeyListeners.add('danmaku');
+            }
+        }
+        
         // 贪吃蛇游戏
         class SnakeGame {
             constructor() {
@@ -1787,40 +1804,54 @@
             bindControls() {
                 // 绑定键盘控制 - 添加WASD支持
                 document.addEventListener('keydown', (e) => {
-                    if (currentGame !== 'snake') return;
-                    
-                    switch(e.key.toLowerCase()) {
-                        case 'arrowup':
-                        case 'w':
-                            if (this.direction !== 'down') this.nextDirection = 'up';
-                            e.preventDefault();
-                            break;
-                        case 'arrowdown':
-                        case 's':
-                            if (this.direction !== 'up') this.nextDirection = 'down';
-                            e.preventDefault();
-                            break;
-                        case 'arrowleft':
-                        case 'a':
-                            if (this.direction !== 'right') this.nextDirection = 'left';
-                            e.preventDefault();
-                            break;
-                        case 'arrowright':
-                        case 'd':
-                            if (this.direction !== 'left') this.nextDirection = 'right';
-                            e.preventDefault();
-                            break;
-                        case ' ':
-                            this.togglePause();
-                            e.preventDefault();
-                            break;
-                        case 'r':
-                        case 'r':
-                            if (this.gameOver) this.restart();
-                            e.preventDefault();
-                            break;
-                    }
-                });
+    // 检查是否弹幕游戏是当前激活的游戏
+    if (!activeKeyListeners.has('danmaku')) return;
+    
+    const key = e.key.toLowerCase();
+    switch(key) {
+        case 'arrowup':
+        case 'w':
+            this.keys.up = true;
+            e.preventDefault();
+            break;
+        case 'arrowdown':
+        case 's':
+            this.keys.down = true;
+            e.preventDefault();
+            break;
+        case 'arrowleft':
+        case 'a':
+            this.keys.left = true;
+            e.preventDefault();
+            break;
+        case 'arrowright':
+        case 'd':
+            this.keys.right = true;
+            e.preventDefault();
+            break;
+        case 'z':
+        case ' ':
+            this.keys.shoot = true;
+            e.preventDefault();
+            break;
+        case 'x':  // X键只用于炸弹
+            this.keys.bomb = true;
+            e.preventDefault();
+            break;
+        case 'shift':  // Shift键只用于低速
+            this.keys.slow = true;
+            e.preventDefault();
+            break;
+        case 'p':
+            this.togglePause();
+            e.preventDefault();
+            break;
+        case 'r':
+            if (this.gameOver) this.restart();
+            e.preventDefault();
+            break;
+    }
+});
                 
                 // 绑定屏幕控制按钮
                 document.getElementById('snakeUp').addEventListener('click', () => {
@@ -2272,7 +2303,8 @@
             bindControls() {
                 // 绑定键盘控制 - 添加WASD和Q/E支持
                 document.addEventListener('keydown', (e) => {
-                    if (currentGame !== 'tetris') return;
+                    // 检查是否俄罗斯方块游戏是当前激活的游戏 - 修复按键冲突
+                    if (!activeKeyListeners.has('tetris')) return;
                     
                     const key = e.key.toLowerCase();
                     switch(key) {
@@ -2621,6 +2653,13 @@
                     this.ctx.fillStyle = '#ffcc00';
                     this.ctx.fillRect(player.x - 2, player.y - 30, 4, 15);
                 }
+                
+                // 绘制碰撞检测区域（调试用，正式发布时可注释掉）
+                this.ctx.strokeStyle = 'rgba(255, 0, 0, 0.3)';
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                this.ctx.arc(this.player.x, this.player.y, 10, 0, Math.PI * 2); // 10像素半径
+                this.ctx.stroke();
             }
             
             drawBullets() {
@@ -2833,7 +2872,7 @@
                 // 生成BOSS
                 this.spawnBoss();
                 
-                // 碰撞检测
+                // 碰撞检测 - 使用缩小后的受击判定
                 this.checkCollisions();
                 
                 // 清理过期对象
@@ -3368,18 +3407,20 @@
                     }
                 }
                 
-                // 检查敌人子弹与玩家的碰撞
+                // 检查敌人子弹与玩家的碰撞 - 使用缩小后的受击判定
                 if (!player.invincible) {
                     for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
                         const bullet = this.enemyBullets[i];
                         
-                        // 计算距离
+                        // 计算距离 - 使用更小的碰撞半径（10像素）
                         const dx = bullet.x - player.x;
                         const dy = bullet.y - player.y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        // 碰撞检测
-                        if (distance < bullet.radius + Math.max(player.width, player.height) / 2) {
+                        // 碰撞检测 - 缩小玩家受击判定区域
+                        const playerHitRadius = 10; // 缩小的碰撞半径
+                        
+                        if (distance < bullet.radius + playerHitRadius) {
                             // 玩家被击中
                             this.playerHit();
                             
@@ -3393,7 +3434,7 @@
                         }
                     }
                     
-                    // 检查敌人与玩家的碰撞
+                    // 检查敌人与玩家的碰撞 - 使用缩小后的受击判定
                     for (let i = this.enemies.length - 1; i >= 0; i--) {
                         const enemy = this.enemies[i];
                         
@@ -3402,11 +3443,11 @@
                         const dy = enemy.y - player.y;
                         const distance = Math.sqrt(dx * dx + dy * dy);
                         
-                        // 碰撞检测
+                        // 碰撞检测 - 使用缩小的玩家碰撞半径
                         const enemyRadius = enemy.radius || enemy.width / 2;
-                        const playerRadius = Math.max(player.width, player.height) / 2;
+                        const playerHitRadius = 12; // 稍微大一点的碰撞半径，但比整个飞机小
                         
-                        if (distance < enemyRadius + playerRadius) {
+                        if (distance < enemyRadius + playerHitRadius) {
                             // 玩家被击中
                             this.playerHit();
                             
@@ -3554,84 +3595,91 @@
             bindControls() {
                 // 绑定键盘控制
                 document.addEventListener('keydown', (e) => {
-                    if (currentGame !== 'danmaku') return;
-                    
-                    const key = e.key.toLowerCase();
-                    switch(key) {
-                        case 'arrowup':
-                        case 'w':
-                            this.keys.up = true;
-                            e.preventDefault();
-                            break;
-                        case 'arrowdown':
-                        case 's':
-                            this.keys.down = true;
-                            e.preventDefault();
-                            break;
-                        case 'arrowleft':
-                        case 'a':
-                            this.keys.left = true;
-                            e.preventDefault();
-                            break;
-                        case 'arrowright':
-                        case 'd':
-                            this.keys.right = true;
-                            e.preventDefault();
-                            break;
-                        case 'z':
-                        case ' ':
-                            this.keys.shoot = true;
-                            e.preventDefault();
-                            break;
-                        case 'x':
-                        case 'shift':
-                            this.keys.bomb = true;
-                            e.preventDefault();
-                            break;
-                        case 'p':
-                            this.togglePause();
-                            e.preventDefault();
-                            break;
-                        case 'r':
-                            if (this.gameOver) this.restart();
-                            e.preventDefault();
-                            break;
-                    }
-                });
-                
-                document.addEventListener('keyup', (e) => {
-                    if (currentGame !== 'danmaku') return;
-                    
-                    const key = e.key.toLowerCase();
-                    switch(key) {
-                        case 'arrowup':
-                        case 'w':
-                            this.keys.up = false;
-                            break;
-                        case 'arrowdown':
-                        case 's':
-                            this.keys.down = false;
-                            break;
-                        case 'arrowleft':
-                        case 'a':
-                            this.keys.left = false;
-                            break;
-                        case 'arrowright':
-                        case 'd':
-                            this.keys.right = false;
-                            break;
-                        case 'z':
-                        case ' ':
-                            this.keys.shoot = false;
-                            break;
-                        case 'x':
-                        case 'shift':
-                            this.keys.bomb = false;
-                            this.keys.slow = false;
-                            break;
-                    }
-                });
-                
+    // 检查是否弹幕游戏是当前激活的游戏
+    if (!activeKeyListeners.has('danmaku')) return;
+    
+    const key = e.key.toLowerCase();
+    switch(key) {
+        case 'arrowup':
+        case 'w':
+            this.keys.up = true;
+            e.preventDefault();
+            break;
+        case 'arrowdown':
+        case 's':
+            this.keys.down = true;
+            e.preventDefault();
+            break;
+        case 'arrowleft':
+        case 'a':
+            this.keys.left = true;
+            e.preventDefault();
+            break;
+        case 'arrowright':
+        case 'd':
+            this.keys.right = true;
+            e.preventDefault();
+            break;
+        case 'z':
+        case ' ':
+            this.keys.shoot = true;
+            e.preventDefault();
+            break;
+        case 'x':  // X键只用于炸弹
+            this.keys.bomb = true;
+            e.preventDefault();
+            break;
+        case 'shift':  // Shift键只用于低速
+            this.keys.slow = true;
+            e.preventDefault();
+            break;
+        case 'p':
+            this.togglePause();
+            e.preventDefault();
+            break;
+        case 'r':
+            if (this.gameOver) this.restart();
+            e.preventDefault();
+            break;
+    }
+});
+
+// keyup事件
+document.addEventListener('keyup', (e) => {
+    // 检查是否弹幕游戏是当前激活的游戏
+    if (!activeKeyListeners.has('danmaku')) return;
+    
+    const key = e.key.toLowerCase();
+    switch(key) {
+        case 'arrowup':
+        case 'w':
+            this.keys.up = false;
+            break;
+        case 'arrowdown':
+        case 's':
+            this.keys.down = false;
+            break;
+        case 'arrowleft':
+        case 'a':
+            this.keys.left = false;
+            break;
+        case 'arrowright':
+        case 'd':
+            this.keys.right = false;
+            break;
+        case 'z':
+        case ' ':
+            this.keys.shoot = false;
+            break;
+        case 'x':  // X键只释放炸弹
+            this.keys.bomb = false;
+            break;
+        case 'shift':  // Shift键只释放低速
+            this.keys.slow = false;
+            break;
+    }
+});
+
                 // 绑定屏幕控制按钮
                 document.getElementById('danmakuUp').addEventListener('mousedown', () => this.keys.up = true);
                 document.getElementById('danmakuUp').addEventListener('mouseup', () => this.keys.up = false);
@@ -3838,22 +3886,32 @@
         
         // 打开游戏
         function openGame(game) {
+            // 首先关闭当前游戏
+            if (currentGame) {
+                closeGame(currentGame);
+            }
+            
             currentGame = game;
             
             if (game === 'snake') {
                 document.getElementById('snakeGameContainer').style.display = 'flex';
                 snakeGame.start();
+                enableGameKeyListeners('snake');
             } else if (game === 'tetris') {
                 document.getElementById('tetrisGameContainer').style.display = 'flex';
                 tetrisGame.start();
+                enableGameKeyListeners('tetris');
             } else if (game === 'danmaku') {
                 document.getElementById('danmakuGameContainer').style.display = 'flex';
                 danmakuGame.start();
+                enableGameKeyListeners('danmaku');
             }
         }
         
         // 关闭游戏
         function closeGame(game) {
+            // 禁用该游戏的按键监听器
+            activeKeyListeners.delete(game);
             currentGame = null;
             
             if (game === 'snake') {
