@@ -1240,7 +1240,7 @@
             const gainNode2 = audioContext.createGain();
             gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
             gainNode2.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
-            gainNode2.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
+            gainNode2.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.6);
             
             oscillator2.connect(gainNode2);
             gainNode2.connect(masterGain);
@@ -1804,54 +1804,41 @@
             bindControls() {
                 // 绑定键盘控制 - 添加WASD支持
                 document.addEventListener('keydown', (e) => {
-    // 检查是否弹幕游戏是当前激活的游戏
-    if (!activeKeyListeners.has('danmaku')) return;
-    
-    const key = e.key.toLowerCase();
-    switch(key) {
-        case 'arrowup':
-        case 'w':
-            this.keys.up = true;
-            e.preventDefault();
-            break;
-        case 'arrowdown':
-        case 's':
-            this.keys.down = true;
-            e.preventDefault();
-            break;
-        case 'arrowleft':
-        case 'a':
-            this.keys.left = true;
-            e.preventDefault();
-            break;
-        case 'arrowright':
-        case 'd':
-            this.keys.right = true;
-            e.preventDefault();
-            break;
-        case 'z':
-        case ' ':
-            this.keys.shoot = true;
-            e.preventDefault();
-            break;
-        case 'x':  // X键只用于炸弹
-            this.keys.bomb = true;
-            e.preventDefault();
-            break;
-        case 'shift':  // Shift键只用于低速
-            this.keys.slow = true;
-            e.preventDefault();
-            break;
-        case 'p':
-            this.togglePause();
-            e.preventDefault();
-            break;
-        case 'r':
-            if (this.gameOver) this.restart();
-            e.preventDefault();
-            break;
-    }
-});
+                    // 检查是否贪吃蛇游戏是当前激活的游戏
+                    if (!activeKeyListeners.has('snake')) return;
+                    
+                    const key = e.key.toLowerCase();
+                    switch(key) {
+                        case 'arrowup':
+                        case 'w':
+                            if (this.direction !== 'down') this.nextDirection = 'up';
+                            e.preventDefault();
+                            break;
+                        case 'arrowdown':
+                        case 's':
+                            if (this.direction !== 'up') this.nextDirection = 'down';
+                            e.preventDefault();
+                            break;
+                        case 'arrowleft':
+                        case 'a':
+                            if (this.direction !== 'right') this.nextDirection = 'left';
+                            e.preventDefault();
+                            break;
+                        case 'arrowright':
+                        case 'd':
+                            if (this.direction !== 'left') this.nextDirection = 'right';
+                            e.preventDefault();
+                            break;
+                        case ' ':
+                            this.togglePause();
+                            e.preventDefault();
+                            break;
+                        case 'r':
+                            if (this.gameOver) this.restart();
+                            e.preventDefault();
+                            break;
+                    }
+                });
                 
                 // 绑定屏幕控制按钮
                 document.getElementById('snakeUp').addEventListener('click', () => {
@@ -3595,90 +3582,90 @@
             bindControls() {
                 // 绑定键盘控制
                 document.addEventListener('keydown', (e) => {
-    // 检查是否弹幕游戏是当前激活的游戏
-    if (!activeKeyListeners.has('danmaku')) return;
-    
-    const key = e.key.toLowerCase();
-    switch(key) {
-        case 'arrowup':
-        case 'w':
-            this.keys.up = true;
-            e.preventDefault();
-            break;
-        case 'arrowdown':
-        case 's':
-            this.keys.down = true;
-            e.preventDefault();
-            break;
-        case 'arrowleft':
-        case 'a':
-            this.keys.left = true;
-            e.preventDefault();
-            break;
-        case 'arrowright':
-        case 'd':
-            this.keys.right = true;
-            e.preventDefault();
-            break;
-        case 'z':
-        case ' ':
-            this.keys.shoot = true;
-            e.preventDefault();
-            break;
-        case 'x':  // X键只用于炸弹
-            this.keys.bomb = true;
-            e.preventDefault();
-            break;
-        case 'shift':  // Shift键只用于低速
-            this.keys.slow = true;
-            e.preventDefault();
-            break;
-        case 'p':
-            this.togglePause();
-            e.preventDefault();
-            break;
-        case 'r':
-            if (this.gameOver) this.restart();
-            e.preventDefault();
-            break;
-    }
-});
+                    // 检查是否弹幕游戏是当前激活的游戏
+                    if (!activeKeyListeners.has('danmaku')) return;
+                    
+                    const key = e.key.toLowerCase();
+                    switch(key) {
+                        case 'arrowup':
+                        case 'w':
+                            this.keys.up = true;
+                            e.preventDefault();
+                            break;
+                        case 'arrowdown':
+                        case 's':
+                            this.keys.down = true;
+                            e.preventDefault();
+                            break;
+                        case 'arrowleft':
+                        case 'a':
+                            this.keys.left = true;
+                            e.preventDefault();
+                            break;
+                        case 'arrowright':
+                        case 'd':
+                            this.keys.right = true;
+                            e.preventDefault();
+                            break;
+                        case 'z':
+                        case ' ':
+                            this.keys.shoot = true;
+                            e.preventDefault();
+                            break;
+                        case 'x':  // X键只用于炸弹
+                            this.keys.bomb = true;
+                            e.preventDefault();
+                            break;
+                        case 'shift':  // Shift键只用于低速
+                            this.keys.slow = true;
+                            e.preventDefault();
+                            break;
+                        case 'p':
+                            this.togglePause();
+                            e.preventDefault();
+                            break;
+                        case 'r':
+                            if (this.gameOver) this.restart();
+                            e.preventDefault();
+                            break;
+                    }
+                });
 
-// keyup事件
-document.addEventListener('keyup', (e) => {
-    // 检查是否弹幕游戏是当前激活的游戏
-    if (!activeKeyListeners.has('danmaku')) return;
-    
-    const key = e.key.toLowerCase();
-    switch(key) {
-        case 'arrowup':
-        case 'w':
-            this.keys.up = false;
-            break;
-        case 'arrowdown':
-        case 's':
-            this.keys.down = false;
-            break;
-        case 'arrowleft':
-        case 'a':
-            this.keys.left = false;
-            break;
-        case 'arrowright':
-        case 'd':
-            this.keys.right = false;
-            break;
-        case 'z':
-        case ' ':
-            this.keys.shoot = false;
-            break;
-        case 'x':  // X键只释放炸弹
-            this.keys.bomb = false;
-            break;
-        case 'shift':  // Shift键只释放低速
-            this.keys.slow = false;
-            break;
-    }
-});
+                // keyup事件
+                document.addEventListener('keyup', (e) => {
+                    // 检查是否弹幕游戏是当前激活的游戏
+                    if (!activeKeyListeners.has('danmaku')) return;
+                    
+                    const key = e.key.toLowerCase();
+                    switch(key) {
+                        case 'arrowup':
+                        case 'w':
+                            this.keys.up = false;
+                            break;
+                        case 'arrowdown':
+                        case 's':
+                            this.keys.down = false;
+                            break;
+                        case 'arrowleft':
+                        case 'a':
+                            this.keys.left = false;
+                            break;
+                        case 'arrowright':
+                        case 'd':
+                            this.keys.right = false;
+                            break;
+                        case 'z':
+                        case ' ':
+                            this.keys.shoot = false;
+                            break;
+                        case 'x':  // X键只释放炸弹
+                            this.keys.bomb = false;
+                            break;
+                        case 'shift':  // Shift键只释放低速
+                            this.keys.slow = false;
+                            break;
+                    }
+                });
 
                 // 绑定屏幕控制按钮
                 document.getElementById('danmakuUp').addEventListener('mousedown', () => this.keys.up = true);
