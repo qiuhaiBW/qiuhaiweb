@@ -22,7 +22,7 @@
         }
         
         /* 星空背景 */
-        .星星 {
+        .stars {
             position: fixed;
             top: 0;
             left: 0;
@@ -35,7 +35,7 @@
             position: absolute;
             background-color: white;
             border-radius: 50%;
-            animation: twinkle 3 infinite alternate;
+            animation: twinkle 3s infinite alternate;
         }
         
         /* 旋转地球球体 */
@@ -1152,7 +1152,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3;
+            transition: all 0.3s;
         }
 
         .close-leaderboard:hover {
@@ -1175,7 +1175,7 @@
             border: none;
             font-size: 1.1rem;
             cursor: pointer;
-            transition: all 0.3;
+            transition: all 0.3s;
             position: relative;
             border-bottom: 3px solid transparent;
         }
@@ -2243,7 +2243,74 @@
             </div>
         </div>
     </div>
+        <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
         <script>
+        // Firebase 配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyDk3ZOVIX-D1KoE1EoW0veXYnr_P4115FU",
+            authDomain: "qiuhaiweb.firebaseapp.com",
+            projectId: "qiuhaiweb",
+            storageBucket: "qiuhaiweb.firebasestorage.app",
+            messagingSenderId: "412193723528",
+            appId: "1:412193723528:web:51c5a6c81cfcee0e3d3b3d",
+            measurementId: "G-3V9NXVK3XD"
+        };
+
+        let firebaseEnabled = false;
+        let db = null;
+
+        function initFirebaseForLeaderboard() {
+            try {
+                if (window.firebase) {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.firestore();
+                    firebaseEnabled = true;
+                    console.log('Firebase 已初始化（排行榜远程存储）');
+                }
+            } catch (e) {
+                console.warn('Firebase 初始化失败：', e);
+                firebaseEnabled = false;
+            }
+        }
+
+        async function saveScoreRemote(gameType, record) {
+            if (!firebaseEnabled || !db) return false;
+            try {
+                await db.collection('scores_' + gameType).add(Object.assign({}, record, {
+                    date: firebase.firestore.Timestamp.fromDate(new Date(record.date))
+                }));
+                return true;
+            } catch (e) {
+                console.error('saveScoreRemote 错误', e);
+                return false;
+            }
+        }
+
+        async function loadLeaderboardRemote(gameType, limit = 50) {
+            if (!firebaseEnabled || !db) return [];
+            try {
+                const snap = await db.collection('scores_' + gameType).orderBy('score', 'desc').limit(limit).get();
+                return snap.docs.map(d => {
+                    const data = d.data();
+                    return {
+                        id: d.id,
+                        name: data.name,
+                        score: data.score,
+                        level: data.level,
+                        stage: data.stage,
+                        date: data.date && data.date.toDate ? data.date.toDate().toISOString() : data.date
+                    };
+                });
+            } catch (e) {
+                console.error('loadLeaderboardRemote 错误', e);
+                return [];
+            }
+        }
+
+        // 尝试初始化 Firebase（如果用户替换了配置）
+        initFirebaseForLeaderboard();
+
         // 创建星空背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -2700,8 +2767,17 @@
                          (window.danmakuGame || undefined);
             
             const restartHandler = function() {
-                if (game.gameOver) {
-                    game.restart();
+                const liveGame = gameType === 'snake' ? window.snakeGame :
+                                 gameType === 'tetris' ? window.tetrisGame :
+                                 window.danmakuGame;
+
+                if (!liveGame) {
+                    // 没有活动的游戏实例，直接返回（避免控制台报错）
+                    return;
+                }
+
+                if (liveGame.gameOver) {
+                    liveGame.restart();
                     container.style.opacity = '0';
                     setTimeout(() => {
                         container.innerHTML = '';
@@ -2745,7 +2821,6 @@
                     
                     container.appendChild(particle);
                     
-                    // 设置最终位置
                     setTimeout(() => {
                         particle.style.left = `${50 + Math.cos(angle) * distance}%`;
                         particle.style.top = `${50 + Math.sin(angle) * distance}%`;
@@ -2757,7 +2832,7 @@
                             particle.remove();
                         }
                     }, 1500);
-                }, i * 30);
+                }, i * 50);
             }
         }
                 // 添加点击特效和音效
@@ -3329,7 +3404,7 @@
                 this.ctx.lineWidth = 0.5;
                 
                 // 绘制列线
-                for (let x = 0; x <= this.canvas.width; x += this.gridSize) {
+                for (let x = 0; x <= this.canvas.width; x += 50) {
                     this.ctx.beginPath();
                     this.ctx.moveTo(x, 0);
                     this.ctx.lineTo(x, this.canvas.height);
@@ -3337,7 +3412,7 @@
                 }
                 
                 // 绘制行线
-                for (let y = 0; y <= this.canvas.height; y += this.gridSize) {
+                for (let y = 0; y <= this.canvas.height; y += 50) {
                     this.ctx.beginPath();
                     this.ctx.moveTo(0, y);
                     this.ctx.lineTo(this.canvas.width, y);
@@ -4622,7 +4697,8 @@
                     }
                 }
             }
-                        updatePowerUps() {
+            
+            updatePowerUps() {
                 for (let i = this.powerUps.length - 1; i >= 0; i--) {
                     const powerUp = this.powerUps[i];
                     
@@ -5204,6 +5280,9 @@
                 this.updateDisplay();
                 this.needsRedraw = true;
                 this.draw();
+                
+                // 重新启动游戏循环
+                this.start();
             }
             
             start() {
@@ -5280,7 +5359,8 @@
                 this.loadLeaderboard('danmaku');
                 this.loadAllLeaderboard();
             }
-                        // 绑定排行榜事件
+            
+            // 绑定排行榜事件
             bindLeaderboardEvents() {
                 // 打开排行榜按钮
                 const openBtn = document.getElementById('openLeaderboardBtn');
@@ -5405,33 +5485,150 @@
                 }
             }
             
-            // 加载排行榜数据
+            // 加载排行榜数据（支持本地和远程 Firestore）
             loadLeaderboard(game) {
-                const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
                 const tableBody = document.getElementById(`${game}LeaderboardBody`);
-                
                 if (!tableBody) return;
-                
-                // 清空现有内容
                 tableBody.innerHTML = '';
-                
+
+                // 如果启用了 Firebase，则优先从远程加载
+                if (firebaseEnabled) {
+                    loadLeaderboardRemote(game).then(remoteData => {
+                        if (!remoteData || remoteData.length === 0) {
+                            tableBody.innerHTML = '<div class="no-records">暂无记录，快来成为第一名吧！</div>';
+                            return;
+                        }
+
+                        const displayData = remoteData.slice(0, 50);
+                        displayData.forEach((record, index) => {
+                            const row = document.createElement('div');
+                            row.className = `leaderboard-row rank-${index + 1}`;
+                            let rowContent = '';
+
+                            if (game === 'snake') {
+                                rowContent = `
+                                    <div class="rank-cell">${index + 1}</div>
+                                    <div class="name-cell">
+                                        <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                        ${record.name}
+                                    </div>
+                                    <div class="score-cell">${record.score}</div>
+                                    <div class="level-cell">-</div>
+                                    <div class="date-cell">${this.formatDate(record.date)}</div>
+                                    <div class="actions-cell">
+                                        <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                                    </div>
+                                `;
+                            } else if (game === 'tetris') {
+                                rowContent = `
+                                    <div class="rank-cell">${index + 1}</div>
+                                    <div class="name-cell">
+                                        <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                        ${record.name}
+                                    </div>
+                                    <div class="score-cell">${record.score}</div>
+                                    <div class="level-cell">${record.level || 1}</div>
+                                    <div class="date-cell">${this.formatDate(record.date)}</div>
+                                    <div class="actions-cell">
+                                        <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                                    </div>
+                                `;
+                            } else if (game === 'danmaku') {
+                                rowContent = `
+                                    <div class="rank-cell">${index + 1}</div>
+                                    <div class="name-cell">
+                                        <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                        ${record.name}
+                                    </div>
+                                    <div class="score-cell">${record.score}</div>
+                                    <div class="stage-cell">${record.stage || 1}</div>
+                                    <div class="date-cell">${this.formatDate(record.date)}</div>
+                                    <div class="actions-cell">
+                                        <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                                    </div>
+                                `;
+                            }
+
+                            row.innerHTML = rowContent;
+                            tableBody.appendChild(row);
+                        });
+                    }).catch(err => {
+                        console.error('远程排行榜加载失败，回退到本地：', err);
+                        // 回退到本地加载
+                        const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
+                        if (leaderboardData.length === 0) {
+                            tableBody.innerHTML = '<div class="no-records">暂无记录，快来成为第一名吧！</div>';
+                            return;
+                        }
+                        leaderboardData.sort((a, b) => b.score - a.score);
+                        const displayData = leaderboardData.slice(0, 50);
+                        displayData.forEach((record, index) => {
+                            const row = document.createElement('div');
+                            row.className = `leaderboard-row rank-${index + 1}`;
+                            let rowContent = '';
+                            if (game === 'snake') {
+                                rowContent = `
+                                    <div class="rank-cell">${index + 1}</div>
+                                    <div class="name-cell">
+                                        <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                        ${record.name}
+                                    </div>
+                                    <div class="score-cell">${record.score}</div>
+                                    <div class="level-cell">-</div>
+                                    <div class="date-cell">${this.formatDate(record.date)}</div>
+                                    <div class="actions-cell">
+                                        <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                                    </div>
+                                `;
+                            } else if (game === 'tetris') {
+                                rowContent = `
+                                    <div class="rank-cell">${index + 1}</div>
+                                    <div class="name-cell">
+                                        <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                        ${record.name}
+                                    </div>
+                                    <div class="score-cell">${record.score}</div>
+                                    <div class="level-cell">${record.level || 1}</div>
+                                    <div class="date-cell">${this.formatDate(record.date)}</div>
+                                    <div class="actions-cell">
+                                        <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                                    </div>
+                                `;
+                            } else if (game === 'danmaku') {
+                                rowContent = `
+                                    <div class="rank-cell">${index + 1}</div>
+                                    <div class="name-cell">
+                                        <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                        ${record.name}
+                                    </div>
+                                    <div class="score-cell">${record.score}</div>
+                                    <div class="stage-cell">${record.stage || 1}</div>
+                                    <div class="date-cell">${this.formatDate(record.date)}</div>
+                                    <div class="actions-cell">
+                                        <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                                    </div>
+                                `;
+                            }
+                            row.innerHTML = rowContent;
+                            tableBody.appendChild(row);
+                        });
+                    });
+
+                    return;
+                }
+
+                // 本地加载逻辑（fallback）
+                const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
                 if (leaderboardData.length === 0) {
                     tableBody.innerHTML = '<div class="no-records">暂无记录，快来成为第一名吧！</div>';
                     return;
                 }
-                
-                // 按得分排序
                 leaderboardData.sort((a, b) => b.score - a.score);
-                
-                // 显示前50条记录
                 const displayData = leaderboardData.slice(0, 50);
-                
                 displayData.forEach((record, index) => {
                     const row = document.createElement('div');
                     row.className = `leaderboard-row rank-${index + 1}`;
-                    
                     let rowContent = '';
-                    
                     if (game === 'snake') {
                         rowContent = `
                             <div class="rank-cell">${index + 1}</div>
@@ -5475,7 +5672,6 @@
                             </div>
                         `;
                     }
-                    
                     row.innerHTML = rowContent;
                     tableBody.appendChild(row);
                 });
@@ -5541,23 +5737,23 @@
                 return records.findIndex(record => record.id === recordId);
             }
             
-            // 保存当前得分
+            // 保存当前得分（保存到本地并尝试同步到远程 Firestore）
             saveCurrentScore() {
                 if (!this.currentGame || this.currentScore === 0) {
                     alert('请先完成一局游戏获得得分！');
                     return;
                 }
-                
+
                 const playerName = document.getElementById('playerNameInput').value || '玩家';
                 if (!playerName.trim()) {
                     alert('请输入玩家名称！');
                     return;
                 }
-                
+
                 // 更新本地存储的玩家名称
                 this.playerName = playerName;
                 localStorage.setItem('playerName', playerName);
-                
+
                 // 创建记录
                 const record = {
                     id: Date.now() + Math.random().toString(36).substr(2, 9),
@@ -5565,34 +5761,40 @@
                     score: this.currentScore,
                     date: new Date().toISOString()
                 };
-                
+
                 // 添加游戏特定数据
                 if (this.currentGame === 'tetris') {
                     record.level = this.currentLevel;
                 } else if (this.currentGame === 'danmaku') {
                     record.stage = this.currentStage;
                 }
-                
+
                 // 获取现有排行榜数据
                 const leaderboardData = JSON.parse(localStorage.getItem(`${this.currentGame}Leaderboard`) || '[]');
-                
-                // 添加新记录
+
+                // 添加新记录并保存到本地
                 leaderboardData.push(record);
-                
-                // 保存到本地存储
                 localStorage.setItem(`${this.currentGame}Leaderboard`, JSON.stringify(leaderboardData));
-                
-                // 重新加载排行榜
+
+                // 重新加载排行榜与统计
                 this.loadLeaderboard(this.currentGame);
                 this.loadAllLeaderboard();
-                
-                // 更新统计数据
                 this.updateStats();
-                
-                // 显示成功消息
+
+                // 尝试同步到远程（如果已配置 Firebase）
+                if (firebaseEnabled) {
+                    saveScoreRemote(this.currentGame, record).then(ok => {
+                        if (ok) {
+                            console.log('远程排行榜保存成功');
+                            // 可选择提示用户或刷新远程排行榜
+                        } else {
+                            console.warn('远程排行榜保存失败，保留本地记录');
+                        }
+                    });
+                }
+
+                // 显示成功消息并检查名次
                 alert(`得分 ${this.currentScore} 已保存到排行榜！`);
-                
-                // 检查是否进入前三名
                 this.checkTopThree(leaderboardData, record);
             }
             
@@ -6035,7 +6237,7 @@
                     } else if (danmakuContainer.style.display === 'flex') {
                         document.getElementById('closeDanmakuGame').click();
                     }
-                }
+                    }
             });
         });
     </script>
