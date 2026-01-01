@@ -22,7 +22,7 @@
         }
         
         /* 星空背景 */
-        .stars {
+        .星星 {
             position: fixed;
             top: 0;
             left: 0;
@@ -35,7 +35,335 @@
             position: absolute;
             background-color: white;
             border-radius: 50%;
-            animation: twinkle 3s infinite alternate;
+            animation: twinkle 3 infinite alternate;
+        }
+        
+        /* 旋转地球球体 */
+        .earth-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            perspective: 2000px;
+            transform-style: preserve-3d;
+        }
+
+        .earth {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            animation: earthOrbit 40s linear infinite;
+        }
+
+        .earth-left {
+            transform: translate(-120%, -50%) rotateY(15deg);
+            animation: earthOrbitLeft 40s linear infinite;
+        }
+
+        .earth-right {
+            transform: translate(20%, -50%) rotateY(-15deg);
+            animation: earthOrbitRight 40s linear infinite;
+        }
+
+        /* 控制器样式（用于替换地球装饰） */
+        .controller { pointer-events: none; display:flex; align-items:center; justify-content:center; }
+        .controller-left, .controller-right { width: 260px; height: 160px; }
+
+        /* 游戏机外观 */
+        .console {
+            width: 240px;
+            height: 140px;
+            border-radius: 18px;
+            background: linear-gradient(180deg,#111827,#0b1220);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.6), inset 0 2px 8px rgba(255,255,255,0.02);
+            display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;
+        }
+
+        .console-screen {
+            width: 180px; height: 80px; border-radius:8px;
+            background: linear-gradient(180deg,#05223a,#031827);
+            box-shadow: inset 0 6px 18px rgba(0,160,255,0.08), 0 6px 18px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.03);
+            margin-bottom:8px;
+        }
+
+        .console-details { display:flex; gap:8px; align-items:center; }
+        .console-vent { width:40px; height:8px; background:linear-gradient(90deg,#0f1720,#0b1220); border-radius:4px; box-shadow: inset 0 1px 2px rgba(255,255,255,0.02); }
+        .console-logo { color:#ffd166; font-weight:700; margin-left:8px; font-size:14px; opacity:0.9; }
+
+        /* 游戏键（ABXY）——十字排布 */
+        .game-keys { position:relative; width:140px; height:140px; }
+        .gkey { position:absolute; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:18px; box-shadow: 0 10px 24px rgba(0,0,0,0.6); }
+        .gkey-x { top:6px; left:50%; transform:translate(-50%,0); }
+        .gkey-y { bottom:6px; left:50%; transform:translate(-50%,0); }
+        .gkey-a { right:6px; top:50%; transform:translate(0,-50%); }
+        .gkey-b { left:6px; top:50%; transform:translate(0,-50%); }
+        .gkey-a { background: linear-gradient(180deg,#ff6b75,#ff3b30); }
+        .gkey-b { background: linear-gradient(180deg,#7fffb1,#2bd97b); }
+        .gkey-x { background: linear-gradient(180deg,#80b8ff,#379bff); }
+        .gkey-y { background: linear-gradient(180deg,#ffe89a,#ffd166); }
+
+        /* 将左右控制器更靠两侧（保留旋转动画逻辑） */
+        .earth-left { transform: translate(-140%, -50%) rotateY(15deg); }
+        .earth-right { transform: translate(140%, -50%) rotateY(-15deg); }
+
+        /* 地球球体 */
+        .earth-sphere {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            background: 
+                radial-gradient(circle at 30% 40%, 
+                    rgba(0, 120, 255, 0.9) 0%,
+                    rgba(0, 100, 200, 0.85) 10%,
+                    rgba(0, 80, 180, 0.8) 20%,
+                    rgba(0, 60, 160, 0.75) 30%,
+                    rgba(0, 40, 140, 0.7) 40%,
+                    rgba(0, 20, 120, 0.65) 50%,
+                    rgba(0, 10, 100, 0.6) 60%,
+                    rgba(0, 0, 80, 0.55) 70%,
+                    rgba(0, 0, 60, 0.5) 80%,
+                    rgba(0, 0, 40, 0.45) 90%,
+                    rgba(0, 0, 20, 0.4) 100%
+                ),
+                radial-gradient(circle at 70% 60%, 
+                    rgba(34, 139, 34, 0.8) 0%,
+                    rgba(30, 130, 30, 0.75) 5%,
+                    rgba(26, 120, 26, 0.7) 10%,
+                    rgba(22, 110, 22, 0.65) 15%,
+                    rgba(18, 100, 18, 0.6) 20%,
+                    rgba(14, 90, 14, 0.55) 25%,
+                    rgba(10, 80, 10, 0.5) 30%,
+                    rgba(6, 70, 6, 0.45) 35%,
+                    rgba(2, 60, 2, 0.4) 40%,
+                    transparent 45%
+                ),
+                radial-gradient(circle at 40% 70%, 
+                    rgba(34, 139, 34, 0.7) 0%,
+                    rgba(30, 130, 30, 0.65) 5%,
+                    rgba(26, 120, 26, 0.6) 10%,
+                    rgba(22, 110, 22, 0.55) 15%,
+                    rgba(18, 100, 18, 0.5) 20%,
+                    rgba(14, 90, 14, 0.45) 25%,
+                    rgba(10, 80, 10, 0.4) 30%,
+                    rgba(6, 70, 6, 0.35) 35%,
+                    rgba(2, 60, 2, 0.3) 40%,
+                    transparent 45%
+                ),
+                radial-gradient(circle at 60% 30%, 
+                    rgba(200, 150, 50, 0.6) 0%,
+                    rgba(190, 140, 45, 0.55) 5%,
+                    rgba(180, 130, 40, 0.5) 10%,
+                    rgba(170, 120, 35, 0.45) 15%,
+                    rgba(160, 110, 30, 0.4) 20%,
+                    rgba(150, 100, 25, 0.35) 25%,
+                    rgba(140, 90, 20, 0.3) 30%,
+                    rgba(130, 80, 15, 0.25) 35%,
+                    rgba(120, 70, 10, 0.2) 40%,
+                    transparent 45%
+                );
+            box-shadow: 
+                inset -30px -30px 60px rgba(0, 0, 0, 0.7),
+                inset 30px 30px 60px rgba(255, 255, 255, 0.1),
+                0 0 100px rgba(0, 217, 255, 0.4);
+            overflow: hidden;
+        }
+
+        /* 地球纹理细节 */
+        .earth-detail {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 110%;
+            height: 110%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: 
+                radial-gradient(circle at 30% 30%, 
+                    rgba(0, 100, 200, 0.3) 0%,
+                    transparent 20%
+                ),
+                radial-gradient(circle at 70% 50%, 
+                    rgba(0, 150, 200, 0.2) 0%,
+                    transparent 15%
+                ),
+                radial-gradient(circle at 50% 70%, 
+                    rgba(0, 80, 180, 0.25) 0%,
+                    transparent 18%
+                );
+            opacity: 0.5;
+        }
+
+        /* 地球云层 */
+        .earth-clouds {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 115%;
+            height: 115%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: 
+                radial-gradient(circle at 40% 60%, 
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(255, 255, 255, 0.2) 5%,
+                    rgba(255, 255, 255, 0.15) 10%,
+                    rgba(255, 255, 255, 0.1) 15%,
+                    rgba(255, 255, 255, 0.05) 20%,
+                    transparent 25%
+                ),
+                radial-gradient(circle at 60% 40%, 
+                    rgba(255, 255, 255, 0.2) 0%,
+                    rgba(255, 255, 255, 0.15) 5%,
+                    rgba(255, 255, 255, 0.1) 10%,
+                    rgba(255, 255, 255, 0.05) 15%,
+                    transparent 20%
+                ),
+                radial-gradient(circle at 20% 80%, 
+                    rgba(255, 255, 255, 0.15) 0%,
+                    rgba(255, 255, 255, 0.1) 5%,
+                    rgba(255, 255, 255, 0.05) 10%,
+                    transparent 15%
+                );
+            opacity: 0.6;
+            animation: cloudRotate 60s linear infinite;
+        }
+
+        /* 地球大气层 */
+        .earth-atmosphere {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle at center, 
+                rgba(135, 206, 235, 0.2) 0%,
+                rgba(135, 206, 235, 0.1) 20%,
+                rgba(135, 206, 235, 0.05) 40%,
+                transparent 70%
+            );
+            box-shadow: 
+                inset 0 0 100px rgba(135, 206, 235, 0.1),
+                0 0 150px rgba(135, 206, 235, 0.2);
+            animation: atmospherePulse 8s ease-in-out infinite;
+        }
+
+        /* 地球光晕 */
+        .earth-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 130%;
+            height: 130%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, 
+                rgba(0, 217, 255, 0.15) 0%,
+                rgba(0, 217, 255, 0.1) 20%,
+                rgba(0, 217, 255, 0.05) 40%,
+                transparent 70%
+            );
+            animation: glowPulse 5s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        /* 地球经纬线 */
+        .earth-grid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+        }
+
+        .grid-line {
+            position: absolute;
+            background: transparent;
+            transform-origin: center;
+        }
+
+        .equator {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transform: rotateX(90deg);
+        }
+
+        .meridian {
+            top: 0;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateX(-50%);
+        }
+
+        .meridian:nth-child(3) { transform: translateX(-50%) rotateY(45deg); }
+        .meridian:nth-child(4) { transform: translateX(-50%) rotateY(90deg); }
+        .meridian:nth-child(5) { transform: translateX(-50%) rotateY(135deg); }
+
+        /* 地球环绕轨道 */
+        .earth-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            z-index: -1;
+        }
+
+        /* 地球环绕粒子 */
+        .orbit-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(0, 217, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 1);
+            top: 0;
+            left: 50%;
+            transform-origin: center 200px;
+            animation: orbitParticle 10s linear infinite;
+        }
+
+        .orbit-particle:nth-child(2) { 
+            animation-delay: -2.5s;
+            background: rgba(255, 0, 100, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 100, 1);
+        }
+        
+        .orbit-particle:nth-child(3) { 
+            animation-delay: -5s;
+            background: rgba(255, 204, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 1);
+        }
+        
+        .orbit-particle:nth-child(4) { 
+            animation-delay: -7.5s;
+            background: rgba(74, 0, 255, 0.8);
+            box-shadow: 0 0 15px rgba(74, 0, 255, 1);
         }
         
         /* 优雅边框 */
@@ -605,8 +933,7 @@
             line-height: 20px;
             font-size: 0.9rem;
         }
-        
-        /* 动画 */
+                /* 动画 */
         @keyframes heartbeat {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
@@ -677,7 +1004,526 @@
             100% { transform: translateY(0); }
         }
         
-        /* 响应式设计 */
+        /* 地球动画 */
+        @keyframes earthOrbit {
+            0% {
+                transform: translate(-50%, -50%) rotateY(0deg) rotateX(10deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotateY(360deg) rotateX(10deg);
+            }
+        }
+
+        @keyframes earthOrbitLeft {
+            0% {
+                transform: translate(-120%, -50%) rotateY(15deg) rotateX(0deg);
+            }
+            100% {
+                transform: translate(-120%, -50%) rotateY(375deg) rotateX(0deg);
+            }
+        }
+
+        @keyframes earthOrbitRight {
+            0% {
+                transform: translate(20%, -50%) rotateY(-15deg) rotateX(0deg);
+            }
+            100% {
+                transform: translate(20%, -50%) rotateY(345deg) rotateX(0deg);
+            }
+        }
+
+        @keyframes cloudRotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes atmospherePulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        @keyframes orbitParticle {
+            0% {
+                transform: rotate(0deg) translateY(-200px);
+            }
+            100% {
+                transform: rotate(360deg) translateY(-200px);
+            }
+        }
+        
+        /* =============== 排行榜CSS =============== */
+        /* 排行榜按钮 */
+        .leaderboard-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.9), rgba(255, 102, 0, 0.9));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255, 204, 0, 1), rgba(255, 102, 0, 1));
+        }
+
+        .leaderboard-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* 排行榜容器 */
+        .leaderboard-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 204, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.3);
+            z-index: 1001;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: linear-gradient(90deg, rgba(255, 0, 100, 0.3), rgba(255, 204, 0, 0.3));
+            border-bottom: 1px solid rgba(255, 204, 0, 0.5);
+        }
+
+        .leaderboard-title {
+            font-size: 2.2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+            margin: 0;
+        }
+
+        .close-leaderboard {
+            background: rgba(255, 0, 100, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3;
+        }
+
+        .close-leaderboard:hover {
+            background: rgba(255, 0, 100, 1);
+            transform: scale(1.1);
+        }
+
+        /* 排行榜标签页 */
+        .leaderboard-tabs {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(255, 204, 0, 0.3);
+            padding: 0 30px;
+        }
+
+        .leaderboard-tab {
+            padding: 15px 25px;
+            background: transparent;
+            color: #b0b0ff;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .leaderboard-tab:hover {
+            color: #ffcc00;
+            background-color: rgba(255, 204, 0, 0.1);
+        }
+
+        .leaderboard-tab.active {
+            color: #ffcc00;
+            border-bottom: 3px solid #ffcc00;
+            background-color: rgba(255, 204, 0, 0.05);
+        }
+
+        /* 排行榜内容区域 */
+        .leaderboard-content {
+            padding: 20px 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* 隐藏滚动条但保持功能 */
+        .leaderboard-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 204, 0, 0.8);
+        }
+
+        /* 排行榜表格 */
+        .leaderboard-table {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .leaderboard-table.active {
+            display: block;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+            background-color: rgba(255, 204, 0, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            color: #ffcc00;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        #tetrisLeaderboard .table-header {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #danmakuLeaderboard .table-header {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #allLeaderboard .table-header {
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+        }
+
+        .table-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .table-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .table-body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .table-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 0, 0.4);
+            border-radius: 3px;
+        }
+
+        /* 排行榜行 */
+        .leaderboard-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+            padding: 15px;
+            margin-bottom: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+            align-items: center;
+        }
+
+        .leaderboard-row:hover {
+            background-color: rgba(255, 204, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        #tetrisLeaderboard .leaderboard-row {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #danmakuLeaderboard .leaderboard-row {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #allLeaderboard .leaderboard-row {
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+        }
+
+        /* 排名样式 */
+        .rank-cell {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rank-1 {
+            color: #ffcc00;
+            border-left-color: #ffcc00;
+        }
+
+        .rank-2 {
+            color: #c0c0c0;
+            border-left-color: #c0c0c0;
+        }
+
+        .rank-3 {
+            color: #cd7f32;
+            border-left-color: #cd7f32;
+        }
+
+        .rank-1 .rank-cell::before {
+            content: "🥇 ";
+        }
+
+        .rank-2 .rank-cell::before {
+            content: "🥈 ";
+        }
+
+        .rank-3 .rank-cell::before {
+            content: "🥉 ";
+        }
+
+        .name-cell {
+            font-size: 1.2rem;
+            color: #00d9ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .name-cell .player-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0064, #4a00ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .score-cell {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffcc00;
+            text-align: center;
+        }
+
+        .level-cell, .stage-cell, .game-cell {
+            text-align: center;
+            color: #b0b0ff;
+        }
+
+        .date-cell {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background: rgba(255, 0, 100, 0.7);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 0, 100, 1);
+            transform: scale(1.05);
+        }
+
+        .action-btn.delete {
+            background: rgba(255, 0, 0, 0.7);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(255, 0, 0, 1);
+        }
+
+        /* 无记录提示 */
+        .no-records {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 2px dashed rgba(255, 204, 0, 0.3);
+        }
+
+        /* 排行榜控制区域 */
+        .leaderboard-controls {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 204, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .player-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        #playerNameInput {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 204, 0, 0.5);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        #playerNameInput:focus {
+            outline: none;
+            border-color: #ffcc00;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+        }
+
+        .save-btn, .clear-btn, .export-btn, .import-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.8), rgba(74, 0, 255, 0.8));
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 1), rgba(74, 0, 255, 1));
+            transform: translateY(-2px);
+        }
+
+        .leaderboard-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, rgba(255, 0, 100, 0.8), rgba(255, 0, 0, 0.8));
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 100, 1), rgba(255, 0, 0, 1));
+            transform: translateY(-2px);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.8), rgba(255, 102, 0, 0.8));
+            color: white;
+        }
+
+        .export-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 1), rgba(255, 102, 0, 1));
+            transform: translateY(-2px);
+        }
+
+        .import-btn {
+            background: linear-gradient(135deg, rgba(0, 255, 100, 0.8), rgba(0, 180, 100, 0.8));
+            color: white;
+        }
+
+        .import-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 100, 1), rgba(0, 180, 100, 1));
+            transform: translateY(-2px);
+        }
+
+        /* 排行榜统计 */
+        .leaderboard-stats {
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .stat-item {
+            color: #b0b0ff;
+            font-size: 1.1rem;
+        }
+
+        .stat-item span {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+                /* 响应式设计 */
         @media (max-width: 768px) {
             .main-title {
                 font-size: 3rem;
@@ -749,6 +1595,88 @@
             .game-over-restart {
                 font-size: 1.5rem;
                 top: 70%;
+            }
+            
+            /* 响应式设计中的地球样式 */
+            .earth {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .earth-sphere {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .earth-orbit {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .orbit-particle {
+                transform-origin: center 140px;
+            }
+            
+            .earth-left {
+                transform: translate(-120%, -50%) rotateY(15deg);
+            }
+            
+            .earth-right {
+                transform: translate(20%, -50%) rotateY(-15deg);
+            }
+            
+            /* 排行榜响应式 */
+            .leaderboard-container {
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .leaderboard-title {
+                font-size: 1.8rem;
+            }
+            
+            .leaderboard-tabs {
+                padding: 0 15px;
+                flex-wrap: wrap;
+            }
+            
+            .leaderboard-tab {
+                padding: 12px 15px;
+                font-size: 1rem;
+                flex: 1;
+                min-width: 120px;
+            }
+            
+            .leaderboard-content {
+                padding: 15px;
+                max-height: 50vh;
+            }
+            
+            .table-header, .leaderboard-row {
+                grid-template-columns: 60px 1fr 100px 100px 120px 80px !important;
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+            
+            .date-cell {
+                font-size: 0.8rem;
+            }
+            
+            .leaderboard-controls {
+                padding: 15px;
+            }
+            
+            .player-input, .leaderboard-actions {
+                flex-direction: column;
+            }
+            
+            #playerNameInput {
+                min-width: 100%;
+            }
+            
+            .leaderboard-stats {
+                flex-direction: column;
+                gap: 10px;
             }
         }
         
@@ -824,12 +1752,96 @@
                 font-size: 1.3rem;
                 top: 70%;
             }
+            
+            /* 响应式设计中的地球样式 */
+            .earth {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .earth-sphere {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .earth-orbit {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .orbit-particle {
+                transform-origin: center 110px;
+            }
+            
+            .earth-left {
+                transform: translate(-120%, -50%) rotateY(15deg);
+            }
+            
+            .earth-right {
+                transform: translate(20%, -50%) rotateY(-15deg);
+            }
+            
+            /* 排行榜响应式 */
+            .leaderboard-title {
+                font-size: 1.5rem;
+            }
+            
+            .table-header, .leaderboard-row {
+                grid-template-columns: 50px 1fr 80px 80px 100px 70px !important;
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+            
+            .name-cell {
+                font-size: 1rem;
+            }
+            
+            .score-cell {
+                font-size: 1.1rem;
+            }
+            
+            .actions-cell {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- 星空背景 -->
     <div class="stars" id="stars"></div>
+    
+    <!-- 控制器装饰（左侧为游戏机，右侧为 ABXY 键） -->
+    <div class="earth-container">
+        <div class="earth earth-left">
+            <div class="controller controller-left" aria-hidden="true">
+                <div class="console">
+                    <div class="console-screen"></div>
+                    <div class="console-details">
+                        <div class="console-vent"></div>
+                        <div class="console-vent"></div>
+                        <div class="console-logo">GAME</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="earth earth-right">
+            <div class="controller controller-right" aria-hidden="true">
+                <div class="game-keys" aria-hidden="true">
+                    <div class="gkey gkey-a">A</div>
+                    <div class="gkey gkey-b">B</div>
+                    <div class="gkey gkey-x">X</div>
+                    <div class="gkey gkey-y">Y</div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- 优雅边框 -->
     <div class="elegant-border">
@@ -881,8 +1893,7 @@
     <div class="footer">
         <p>特别致敬页面 | 设计于2025年12月28日</p>
     </div>
-    
-    <!-- 贪吃蛇游戏容器 -->
+        <!-- 贪吃蛇游戏容器 -->
     <div class="game-container" id="snakeGameContainer">
         <div class="game-header">
             <h2 class="game-title">贪吃蛇</h2>
@@ -1092,50 +2103,147 @@
         </div>
         
         <!-- 弹幕游戏控制说明 -->
-<div class="control-instructions">
-    <div class="control-title">控制说明</div>
-    <div class="control-grid">
-        <div class="control-item">
-            <div class="key">↑ / W</div>
-            <div class="function">向上移动</div>
-        </div>
-        <div class="control-item">
-            <div class="key">↓ / S</div>
-            <div class="function">向下移动</div>
-        </div>
-        <div class="control-item">
-            <div class="key">← / A</div>
-            <div class="function">向左移动</div>
-        </div>
-        <div class="control-item">
-            <div class="key">→ / D</div>
-            <div class="function">向右移动</div>
-        </div>
-        <div class="control-item">
-            <div class="key">Z / 空格</div>
-            <div class="function">射击</div>
-        </div>
-        <div class="control-item">
-            <div class="key">X</div>
-            <div class="function">炸弹</div>
-        </div>
-        <div class="control-item">
-            <div class="key">Shift</div>
-            <div class="function">低速</div>
-        </div>
-        <div class="control-item">
-            <div class="key">P</div>
-            <div class="function">暂停/继续</div>
-        </div>
-        <div class="control-item">
-            <div class="key">R</div>
-            <div class="function">重新开始</div>
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">向上移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">向下移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">向左移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">向右移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Z / 空格</div>
+                    <div class="function">射击</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">X</div>
+                    <div class="function">炸弹</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Shift</div>
+                    <div class="function">低速</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
     
-    <!-- 添加音效相关脚本 -->
-    <script>
+    <!-- 排行榜入口按钮 -->
+    <button class="leaderboard-btn" id="openLeaderboardBtn">🏆 排行榜</button>
+    
+    <!-- 排行榜容器 -->
+    <div class="leaderboard-container" id="leaderboardContainer">
+        <div class="leaderboard-header">
+            <h2 class="leaderboard-title">🎮 游戏排行榜 🏆</h2>
+            <button class="close-leaderboard" id="closeLeaderboard">×</button>
+        </div>
+        
+        <div class="leaderboard-tabs">
+            <button class="leaderboard-tab active" data-game="snake">贪吃蛇</button>
+            <button class="leaderboard-tab" data-game="tetris">俄罗斯方块</button>
+            <button class="leaderboard-tab" data-game="danmaku">弹幕射击</button>
+            <button class="leaderboard-tab" data-game="all">总排行榜</button>
+        </div>
+        
+        <div class="leaderboard-content">
+            <!-- 贪吃蛇排行榜 -->
+            <div class="leaderboard-table active" id="snakeLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="snakeLeaderboardBody">
+                    <!-- 排行榜数据将动态加载 -->
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 俄罗斯方块排行榜 -->
+            <div class="leaderboard-table" id="tetrisLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="level-header">等级</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="tetrisLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 弹幕射击排行榜 -->
+            <div class="leaderboard-table" id="danmakuLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="stage-header">关卡</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="danmakuLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 总排行榜 -->
+            <div class="leaderboard-table" id="allLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="game-header">游戏</div>
+                    <div class="score-header">得分</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="allLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="leaderboard-controls">
+            <div class="player-input">
+                <input type="text" id="playerNameInput" placeholder="输入你的名字（默认：玩家）" maxlength="12">
+                <button id="saveScoreBtn" class="save-btn">保存当前得分</button>
+            </div>
+            <div class="leaderboard-actions">
+                <button id="clearLeaderboardBtn" class="clear-btn">清空排行榜</button>
+                <button id="exportLeaderboardBtn" class="export-btn">导出排行榜</button>
+                <button id="importLeaderboardBtn" class="import-btn">导入排行榜</button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+            </div>
+            <div class="leaderboard-stats">
+                <div class="stat-item">总记录数: <span id="totalRecords">0</span></div>
+                <div class="stat-item">今日新增: <span id="todayRecords">0</span></div>
+                <div class="stat-item">最高分: <span id="highestScore">0</span></div>
+            </div>
+        </div>
+    </div>
+        <script>
         // 创建星空背景
         function createStars() {
             const starsContainer = document.getElementById('stars');
@@ -1199,86 +2307,295 @@
             }
         }
         
-        // 创建"wow"音效
-        function createWowSound() {
-            // 创建一个音频上下文
+        // 添加地球的鼠标交互效果
+        function addEarthInteraction() {
+            const earths = document.querySelectorAll('.earth');
+            
+            earths.forEach(earth => {
+                earth.addEventListener('mouseenter', () => {
+                    if (currentGame) return; // 如果正在游戏中，不触发交互
+                    
+                    // 加速地球旋转
+                    earth.style.animationDuration = '20s';
+                    
+                    // 增强光效
+                    const sphere = earth.querySelector('.earth-sphere');
+                    if (sphere) {
+                        sphere.style.boxShadow = 
+                            'inset -40px -40px 80px rgba(0, 0, 0, 0.8), ' +
+                            'inset 40px 40px 80px rgba(255, 255, 255, 0.15), ' +
+                            '0 0 150px rgba(0, 217, 255, 0.6)';
+                    }
+                    
+                    // 创建环绕粒子
+                    createOrbitingParticles(earth);
+                });
+                
+                earth.addEventListener('mouseleave', () => {
+                    if (currentGame) return;
+                    
+                    // 恢复地球旋转速度
+                    earth.style.animationDuration = '40s';
+                    
+                    // 恢复光效
+                    const sphere = earth.querySelector('.earth-sphere');
+                    if (sphere) {
+                        sphere.style.boxShadow = 
+                            'inset -30px -30px 60px rgba(0, 0, 0, 0.7), ' +
+                            'inset 30px 30px 60px rgba(255, 255, 255, 0.1), ' +
+                            '0 0 100px rgba(0, 217, 255, 0.4)';
+                    }
+                });
+                
+                earth.addEventListener('click', () => {
+                    if (currentGame) return;
+                    
+                    // 点击地球播放特殊音效
+                    createEarthClickSound();
+                    
+                    // 创建点击特效
+                    createEarthExplosion(earth);
+                });
+            });
+        }
+
+        // 创建环绕地球的粒子
+        function createOrbitingParticles(earth) {
+            const particleCount = 8;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('orbit-particle');
+                
+                // 设置粒子样式
+                particle.style.position = 'absolute';
+                particle.style.width = '8px';
+                particle.style.height = '8px';
+                particle.style.backgroundColor = '#00d9ff';
+                particle.style.borderRadius = '50%';
+                particle.style.boxShadow = '0 0 20px #00d9ff';
+                
+                // 计算轨道位置
+                const angle = (Math.PI * 2 / particleCount) * i;
+                const orbitRadius = 150;
+                
+                // 设置动画
+                particle.style.animation = `orbitParticle ${5 + Math.random() * 3}s linear infinite`;
+                particle.style.animationDelay = `${Math.random() * 2}s`;
+                
+                earth.querySelector('.earth-orbit').appendChild(particle);
+                
+                // 3秒后移除粒子
+                setTimeout(() => {
+                    particle.style.opacity = '0';
+                    particle.style.transition = 'opacity 0.5s';
+                    
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.remove();
+                        }
+                    }, 500);
+                }, 3000);
+            }
+        }
+
+        // 创建地球点击音效
+        function createEarthClickSound() {
             const audioContext = new (window.AudioContext || window.webkitAudioContext)();
             
-            // 创建主增益节点控制音量
+            // 创建主增益节点
             const masterGain = audioContext.createGain();
-            masterGain.gain.value = 0.5; // 音量调整为50%
+            masterGain.gain.value = 0.3;
             masterGain.connect(audioContext.destination);
             
-            // 创建主振荡器 - 产生"wow"效果
-            const oscillator = audioContext.createOscillator();
-            oscillator.type = 'sine';
+            // 创建太空音效
+            const oscillator1 = audioContext.createOscillator();
+            oscillator1.type = 'sine';
+            oscillator1.frequency.setValueAtTime(329.63, audioContext.currentTime); // E4
             
-            // 设置频率变化 - 从高到低创造"wow"效果
-            oscillator.frequency.setValueAtTime(880, audioContext.currentTime); // A5
-            oscillator.frequency.exponentialRampToValueAtTime(440, audioContext.currentTime + 0.3); // A4
+            const gainNode1 = audioContext.createGain();
+            gainNode1.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode1.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+            gainNode1.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1);
             
-            // 创建增益节点控制音量包络
-            const gainNode = audioContext.createGain();
-            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.8, audioContext.currentTime + 0.05);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            oscillator1.connect(gainNode1);
+            gainNode1.connect(masterGain);
             
-            // 连接节点
-            oscillator.connect(gainNode);
-            gainNode.connect(masterGain);
-            
-            // 启动和停止振荡器
-            oscillator.start();
-            oscillator.stop(audioContext.currentTime + 0.6);
-            
-            // 同时添加一个较低的振荡器创造和声效果
+            // 添加和声
             const oscillator2 = audioContext.createOscillator();
-            oscillator2.type = 'sine';
-            oscillator2.frequency.setValueAtTime(660, audioContext.currentTime); // E5
-            oscillator2.frequency.exponentialRampToValueAtTime(330, audioContext.currentTime + 0.4); // E4
+            oscillator2.type = 'triangle';
+            oscillator2.frequency.setValueAtTime(659.25, audioContext.currentTime); // E5
             
             const gainNode2 = audioContext.createGain();
             gainNode2.gain.setValueAtTime(0, audioContext.currentTime);
-            gainNode2.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
-            gainNode2.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.6);
+            gainNode2.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
+            gainNode2.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.8);
             
             oscillator2.connect(gainNode2);
             gainNode2.connect(masterGain);
             
+            oscillator1.start();
+            oscillator1.stop(audioContext.currentTime + 1);
+            
             oscillator2.start();
-            oscillator2.stop(audioContext.currentTime + 0.7);
+            oscillator2.stop(audioContext.currentTime + 0.8);
+        }
+
+        // 创建地球点击爆炸特效
+        function createEarthExplosion(earth) {
+            const explosionCount = 20;
             
-            // 添加一点混响效果
-            const convolver = audioContext.createConvolver();
-            
-            // 创建一个简单的脉冲响应模拟房间混响
-            const sampleRate = audioContext.sampleRate;
-            const length = sampleRate * 0.5;
-            const impulse = audioContext.createBuffer(2, length, sampleRate);
-            const left = impulse.getChannelData(0);
-            const right = impulse.getChannelData(1);
-            
-            for (let i = 0; i < length; i++) {
-                left[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
-                right[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / length, 2);
+            for (let i = 0; i < explosionCount; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.classList.add('earth-explosion-particle');
+                    
+                    // 随机位置和方向
+                    const angle = (Math.PI * 2 / explosionCount) * i + Math.random() * 0.5;
+                    const distance = 150 + Math.random() * 80;
+                    const size = 8 + Math.random() * 15;
+                    
+                    // 随机颜色（蓝绿色系）
+                    const colors = ['#00d9ff', '#00ffcc', '#00bfff', '#0080ff'];
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    // 设置粒子样式
+                    particle.style.position = 'absolute';
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    particle.style.backgroundColor = color;
+                    particle.style.borderRadius = '50%';
+                    particle.style.boxShadow = `0 0 30px ${color}`;
+                    particle.style.left = '50%';
+                    particle.style.top = '50%';
+                    particle.style.transform = 'translate(-50%, -50%)';
+                    
+                    earth.appendChild(particle);
+                    
+                    // 动画
+                    setTimeout(() => {
+                        particle.style.left = `${50 + Math.cos(angle) * distance}%`;
+                        particle.style.top = `${50 + Math.sin(angle) * distance}%`;
+                        particle.style.opacity = '0';
+                        particle.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                        particle.style.transition = 'all 1s ease-out';
+                    }, 10);
+                    
+                    // 移除粒子
+                    setTimeout(() => {
+                        if (particle.parentNode) {
+                            particle.remove();
+                        }
+                    }, 1100);
+                }, i * 50);
             }
-            
-            convolver.buffer = impulse;
-            
-            // 将振荡器连接到混响然后到主增益
-            const dryGain = audioContext.createGain();
-            const wetGain = audioContext.createGain();
-            dryGain.gain.value = 0.7;
-            wetGain.gain.value = 0.3;
-            
-            oscillator.connect(dryGain);
-            oscillator2.connect(dryGain);
-            dryGain.connect(masterGain);
-            
-            oscillator.connect(convolver);
-            oscillator2.connect(convolver);
-            convolver.connect(wetGain);
-            wetGain.connect(masterGain);
+        }
+        
+        // 创建点击音效（循环四种音色）
+        function createWowSound() {
+            if (typeof window._clickSoundIndex === 'undefined') window._clickSoundIndex = 0;
+            const idx = window._clickSoundIndex % 4;
+            window._clickSoundIndex++;
+
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const masterGain = audioContext.createGain();
+            masterGain.gain.value = 0.45;
+            masterGain.connect(audioContext.destination);
+
+            const now = audioContext.currentTime;
+
+            if (idx === 0) {
+                // 1: 原始 wow（上降频 + 2 个正弦和少量混响）
+                const oscA = audioContext.createOscillator();
+                oscA.type = 'sine';
+                oscA.frequency.setValueAtTime(880, now);
+                oscA.frequency.exponentialRampToValueAtTime(440, now + 0.32);
+
+                const gA = audioContext.createGain();
+                gA.gain.setValueAtTime(0, now);
+                gA.gain.linearRampToValueAtTime(0.8, now + 0.04);
+                gA.gain.exponentialRampToValueAtTime(0.01, now + 0.6);
+
+                const oscB = audioContext.createOscillator();
+                oscB.type = 'sine';
+                oscB.frequency.setValueAtTime(660, now);
+                oscB.frequency.exponentialRampToValueAtTime(330, now + 0.42);
+
+                const gB = audioContext.createGain();
+                gB.gain.setValueAtTime(0, now);
+                gB.gain.linearRampToValueAtTime(0.45, now + 0.06);
+                gB.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
+
+                const convolver = audioContext.createConvolver();
+                // 简单脉冲响应
+                const sampleRate = audioContext.sampleRate;
+                const len = Math.floor(sampleRate * 0.25);
+                const buf = audioContext.createBuffer(2, len, sampleRate);
+                for (let c = 0; c < 2; c++) {
+                    const data = buf.getChannelData(c);
+                    for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 2);
+                }
+                convolver.buffer = buf;
+
+                oscA.connect(gA); gA.connect(masterGain);
+                oscB.connect(gB); gB.connect(masterGain);
+                oscA.connect(convolver); oscB.connect(convolver);
+                convolver.connect(masterGain);
+
+                oscA.start(); oscA.stop(now + 0.7);
+                oscB.start(); oscB.stop(now + 0.75);
+            } else if (idx === 1) {
+                // 2: 短促点击（方波 + 快速包络）
+                const osc = audioContext.createOscillator();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(1200, now);
+
+                const g = audioContext.createGain();
+                g.gain.setValueAtTime(0, now);
+                g.gain.linearRampToValueAtTime(0.9, now + 0.005);
+                g.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+
+                osc.connect(g); g.connect(masterGain);
+                osc.start(); osc.stop(now + 0.14);
+            } else if (idx === 2) {
+                // 3: 下行三音（三连音短旋律）
+                const freqs = [880, 660, 440];
+                freqs.forEach((f, i) => {
+                    const o = audioContext.createOscillator();
+                    o.type = 'triangle';
+                    o.frequency.setValueAtTime(f, now + i * 0.06);
+                    const gg = audioContext.createGain();
+                    gg.gain.setValueAtTime(0, now + i * 0.06);
+                    gg.gain.linearRampToValueAtTime(0.6, now + i * 0.06 + 0.02);
+                    gg.gain.exponentialRampToValueAtTime(0.001, now + i * 0.06 + 0.3);
+                    o.connect(gg); gg.connect(masterGain);
+                    o.start(now + i * 0.06); o.stop(now + i * 0.06 + 0.36);
+                });
+            } else {
+                // 4: 柔和铃声（小号音色模拟）
+                const carrier = audioContext.createOscillator();
+                carrier.type = 'sine';
+                carrier.frequency.setValueAtTime(1046.5, now); // C6
+
+                const mod = audioContext.createOscillator();
+                mod.type = 'sine';
+                mod.frequency.setValueAtTime(8, now);
+
+                const modGain = audioContext.createGain();
+                modGain.gain.setValueAtTime(30, now);
+
+                mod.connect(modGain);
+                modGain.connect(carrier.frequency);
+
+                const gC = audioContext.createGain();
+                gC.gain.setValueAtTime(0, now);
+                gC.gain.linearRampToValueAtTime(0.7, now + 0.06);
+                gC.gain.exponentialRampToValueAtTime(0.001, now + 1.0);
+
+                carrier.connect(gC); gC.connect(masterGain);
+                carrier.start(now); carrier.stop(now + 1.0);
+                mod.start(now); mod.stop(now + 1.0);
+            }
         }
         
         // 随机颜色生成函数
@@ -1378,9 +2695,9 @@
             const canvas = gameType === 'snake' ? document.getElementById('snakeCanvas') : 
                           gameType === 'tetris' ? document.getElementById('tetrisCanvas') : 
                           document.getElementById('danmakuCanvas');
-            const game = gameType === 'snake' ? snakeGame : 
-                         gameType === 'tetris' ? tetrisGame : 
-                         danmakuGame;
+            const game = gameType === 'snake' ? (window.snakeGame || undefined) : 
+                         gameType === 'tetris' ? (window.tetrisGame || undefined) : 
+                         (window.danmakuGame || undefined);
             
             const restartHandler = function() {
                 if (game.gameOver) {
@@ -1443,8 +2760,7 @@
                 }, i * 30);
             }
         }
-        
-        // 添加点击特效和音效
+                // 添加点击特效和音效
         document.addEventListener('click', function(e) {
             // 检查点击的是否在游戏容器内
             const snakeContainer = document.getElementById('snakeGameContainer');
@@ -1469,6 +2785,14 @@
             
             // 如果是控制按钮，不播放音效
             if (isControlBtn) {
+                return;
+            }
+            
+            // 检查点击的是否是地球
+            const isEarth = e.target.closest('.earth');
+            
+            // 如果是地球，地球的交互已经处理过，不播放主音效
+            if (isEarth) {
                 return;
             }
             
@@ -1919,8 +3243,7 @@
                 }
             }
         }
-        
-        // 俄罗斯方块游戏 - 优化版
+                // 俄罗斯方块游戏 - 优化版
         class TetrisGame {
             constructor() {
                 this.canvas = document.getElementById('tetrisCanvas');
@@ -2443,8 +3766,7 @@
                 }
             }
         }
-        
-        // 弹幕射击游戏
+                // 弹幕射击游戏
         class DanmakuGame {
             constructor() {
                 this.canvas = document.getElementById('danmakuCanvas');
@@ -2492,7 +3814,22 @@
                 this.enemyBullets = []; // 敌人子弹
                 this.powerUps = []; // 道具
                 this.effects = []; // 特效
-                
+
+                // 对象池与性能参数（用于优化，减少 GC 与频繁分配）
+                this.pools = {
+                    bullets: [],
+                    enemyBullets: [],
+                    enemies: [],
+                    powerUps: [],
+                    effects: []
+                };
+                this.maxEnemies = 30; // 最大同时存在的敌人数量
+                this.maxBullets = 200; // 玩家子弹上限
+                this.maxEnemyBullets = 200; // 敌人子弹上限
+                this.gridCellSize = 120; // 空间分区单元格尺寸
+                this.spatialGrid = {}; // 每帧构建的网格缓存
+                this.usePooling = true;
+
                 // 游戏计时
                 this.frameCount = 0;
                 this.enemySpawnTimer = 0;
@@ -2600,6 +3937,25 @@
                 }
             }
             
+            // 构建简单网格（空间分区），将对象放入相应单元以加速碰撞检测
+            buildSpatialGrid() {
+                this.spatialGrid = {};
+                const cs = this.gridCellSize;
+
+                const put = (obj, kind) => {
+                    const gx = Math.floor((obj.x || 0) / cs);
+                    const gy = Math.floor((obj.y || 0) / cs);
+                    const key = `${gx},${gy}`;
+                    if (!this.spatialGrid[key]) this.spatialGrid[key] = { enemies: [], bullets: [], enemyBullets: [], powerUps: [] };
+                    this.spatialGrid[key][kind].push(obj);
+                };
+
+                for (let e of this.enemies) put(e, 'enemies');
+                for (let b of this.bullets) put(b, 'bullets');
+                for (let eb of this.enemyBullets) put(eb, 'enemyBullets');
+                for (let p of this.powerUps) put(p, 'powerUps');
+            }
+
             drawPlayer() {
                 const player = this.player;
                 
@@ -2766,9 +4122,9 @@
                         // 生命值道具
                         this.ctx.fillStyle = '#ff0064';
                         this.ctx.beginPath();
-                        this.ctx.moveTo(powerUp.x, powerUp.y - powerUp.radius);
-                        this.ctx.lineTo(powerUp.x - powerUp.radius, powerUp.y + powerUp.radius);
-                        this.ctx.lineTo(powerUp.x + powerUp.radius, powerUp.y + powerUp.radius);
+                        this.ctx.moveTo(powerUp.x, powerUp.y - powerUp.radius); // 顶部
+                        this.ctx.lineTo(powerUp.x - powerUp.radius, powerUp.y + powerUp.radius); // 左下
+                        this.ctx.lineTo(powerUp.x + powerUp.radius, powerUp.y + powerUp.radius); // 右下
                         this.ctx.closePath();
                         this.ctx.fill();
                     } else if (powerUp.type === 'bomb') {
@@ -2834,6 +4190,10 @@
                 }
                 
                 this.frameCount++;
+                // 每帧更新空间分区索引，用于优化后续碰撞检测
+                if (this.usePooling) {
+                    this.buildSpatialGrid();
+                }
                 
                 // 更新玩家状态
                 this.updatePlayer();
@@ -3033,6 +4393,16 @@
                     } else {
                         // 对中型敌机和BOSS造成大量伤害
                         enemy.health -= 50;
+                        if (enemy.type === 'boss') {
+                            this.bossHealth = enemy.health;
+                            if (this.bossHealthFill) {
+                                const pct = Math.max(0, Math.min(1, this.bossHealth / (enemy.maxHealth || this.bossMaxHealth)));
+                                this.bossHealthFill.style.width = `${Math.round(pct * 100)}%`;
+                            }
+                            if (this.bossHealthText) {
+                                this.bossHealthText.textContent = `BOSS: ${Math.max(0, Math.round(this.bossHealth))}`;
+                            }
+                        }
                         this.createExplosion(enemy.x, enemy.y, 30);
                         
                         if (enemy.health <= 0) {
@@ -3068,7 +4438,10 @@
                     // 移除超出屏幕的子弹
                     if (bullet.y < -10 || bullet.y > this.canvas.height + 10 ||
                         bullet.x < -10 || bullet.x > this.canvas.width + 10) {
-                        this.bullets.splice(i, 1);
+                        const removed = this.bullets.splice(i, 1)[0];
+                        if (this.usePooling) {
+                            if (this.pools.bullets.length < this.maxBullets) this.pools.bullets.push(removed);
+                        }
                     }
                 }
             }
@@ -3119,6 +4492,24 @@
                         if (this.frameCount % 120 === 0) {
                             this.bossSpecialAttack(enemy);
                         }
+                        // 限制BOSS位置：保持在画布上半部分并避免飞出侧边/顶部
+                        const r = enemy.radius || 60;
+                        // 水平夹住
+                        if (enemy.x < r) enemy.x = r;
+                        if (enemy.x > this.canvas.width - r) enemy.x = this.canvas.width - r;
+                        // 限制垂直范围到画布上半部分（留一点下边距）
+                        const maxY = Math.max(r, Math.floor(this.canvas.height * 0.45));
+                        if (enemy.y > maxY) {
+                            enemy.y = maxY;
+                            // 避免继续向下移动
+                            if (enemy.vy > 0) enemy.vy = 0;
+                        }
+                        // 不允许过度飞出顶部
+                        const minY = -r * 2;
+                        if (enemy.y < minY) {
+                            enemy.y = minY;
+                            enemy.vy = Math.abs(enemy.vy) || 1;
+                        }
                     }
                     
                     // 检查敌人是否死亡
@@ -3147,16 +4538,31 @@
                 const angle = Math.atan2(this.player.y - enemy.y, this.player.x - enemy.x);
                 const speed = 3;
                 
-                this.enemyBullets.push({
-                    x: enemy.x,
-                    y: enemy.y + enemy.radius,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed,
-                    radius: 3,
-                    damage: 1,
-                    color: '#ff0064',
-                    type: 'normal'
-                });
+                // 使用对象池复用敌人子弹，且限制最大数量
+                let eb;
+                if (this.usePooling && this.pools.enemyBullets.length) {
+                    eb = this.pools.enemyBullets.pop();
+                    eb.x = enemy.x;
+                    eb.y = enemy.y + enemy.radius;
+                    eb.vx = Math.cos(angle) * speed;
+                    eb.vy = Math.sin(angle) * speed;
+                    eb.radius = 3;
+                    eb.damage = 1;
+                    eb.color = '#ff0064';
+                    eb.type = 'normal';
+                } else {
+                    eb = {
+                        x: enemy.x,
+                        y: enemy.y + enemy.radius,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        radius: 3,
+                        damage: 1,
+                        color: '#ff0064',
+                        type: 'normal'
+                    };
+                }
+                if (this.enemyBullets.length < this.maxEnemyBullets) this.enemyBullets.push(eb);
             }
             
             bossShoot(boss) {
@@ -3209,12 +4615,14 @@
                     // 移除超出屏幕的子弹
                     if (bullet.y > this.canvas.height + 50 ||
                         bullet.x < -50 || bullet.x > this.canvas.width + 50) {
-                        this.enemyBullets.splice(i, 1);
+                        const removed = this.enemyBullets.splice(i, 1)[0];
+                        if (this.usePooling) {
+                            if (this.pools.enemyBullets.length < this.maxEnemyBullets) this.pools.enemyBullets.push(removed);
+                        }
                     }
                 }
             }
-            
-            updatePowerUps() {
+                        updatePowerUps() {
                 for (let i = this.powerUps.length - 1; i >= 0; i--) {
                     const powerUp = this.powerUps[i];
                     
@@ -3244,15 +4652,23 @@
                 if (this.enemySpawnTimer >= this.enemySpawnDelay && !this.bossActive) {
                     this.enemySpawnTimer = 0;
                     
-                    // 根据关卡调整敌人生成难度
+                    // 根据关卡调整敌人生成难度，且限制最大敌人数量
                     const enemyCount = Math.min(3 + Math.floor(this.stage / 2), 8);
-                    
-                    for (let i = 0; i < enemyCount; i++) {
+                    const allowed = Math.max(0, this.maxEnemies - this.enemies.length);
+                    const spawnCount = Math.min(enemyCount, allowed);
+
+                    for (let i = 0; i < spawnCount; i++) {
                         const type = Math.random() < 0.7 ? 'small' : 'medium';
-                        
+                        let en;
+                        if (this.usePooling && this.pools.enemies.length) {
+                            en = this.pools.enemies.pop();
+                        } else {
+                            en = {};
+                        }
+
                         if (type === 'small') {
                             // 小型敌机
-                            this.enemies.push({
+                            Object.assign(en, {
                                 id: this.frameCount + i,
                                 x: Math.random() * (this.canvas.width - 100) + 50,
                                 y: -50,
@@ -3266,7 +4682,7 @@
                             });
                         } else {
                             // 中型敌机
-                            this.enemies.push({
+                            Object.assign(en, {
                                 id: this.frameCount + i,
                                 x: Math.random() * (this.canvas.width - 100) + 50,
                                 y: -100,
@@ -3281,6 +4697,8 @@
                                 color: '#ff9900'
                             });
                         }
+
+                        this.enemies.push(en);
                     }
                 }
             }
@@ -3289,73 +4707,39 @@
                 // BOSS生成逻辑
                 if (!this.bossActive && this.frameCount - this.bossSpawnTimer > this.bossSpawnDelay) {
                     this.bossSpawnTimer = this.frameCount;
+                    this.bossActive = true;
                     
-                    // 每3关出现一个BOSS
-                    if (this.stage % 3 === 0) {
-                        this.bossActive = true;
-                        
-                        const boss = {
-                            id: this.frameCount,
-                            x: this.canvas.width / 2,
-                            y: 100,
-                            vx: 1,
-                            vy: 0,
-                            radius: 60,
-                            health: 100 + (this.stage / 3) * 50,
-                            maxHealth: 100 + (this.stage / 3) * 50,
-                            type: 'boss',
-                            color: '#ff0000'
-                        };
-                        
-                        this.enemies.push(boss);
-                        
-                        // 更新BOSS血条
-                        this.bossHealth = boss.health;
-                        this.bossMaxHealth = boss.maxHealth;
-                        this.bossHealthBar.style.display = 'block';
-                        this.updateDisplay();
+                    // 显示BOSS血条
+                    this.bossHealthBar.style.display = 'block';
+                    
+                    // 创建BOSS
+                    this.bossMaxHealth = 100 + this.stage * 50;
+                    this.bossHealth = this.bossMaxHealth;
+                    // 同步血条显示
+                    if (this.bossHealthFill) {
+                        this.bossHealthFill.style.width = '100%';
                     }
-                }
-                
-                // 更新BOSS血条
-                if (this.bossActive) {
-                    const boss = this.enemies.find(e => e.type === 'boss');
-                    if (boss) {
-                        this.bossHealth = boss.health;
+                    if (this.bossHealthText) {
+                        this.bossHealthText.textContent = `BOSS: ${this.bossHealth}`;
                     }
-                }
-            }
-            
-            dropPowerUp(enemy) {
-                // 道具掉落逻辑
-                const dropChance = enemy.type === 'boss' ? 1.0 : 
-                                  enemy.type === 'medium' ? 0.3 : 0.1;
-                
-                if (Math.random() < dropChance) {
-                    const types = ['power', 'life', 'bomb'];
-                    const type = types[Math.floor(Math.random() * types.length)];
                     
-                    let color;
-                    if (type === 'power') color = '#ffff00';
-                    else if (type === 'life') color = '#ff0064';
-                    else color = '#ff9900';
-                    
-                    this.powerUps.push({
+                    this.enemies.push({
                         id: this.frameCount,
-                        x: enemy.x,
-                        y: enemy.y,
+                        x: this.canvas.width / 2,
+                        y: -100,
+                        vx: 0,
                         vy: 1,
-                        radius: 10,
-                        type: type,
-                        color: color
+                        radius: 60,
+                        health: this.bossHealth,
+                        maxHealth: this.bossMaxHealth,
+                        type: 'boss',
+                        color: '#ff0000'
                     });
                 }
             }
             
             checkCollisions() {
-                const player = this.player;
-                
-                // 检查玩家子弹与敌人的碰撞
+                // 玩家子弹与敌人碰撞检测
                 for (let i = this.bullets.length - 1; i >= 0; i--) {
                     const bullet = this.bullets[i];
                     
@@ -3363,30 +4747,77 @@
                         const enemy = this.enemies[j];
                         
                         // 计算距离
-                        const dx = bullet.x - enemy.x;
-                        const dy = bullet.y - enemy.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        let distance;
+                        if (enemy.type === 'small' || enemy.type === 'boss') {
+                            // 圆形敌人
+                            distance = Math.sqrt(
+                                Math.pow(bullet.x - enemy.x, 2) + 
+                                Math.pow(bullet.y - enemy.y, 2)
+                            );
+                        } else {
+                            // 矩形敌人
+                            const dx = Math.abs(bullet.x - enemy.x);
+                            const dy = Math.abs(bullet.y - enemy.y);
+                            
+                            if (dx > enemy.width/2 || dy > enemy.height/2) {
+                                continue;
+                            }
+                            distance = Math.sqrt(dx*dx + dy*dy);
+                        }
                         
-                        // 碰撞检测
-                        if (distance < bullet.radius + (enemy.radius || enemy.width / 2)) {
+                        // 检查碰撞
+                        let collisionDistance;
+                        if (enemy.type === 'small') {
+                            collisionDistance = enemy.radius + bullet.radius;
+                        } else if (enemy.type === 'medium') {
+                            collisionDistance = Math.min(enemy.width, enemy.height)/2 + bullet.radius;
+                        } else {
+                            collisionDistance = enemy.radius + bullet.radius;
+                        }
+                        
+                        if (distance < collisionDistance) {
                             // 造成伤害
                             enemy.health -= bullet.damage;
-                            
+                            // 如果是BOSS，更新全局BOSS血条显示
+                            if (enemy.type === 'boss') {
+                                this.bossHealth = enemy.health;
+                                if (this.bossHealthFill) {
+                                    const pct = Math.max(0, Math.min(1, this.bossHealth / (enemy.maxHealth || this.bossMaxHealth)));
+                                    this.bossHealthFill.style.width = `${Math.round(pct * 100)}%`;
+                                }
+                                if (this.bossHealthText) {
+                                    this.bossHealthText.textContent = `BOSS: ${Math.max(0, Math.round(this.bossHealth))}`;
+                                }
+                            }
+
                             // 创建击中特效
                             this.createHitEffect(bullet.x, bullet.y);
                             
                             // 移除子弹
                             this.bullets.splice(i, 1);
                             
-                            // 如果敌人死亡，增加分数
+                            // 如果敌人死亡
                             if (enemy.health <= 0) {
+                                // 增加得分
                                 if (enemy.type === 'small') {
                                     this.score += 100;
                                 } else if (enemy.type === 'medium') {
                                     this.score += 500;
                                 } else if (enemy.type === 'boss') {
                                     this.score += 5000;
+                                    this.bossActive = false;
+                                    this.bossHealthBar.style.display = 'none';
+                                    this.stage++;
                                 }
+                                
+                                // 创建爆炸特效
+                                this.createExplosion(enemy.x, enemy.y, enemy.type === 'boss' ? 50 : 20);
+                                
+                                // 掉落道具
+                                this.dropPowerUp(enemy);
+                                
+                                // 移除敌人
+                                this.enemies.splice(j, 1);
                             }
                             
                             break;
@@ -3394,128 +4825,145 @@
                     }
                 }
                 
-                // 检查敌人子弹与玩家的碰撞 - 使用缩小后的受击判定
-                if (!player.invincible) {
+                // 敌人子弹与玩家碰撞检测
+                if (!this.player.invincible) {
                     for (let i = this.enemyBullets.length - 1; i >= 0; i--) {
                         const bullet = this.enemyBullets[i];
+                        const distance = Math.sqrt(
+                            Math.pow(bullet.x - this.player.x, 2) + 
+                            Math.pow(bullet.y - this.player.y, 2)
+                        );
                         
-                        // 计算距离 - 使用更小的碰撞半径（10像素）
-                        const dx = bullet.x - player.x;
-                        const dy = bullet.y - player.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
-                        
-                        // 碰撞检测 - 缩小玩家受击判定区域
-                        const playerHitRadius = 10; // 缩小的碰撞半径
-                        
-                        if (distance < bullet.radius + playerHitRadius) {
-                            // 玩家被击中
+                        if (distance < 15) { // 玩家碰撞半径15
+                            // 玩家受伤
                             this.playerHit();
                             
                             // 移除子弹
                             this.enemyBullets.splice(i, 1);
                             
                             // 创建击中特效
-                            this.createExplosion(bullet.x, bullet.y, 15);
-                            
-                            break;
+                            this.createHitEffect(bullet.x, bullet.y);
                         }
                     }
                     
-                    // 检查敌人与玩家的碰撞 - 使用缩小后的受击判定
+                    // 敌人与玩家碰撞检测
                     for (let i = this.enemies.length - 1; i >= 0; i--) {
                         const enemy = this.enemies[i];
+                        const distance = Math.sqrt(
+                            Math.pow(enemy.x - this.player.x, 2) + 
+                            Math.pow(enemy.y - this.player.y, 2)
+                        );
                         
-                        // 计算距离
-                        const dx = enemy.x - player.x;
-                        const dy = enemy.y - player.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        let collisionDistance;
+                        if (enemy.type === 'small') {
+                            collisionDistance = enemy.radius + 15;
+                        } else if (enemy.type === 'medium') {
+                            collisionDistance = Math.min(enemy.width, enemy.height)/2 + 15;
+                        } else {
+                            collisionDistance = enemy.radius + 15;
+                        }
                         
-                        // 碰撞检测 - 使用缩小的玩家碰撞半径
-                        const enemyRadius = enemy.radius || enemy.width / 2;
-                        const playerHitRadius = 12; // 稍微大一点的碰撞半径，但比整个飞机小
-                        
-                        if (distance < enemyRadius + playerHitRadius) {
-                            // 玩家被击中
+                        if (distance < collisionDistance) {
+                            // 玩家受伤
                             this.playerHit();
                             
-                            // 敌人受到伤害
+                            // 敌人也受伤
                             enemy.health -= 5;
+                            if (enemy.type === 'boss') {
+                                this.bossHealth = enemy.health;
+                                if (this.bossHealthFill) {
+                                    const pct = Math.max(0, Math.min(1, this.bossHealth / (enemy.maxHealth || this.bossMaxHealth)));
+                                    this.bossHealthFill.style.width = `${Math.round(pct * 100)}%`;
+                                }
+                                if (this.bossHealthText) {
+                                    this.bossHealthText.textContent = `BOSS: ${Math.max(0, Math.round(this.bossHealth))}`;
+                                }
+                            }
                             
-                            // 创建爆炸特效
-                            this.createExplosion(enemy.x, enemy.y, 30);
-                            
-                            break;
+                            if (enemy.health <= 0) {
+                                this.createExplosion(enemy.x, enemy.y, 20);
+                                this.enemies.splice(i, 1);
+                            }
                         }
                     }
                 }
                 
-                // 检查道具与玩家的碰撞
+                // 道具与玩家碰撞检测
                 for (let i = this.powerUps.length - 1; i >= 0; i--) {
                     const powerUp = this.powerUps[i];
+                    const distance = Math.sqrt(
+                        Math.pow(powerUp.x - this.player.x, 2) + 
+                        Math.pow(powerUp.y - this.player.y, 2)
+                    );
                     
-                    // 计算距离
-                    const dx = powerUp.x - player.x;
-                    const dy = powerUp.y - player.y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
-                    
-                    // 碰撞检测
-                    if (distance < powerUp.radius + Math.max(player.width, player.height) / 2) {
-                        // 获取道具
-                        this.getPowerUp(powerUp);
-                        
-                        // 移除道具
+                    if (distance < powerUp.radius + 15) {
+                        // 获得道具
+                        this.collectPowerUp(powerUp);
                         this.powerUps.splice(i, 1);
                     }
                 }
             }
             
             playerHit() {
-                const player = this.player;
+                if (this.player.invincible) return;
                 
-                // 减少生命值
                 this.lives--;
+                this.updateDisplay();
                 
-                // 如果生命值为0，游戏结束
+                // 无敌状态
+                this.player.invincible = true;
+                this.player.invincibleTimer = 120; // 2秒无敌
+                
+                // 创建爆炸特效
+                this.createExplosion(this.player.x, this.player.y, 20);
+                
+                // 检查游戏是否结束
                 if (this.lives <= 0) {
                     this.gameOver = true;
                     createGameOverEffect('danmaku', this.score);
-                    return;
                 }
-                
-                // 设置无敌状态
-                player.invincible = true;
-                player.invincibleTimer = 120; // 2秒无敌时间（60FPS）
-                
-                // 重置火力（可选，根据游戏设计）
-                // this.power = Math.max(1, this.power - 1);
-                
-                // 更新显示
-                this.updateDisplay();
-                
-                // 创建玩家被击中特效
-                this.createExplosion(player.x, player.y, 30);
             }
             
-            getPowerUp(powerUp) {
+            collectPowerUp(powerUp) {
                 if (powerUp.type === 'power') {
-                    // 火力升级
-                    this.power = Math.min(5, this.power + 1);
+                    // 增加火力
+                    this.power = Math.min(this.power + 1, 5);
+                    this.updateDisplay();
                 } else if (powerUp.type === 'life') {
-                    // 增加生命值
-                    this.lives = Math.min(5, this.lives + 1);
+                    // 增加生命
+                    this.lives = Math.min(this.lives + 1, 5);
+                    this.updateDisplay();
                 } else if (powerUp.type === 'bomb') {
                     // 增加炸弹
-                    this.bombs = Math.min(5, this.bombs + 1);
+                    this.bombs = Math.min(this.bombs + 1, 5);
+                    this.updateDisplay();
                 }
+            }
+            
+            dropPowerUp(enemy) {
+                // 随机掉落道具
+                const dropChance = Math.random();
                 
-                // 增加分数
-                this.score += 100;
-                
-                // 更新显示
-                this.updateDisplay();
-                
-                // 创建获取道具特效
-                this.createExplosion(powerUp.x, powerUp.y, 20);
+                if (dropChance < 0.3) {
+                    // 30%几率掉落火力道具
+                    const powerUpTypes = ['power', 'life', 'bomb'];
+                    const type = powerUpTypes[Math.floor(Math.random() * powerUpTypes.length)];
+                    const colors = {
+                        'power': '#00d9ff',
+                        'life': '#ff0064',
+                        'bomb': '#ff9900'
+                    };
+                    
+                    this.powerUps.push({
+                        id: this.frameCount,
+                        x: enemy.x,
+                        y: enemy.y,
+                        vy: 2,
+                        radius: 10,
+                        type: type,
+                        color: colors[type]
+                    });
+                }
             }
             
             createExplosion(x, y, radius) {
@@ -3525,7 +4973,7 @@
                     y: y,
                     radius: radius,
                     startFrame: this.frameCount,
-                    duration: 20
+                    duration: 30
                 });
             }
             
@@ -3534,7 +4982,7 @@
                     type: 'hit',
                     x: x,
                     y: y,
-                    radius: 10,
+                    radius: 5,
                     startFrame: this.frameCount,
                     duration: 10
                 });
@@ -3547,20 +4995,9 @@
                     bullet.x > -20 && bullet.x < this.canvas.width + 20
                 );
                 
-                // 清理超出屏幕的敌人子弹
                 this.enemyBullets = this.enemyBullets.filter(bullet => 
                     bullet.y > -50 && bullet.y < this.canvas.height + 50 &&
                     bullet.x > -50 && bullet.x < this.canvas.width + 50
-                );
-                
-                // 清理超出屏幕的敌人
-                this.enemies = this.enemies.filter(enemy => 
-                    enemy.y > -100 && enemy.y < this.canvas.height + 100
-                );
-                
-                // 清理超出屏幕的道具
-                this.powerUps = this.powerUps.filter(powerUp => 
-                    powerUp.y > -20 && powerUp.y < this.canvas.height + 20
                 );
             }
             
@@ -3570,13 +5007,6 @@
                 this.powerElement.textContent = `火力: ${this.power}`;
                 this.bombsElement.textContent = `炸弹: ${this.bombs}`;
                 this.stageElement.textContent = `关卡: ${this.stage}`;
-                
-                // 更新BOSS血条
-                if (this.bossActive) {
-                    const healthPercent = (this.bossHealth / this.bossMaxHealth) * 100;
-                    this.bossHealthFill.style.width = `${healthPercent}%`;
-                    this.bossHealthText.textContent = `BOSS: ${Math.round(healthPercent)}%`;
-                }
             }
             
             bindControls() {
@@ -3612,11 +5042,11 @@
                             this.keys.shoot = true;
                             e.preventDefault();
                             break;
-                        case 'x':  // X键只用于炸弹
+                        case 'x':
                             this.keys.bomb = true;
                             e.preventDefault();
                             break;
-                        case 'shift':  // Shift键只用于低速
+                        case 'shift':
                             this.keys.slow = true;
                             e.preventDefault();
                             break;
@@ -3630,12 +5060,8 @@
                             break;
                     }
                 });
-
-                // keyup事件
+                
                 document.addEventListener('keyup', (e) => {
-                    // 检查是否弹幕游戏是当前激活的游戏
-                    if (!activeKeyListeners.has('danmaku')) return;
-                    
                     const key = e.key.toLowerCase();
                     switch(key) {
                         case 'arrowup':
@@ -3658,50 +5084,57 @@
                         case ' ':
                             this.keys.shoot = false;
                             break;
-                        case 'x':  // X键只释放炸弹
+                        case 'x':
                             this.keys.bomb = false;
                             break;
-                        case 'shift':  // Shift键只释放低速
+                        case 'shift':
                             this.keys.slow = false;
                             break;
                     }
                 });
-
+                
                 // 绑定屏幕控制按钮
-                document.getElementById('danmakuUp').addEventListener('mousedown', () => this.keys.up = true);
-                document.getElementById('danmakuUp').addEventListener('mouseup', () => this.keys.up = false);
-                document.getElementById('danmakuUp').addEventListener('touchstart', () => this.keys.up = true);
-                document.getElementById('danmakuUp').addEventListener('touchend', () => this.keys.up = false);
+                const setupButton = (id, key) => {
+                    const btn = document.getElementById(id);
+                    if (!btn) return;
+                    
+                    btn.addEventListener('mousedown', () => { this.keys[key] = true; });
+                    btn.addEventListener('touchstart', (e) => {
+                        this.keys[key] = true;
+                        e.preventDefault();
+                    });
+                    
+                    btn.addEventListener('mouseup', () => { this.keys[key] = false; });
+                    btn.addEventListener('mouseleave', () => { this.keys[key] = false; });
+                    btn.addEventListener('touchend', (e) => {
+                        this.keys[key] = false;
+                        e.preventDefault();
+                    });
+                };
                 
-                document.getElementById('danmakuDown').addEventListener('mousedown', () => this.keys.down = true);
-                document.getElementById('danmakuDown').addEventListener('mouseup', () => this.keys.down = false);
-                document.getElementById('danmakuDown').addEventListener('touchstart', () => this.keys.down = true);
-                document.getElementById('danmakuDown').addEventListener('touchend', () => this.keys.down = false);
+                setupButton('danmakuUp', 'up');
+                setupButton('danmakuDown', 'down');
+                setupButton('danmakuLeft', 'left');
+                setupButton('danmakuRight', 'right');
+                setupButton('danmakuShoot', 'shoot');
+                setupButton('danmakuBomb', 'bomb');
                 
-                document.getElementById('danmakuLeft').addEventListener('mousedown', () => this.keys.left = true);
-                document.getElementById('danmakuLeft').addEventListener('mouseup', () => this.keys.left = false);
-                document.getElementById('danmakuLeft').addEventListener('touchstart', () => this.keys.left = true);
-                document.getElementById('danmakuLeft').addEventListener('touchend', () => this.keys.left = false);
-                
-                document.getElementById('danmakuRight').addEventListener('mousedown', () => this.keys.right = true);
-                document.getElementById('danmakuRight').addEventListener('mouseup', () => this.keys.right = false);
-                document.getElementById('danmakuRight').addEventListener('touchstart', () => this.keys.right = true);
-                document.getElementById('danmakuRight').addEventListener('touchend', () => this.keys.right = false);
-                
-                document.getElementById('danmakuShoot').addEventListener('mousedown', () => this.keys.shoot = true);
-                document.getElementById('danmakuShoot').addEventListener('mouseup', () => this.keys.shoot = false);
-                document.getElementById('danmakuShoot').addEventListener('touchstart', () => this.keys.shoot = true);
-                document.getElementById('danmakuShoot').addEventListener('touchend', () => this.keys.shoot = false);
-                
-                document.getElementById('danmakuBomb').addEventListener('mousedown', () => this.keys.bomb = true);
-                document.getElementById('danmakuBomb').addEventListener('mouseup', () => this.keys.bomb = false);
-                document.getElementById('danmakuBomb').addEventListener('touchstart', () => this.keys.bomb = true);
-                document.getElementById('danmakuBomb').addEventListener('touchend', () => this.keys.bomb = false);
-                
-                document.getElementById('danmakuSlow').addEventListener('mousedown', () => this.keys.slow = true);
-                document.getElementById('danmakuSlow').addEventListener('mouseup', () => this.keys.slow = false);
-                document.getElementById('danmakuSlow').addEventListener('touchstart', () => this.keys.slow = true);
-                document.getElementById('danmakuSlow').addEventListener('touchend', () => this.keys.slow = false);
+                // 低速按钮特殊处理
+                const slowBtn = document.getElementById('danmakuSlow');
+                if (slowBtn) {
+                    slowBtn.addEventListener('mousedown', () => { this.keys.slow = true; });
+                    slowBtn.addEventListener('touchstart', (e) => {
+                        this.keys.slow = true;
+                        e.preventDefault();
+                    });
+                    
+                    slowBtn.addEventListener('mouseup', () => { this.keys.slow = false; });
+                    slowBtn.addEventListener('mouseleave', () => { this.keys.slow = false; });
+                    slowBtn.addEventListener('touchend', (e) => {
+                        this.keys.slow = false;
+                        e.preventDefault();
+                    });
+                }
                 
                 document.getElementById('danmakuPause').addEventListener('click', () => {
                     this.togglePause();
@@ -3742,7 +5175,6 @@
             }
             
             restart() {
-                // 重置游戏状态
                 this.score = 0;
                 this.lives = 3;
                 this.power = 1;
@@ -3751,37 +5183,25 @@
                 this.gameOver = false;
                 this.paused = false;
                 this.bossActive = false;
-                this.bossHealth = 0;
-                this.bossMaxHealth = 0;
                 
-                // 重置玩家
                 this.player.x = this.canvas.width / 2;
                 this.player.y = this.canvas.height - 100;
                 this.player.invincible = false;
                 this.player.invincibleTimer = 0;
-                this.player.shootTimer = 0;
-                this.player.bombTimer = 0;
-                this.player.isSlow = false;
                 
-                // 清空游戏对象
                 this.bullets = [];
                 this.enemies = [];
                 this.enemyBullets = [];
                 this.powerUps = [];
                 this.effects = [];
                 
-                // 重置计时器
                 this.frameCount = 0;
                 this.enemySpawnTimer = 0;
                 this.bossSpawnTimer = 0;
                 
-                // 隐藏BOSS血条
                 this.bossHealthBar.style.display = 'none';
                 
-                // 更新显示
                 this.updateDisplay();
-                
-                // 绘制
                 this.needsRedraw = true;
                 this.draw();
             }
@@ -3790,12 +5210,20 @@
                 if (danmakuAnimationFrame) {
                     cancelAnimationFrame(danmakuAnimationFrame);
                 }
-                
-                const gameLoop = () => {
-                    this.update();
-                    danmakuAnimationFrame = requestAnimationFrame(gameLoop);
+                this.lastUpdate = 0;
+                const gameLoop = (timestamp) => {
+                    if (!this.lastUpdate) this.lastUpdate = timestamp;
+                    const deltaTime = timestamp - this.lastUpdate;
+                    
+                    if (deltaTime > 16) { // 大约60FPS
+                        this.update();
+                        this.lastUpdate = timestamp;
+                    }
+                    
+                    if (!this.gameOver) {
+                        danmakuAnimationFrame = requestAnimationFrame(gameLoop);
+                    }
                 };
-                
                 danmakuAnimationFrame = requestAnimationFrame(gameLoop);
             }
             
@@ -3807,127 +5235,809 @@
             }
         }
         
-        // 游戏实例
-        let snakeGame, tetrisGame, danmakuGame;
+        // ==================== 排行榜系统 ====================
+        class LeaderboardSystem {
+            constructor() {
+                this.currentGame = null;
+                this.currentScore = 0;
+                this.currentLevel = 1;
+                this.currentStage = 1;
+                this.playerName = localStorage.getItem('playerName') || '玩家';
+                
+                this.initializeLeaderboard();
+                this.bindLeaderboardEvents();
+                this.updateStats();
+            }
+            
+            // 初始化排行榜
+            initializeLeaderboard() {
+                // 检查本地存储中是否有排行榜数据
+                if (!localStorage.getItem('snakeLeaderboard')) {
+                    localStorage.setItem('snakeLeaderboard', JSON.stringify([]));
+                }
+                
+                if (!localStorage.getItem('tetrisLeaderboard')) {
+                    localStorage.setItem('tetrisLeaderboard', JSON.stringify([]));
+                }
+                
+                if (!localStorage.getItem('danmakuLeaderboard')) {
+                    localStorage.setItem('danmakuLeaderboard', JSON.stringify([]));
+                }
+                
+                // 设置玩家名字输入框的默认值
+                const playerNameInput = document.getElementById('playerNameInput');
+                if (playerNameInput) {
+                    playerNameInput.value = this.playerName;
+                    playerNameInput.addEventListener('input', (e) => {
+                        this.playerName = e.target.value || '玩家';
+                        localStorage.setItem('playerName', this.playerName);
+                    });
+                }
+                
+                // 加载排行榜数据
+                this.loadLeaderboard('snake');
+                this.loadLeaderboard('tetris');
+                this.loadLeaderboard('danmaku');
+                this.loadAllLeaderboard();
+            }
+                        // 绑定排行榜事件
+            bindLeaderboardEvents() {
+                // 打开排行榜按钮
+                const openBtn = document.getElementById('openLeaderboardBtn');
+                if (openBtn) {
+                    openBtn.addEventListener('click', () => {
+                        this.openLeaderboard();
+                    });
+                }
+                
+                // 关闭排行榜按钮
+                const closeBtn = document.getElementById('closeLeaderboard');
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', () => {
+                        this.closeLeaderboard();
+                    });
+                }
+                
+                // 标签页切换
+                const tabs = document.querySelectorAll('.leaderboard-tab');
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        const game = e.target.getAttribute('data-game');
+                        this.switchTab(game);
+                    });
+                });
+                
+                // 保存得分按钮
+                const saveBtn = document.getElementById('saveScoreBtn');
+                if (saveBtn) {
+                    saveBtn.addEventListener('click', () => {
+                        this.saveCurrentScore();
+                    });
+                }
+                
+                // 清空排行榜按钮
+                const clearBtn = document.getElementById('clearLeaderboardBtn');
+                if (clearBtn) {
+                    clearBtn.addEventListener('click', () => {
+                        if (confirm('确定要清空所有排行榜数据吗？此操作不可撤销！')) {
+                            this.clearAllLeaderboards();
+                        }
+                    });
+                }
+                
+                // 导出排行榜按钮
+                const exportBtn = document.getElementById('exportLeaderboardBtn');
+                if (exportBtn) {
+                    exportBtn.addEventListener('click', () => {
+                        this.exportLeaderboard();
+                    });
+                }
+                
+                // 导入排行榜按钮
+                const importBtn = document.getElementById('importLeaderboardBtn');
+                if (importBtn) {
+                    importBtn.addEventListener('click', () => {
+                        document.getElementById('importFileInput').click();
+                    });
+                }
+                
+                // 文件导入
+                const importInput = document.getElementById('importFileInput');
+                if (importInput) {
+                    importInput.addEventListener('change', (e) => {
+                        this.importLeaderboard(e.target.files[0]);
+                    });
+                }
+            }
+            
+            // 打开排行榜
+            openLeaderboard() {
+                const leaderboard = document.getElementById('leaderboardContainer');
+                if (leaderboard) {
+                    leaderboard.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    
+                    // 更新统计数据
+                    this.updateStats();
+                    
+                    // 加载当前游戏排行榜
+                    if (this.currentGame) {
+                        this.switchTab(this.currentGame);
+                    }
+                }
+            }
+            
+            // 关闭排行榜
+            closeLeaderboard() {
+                const leaderboard = document.getElementById('leaderboardContainer');
+                if (leaderboard) {
+                    leaderboard.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+            
+            // 切换标签页
+            switchTab(game) {
+                // 更新标签页状态
+                const tabs = document.querySelectorAll('.leaderboard-tab');
+                tabs.forEach(tab => {
+                    tab.classList.remove('active');
+                    if (tab.getAttribute('data-game') === game) {
+                        tab.classList.add('active');
+                    }
+                });
+                
+                // 显示对应的排行榜
+                const tables = document.querySelectorAll('.leaderboard-table');
+                tables.forEach(table => {
+                    table.classList.remove('active');
+                    if (table.id === `${game}Leaderboard` || 
+                        (game === 'all' && table.id === 'allLeaderboard')) {
+                        table.classList.add('active');
+                    }
+                });
+                
+                // 加载对应的排行榜数据
+                if (game === 'all') {
+                    this.loadAllLeaderboard();
+                } else {
+                    this.loadLeaderboard(game);
+                }
+            }
+            
+            // 加载排行榜数据
+            loadLeaderboard(game) {
+                const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
+                const tableBody = document.getElementById(`${game}LeaderboardBody`);
+                
+                if (!tableBody) return;
+                
+                // 清空现有内容
+                tableBody.innerHTML = '';
+                
+                if (leaderboardData.length === 0) {
+                    tableBody.innerHTML = '<div class="no-records">暂无记录，快来成为第一名吧！</div>';
+                    return;
+                }
+                
+                // 按得分排序
+                leaderboardData.sort((a, b) => b.score - a.score);
+                
+                // 显示前50条记录
+                const displayData = leaderboardData.slice(0, 50);
+                
+                displayData.forEach((record, index) => {
+                    const row = document.createElement('div');
+                    row.className = `leaderboard-row rank-${index + 1}`;
+                    
+                    let rowContent = '';
+                    
+                    if (game === 'snake') {
+                        rowContent = `
+                            <div class="rank-cell">${index + 1}</div>
+                            <div class="name-cell">
+                                <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                ${record.name}
+                            </div>
+                            <div class="score-cell">${record.score}</div>
+                            <div class="level-cell">-</div>
+                            <div class="date-cell">${this.formatDate(record.date)}</div>
+                            <div class="actions-cell">
+                                <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                            </div>
+                        `;
+                    } else if (game === 'tetris') {
+                        rowContent = `
+                            <div class="rank-cell">${index + 1}</div>
+                            <div class="name-cell">
+                                <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                ${record.name}
+                            </div>
+                            <div class="score-cell">${record.score}</div>
+                            <div class="level-cell">${record.level || 1}</div>
+                            <div class="date-cell">${this.formatDate(record.date)}</div>
+                            <div class="actions-cell">
+                                <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                            </div>
+                        `;
+                    } else if (game === 'danmaku') {
+                        rowContent = `
+                            <div class="rank-cell">${index + 1}</div>
+                            <div class="name-cell">
+                                <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                                ${record.name}
+                            </div>
+                            <div class="score-cell">${record.score}</div>
+                            <div class="stage-cell">${record.stage || 1}</div>
+                            <div class="date-cell">${this.formatDate(record.date)}</div>
+                            <div class="actions-cell">
+                                <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${game}', ${index})">删除</button>
+                            </div>
+                        `;
+                    }
+                    
+                    row.innerHTML = rowContent;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // 加载总排行榜
+            loadAllLeaderboard() {
+                const games = ['snake', 'tetris', 'danmaku'];
+                let allRecords = [];
+                
+                games.forEach(game => {
+                    const gameRecords = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
+                    gameRecords.forEach(record => {
+                        record.game = game === 'snake' ? '贪吃蛇' : 
+                                     game === 'tetris' ? '俄罗斯方块' : '弹幕射击';
+                        record.gameType = game;
+                    });
+                    allRecords = allRecords.concat(gameRecords);
+                });
+                
+                // 按得分排序
+                allRecords.sort((a, b) => b.score - a.score);
+                
+                const tableBody = document.getElementById('allLeaderboardBody');
+                if (!tableBody) return;
+                
+                // 清空现有内容
+                tableBody.innerHTML = '';
+                
+                if (allRecords.length === 0) {
+                    tableBody.innerHTML = '<div class="no-records">暂无记录，快来成为第一名吧！</div>';
+                    return;
+                }
+                
+                // 显示前50条记录
+                const displayData = allRecords.slice(0, 50);
+                
+                displayData.forEach((record, index) => {
+                    const row = document.createElement('div');
+                    row.className = `leaderboard-row rank-${index + 1}`;
+                    
+                    row.innerHTML = `
+                        <div class="rank-cell">${index + 1}</div>
+                        <div class="name-cell">
+                            <div class="player-avatar">${record.name.charAt(0).toUpperCase()}</div>
+                            ${record.name}
+                        </div>
+                        <div class="game-cell">${record.game}</div>
+                        <div class="score-cell">${record.score}</div>
+                        <div class="date-cell">${this.formatDate(record.date)}</div>
+                        <div class="actions-cell">
+                            <button class="action-btn delete" onclick="leaderboardSystem.deleteRecord('${record.gameType}', ${this.findRecordIndex(record.gameType, record.id)})">删除</button>
+                        </div>
+                    `;
+                    
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // 查找记录索引
+            findRecordIndex(game, recordId) {
+                const records = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
+                return records.findIndex(record => record.id === recordId);
+            }
+            
+            // 保存当前得分
+            saveCurrentScore() {
+                if (!this.currentGame || this.currentScore === 0) {
+                    alert('请先完成一局游戏获得得分！');
+                    return;
+                }
+                
+                const playerName = document.getElementById('playerNameInput').value || '玩家';
+                if (!playerName.trim()) {
+                    alert('请输入玩家名称！');
+                    return;
+                }
+                
+                // 更新本地存储的玩家名称
+                this.playerName = playerName;
+                localStorage.setItem('playerName', playerName);
+                
+                // 创建记录
+                const record = {
+                    id: Date.now() + Math.random().toString(36).substr(2, 9),
+                    name: playerName,
+                    score: this.currentScore,
+                    date: new Date().toISOString()
+                };
+                
+                // 添加游戏特定数据
+                if (this.currentGame === 'tetris') {
+                    record.level = this.currentLevel;
+                } else if (this.currentGame === 'danmaku') {
+                    record.stage = this.currentStage;
+                }
+                
+                // 获取现有排行榜数据
+                const leaderboardData = JSON.parse(localStorage.getItem(`${this.currentGame}Leaderboard`) || '[]');
+                
+                // 添加新记录
+                leaderboardData.push(record);
+                
+                // 保存到本地存储
+                localStorage.setItem(`${this.currentGame}Leaderboard`, JSON.stringify(leaderboardData));
+                
+                // 重新加载排行榜
+                this.loadLeaderboard(this.currentGame);
+                this.loadAllLeaderboard();
+                
+                // 更新统计数据
+                this.updateStats();
+                
+                // 显示成功消息
+                alert(`得分 ${this.currentScore} 已保存到排行榜！`);
+                
+                // 检查是否进入前三名
+                this.checkTopThree(leaderboardData, record);
+            }
+            
+            // 检查是否进入前三名
+            checkTopThree(leaderboardData, newRecord) {
+                // 按得分排序
+                const sortedData = [...leaderboardData].sort((a, b) => b.score - a.score);
+                
+                // 找到新记录的排名
+                const rank = sortedData.findIndex(record => record.id === newRecord.id) + 1;
+                
+                if (rank <= 3) {
+                    // 创建庆祝特效
+                    this.createCelebrationEffect(rank);
+                    
+                    // 播放音效
+                    this.playRankSound(rank);
+                }
+            }
+            
+            // 创建庆祝特效
+            createCelebrationEffect(rank) {
+                const colors = {
+                    1: '#ffcc00', // 金牌
+                    2: '#c0c0c0', // 银牌
+                    3: '#cd7f32'  // 铜牌
+                };
+                
+                const messages = {
+                    1: '🎉 恭喜获得第一名！ 🎉',
+                    2: '🥈 恭喜获得第二名！ 🥈',
+                    3: '🥉 恭喜获得第三名！ 🥉'
+                };
+                
+                // 创建庆祝消息
+                const message = document.createElement('div');
+                message.style.position = 'fixed';
+                message.style.top = '50%';
+                message.style.left = '50%';
+                message.style.transform = 'translate(-50%, -50%)';
+                message.style.backgroundColor = 'rgba(0, 0, 0, 0.9)';
+                message.style.color = colors[rank];
+                message.style.padding = '30px 50px';
+                message.style.borderRadius = '15px';
+                message.style.fontSize = '2.5rem';
+                message.style.fontWeight = 'bold';
+                message.style.textAlign = 'center';
+                message.style.zIndex = '2000';
+                message.style.border = `4px solid ${colors[rank]}`;
+                message.style.boxShadow = `0 0 30px ${colors[rank]}`;
+                message.textContent = messages[rank];
+                
+                document.body.appendChild(message);
+                
+                // 创建粒子特效
+                for (let i = 0; i < 50; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.style.position = 'fixed';
+                        particle.style.width = '10px';
+                        particle.style.height = '10px';
+                        particle.style.backgroundColor = colors[rank];
+                        particle.style.borderRadius = '50%';
+                        particle.style.left = `${Math.random() * 100}%`;
+                        particle.style.top = `${Math.random() * 100}%`;
+                        particle.style.boxShadow = `0 0 15px ${colors[rank]}`;
+                        particle.style.zIndex = '1999';
+                        particle.style.animation = `explode ${Math.random() * 1 + 1}s forwards`;
+                        
+                        document.body.appendChild(particle);
+                        
+                        setTimeout(() => {
+                            particle.remove();
+                        }, 1500);
+                    }, i * 50);
+                }
+                
+                // 3秒后移除消息
+                setTimeout(() => {
+                    message.remove();
+                }, 3000);
+            }
+            
+            // 播放排名音效
+            playRankSound(rank) {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const masterGain = audioContext.createGain();
+                masterGain.gain.value = 0.3;
+                masterGain.connect(audioContext.destination);
+                
+                // 根据排名播放不同的音效
+                const frequencies = {
+                    1: [659.25, 830.61, 987.77, 1318.51], // 高音胜利旋律
+                    2: [523.25, 659.25, 783.99], // 中音旋律
+                    3: [392.00, 493.88, 587.33]  // 低音旋律
+                };
+                
+                const freqArray = frequencies[rank];
+                
+                freqArray.forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                        
+                        const gainNode = audioContext.createGain();
+                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(masterGain);
+                        
+                        oscillator.start();
+                        oscillator.stop(audioContext.currentTime + 0.6);
+                    }, index * 200);
+                });
+            }
+            
+            // 删除记录
+            deleteRecord(game, index) {
+                if (!confirm('确定要删除这条记录吗？')) {
+                    return;
+                }
+                
+                const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
+                leaderboardData.splice(index, 1);
+                localStorage.setItem(`${game}Leaderboard`, JSON.stringify(leaderboardData));
+                
+                // 重新加载排行榜
+                this.loadLeaderboard(game);
+                this.loadAllLeaderboard();
+                
+                // 更新统计数据
+                this.updateStats();
+                
+                alert('记录已删除！');
+            }
+            
+            // 清空所有排行榜
+            clearAllLeaderboards() {
+                localStorage.setItem('snakeLeaderboard', JSON.stringify([]));
+                localStorage.setItem('tetrisLeaderboard', JSON.stringify([]));
+                localStorage.setItem('danmakuLeaderboard', JSON.stringify([]));
+                
+                // 重新加载所有排行榜
+                this.loadLeaderboard('snake');
+                this.loadLeaderboard('tetris');
+                this.loadLeaderboard('danmaku');
+                this.loadAllLeaderboard();
+                
+                // 更新统计数据
+                this.updateStats();
+                
+                alert('所有排行榜数据已清空！');
+            }
+            
+            // 导出排行榜
+            exportLeaderboard() {
+                const data = {
+                    snake: JSON.parse(localStorage.getItem('snakeLeaderboard') || '[]'),
+                    tetris: JSON.parse(localStorage.getItem('tetrisLeaderboard') || '[]'),
+                    danmaku: JSON.parse(localStorage.getItem('danmakuLeaderboard') || '[]'),
+                    exportDate: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `游戏排行榜_${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                alert('排行榜数据已导出！');
+            }
+            
+            // 导入排行榜
+            importLeaderboard(file) {
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        // 验证数据格式
+                        if (data.snake && data.tetris && data.danmaku) {
+                            if (confirm('导入排行榜数据将覆盖现有数据，确定要继续吗？')) {
+                                localStorage.setItem('snakeLeaderboard', JSON.stringify(data.snake));
+                                localStorage.setItem('tetrisLeaderboard', JSON.stringify(data.tetris));
+                                localStorage.setItem('danmakuLeaderboard', JSON.stringify(data.danmaku));
+                                
+                                // 重新加载排行榜
+                                this.loadLeaderboard('snake');
+                                this.loadLeaderboard('tetris');
+                                this.loadLeaderboard('danmaku');
+                                this.loadAllLeaderboard();
+                                
+                                // 更新统计数据
+                                this.updateStats();
+                                
+                                alert('排行榜数据导入成功！');
+                            }
+                        } else {
+                            alert('文件格式不正确！');
+                        }
+                    } catch (error) {
+                        alert('文件读取失败，请检查文件格式！');
+                    }
+                };
+                reader.readAsText(file);
+                
+                // 清空文件输入
+                document.getElementById('importFileInput').value = '';
+            }
+            
+            // 更新统计数据
+            updateStats() {
+                const games = ['snake', 'tetris', 'danmaku'];
+                let totalRecords = 0;
+                let todayRecords = 0;
+                let highestScore = 0;
+                const today = new Date().toDateString();
+                
+                games.forEach(game => {
+                    const records = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
+                    totalRecords += records.length;
+                    
+                    records.forEach(record => {
+                        if (new Date(record.date).toDateString() === today) {
+                            todayRecords++;
+                        }
+                        
+                        if (record.score > highestScore) {
+                            highestScore = record.score;
+                        }
+                    });
+                });
+                
+                // 更新显示
+                const totalElem = document.getElementById('totalRecords');
+                const todayElem = document.getElementById('todayRecords');
+                const highestElem = document.getElementById('highestScore');
+                
+                if (totalElem) totalElem.textContent = totalRecords;
+                if (todayElem) todayElem.textContent = todayRecords;
+                if (highestElem) highestElem.textContent = highestScore;
+            }
+            
+            // 格式化日期
+            formatDate(dateString) {
+                const date = new Date(dateString);
+                const now = new Date();
+                const diffMs = now - date;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                if (diffMins < 1) {
+                    return '刚刚';
+                } else if (diffMins < 60) {
+                    return `${diffMins}分钟前`;
+                } else if (diffHours < 24) {
+                    return `${diffHours}小时前`;
+                } else if (diffDays < 7) {
+                    return `${diffDays}天前`;
+                } else {
+                    return date.toLocaleDateString('zh-CN', {
+                        month: 'short',
+                        day: 'numeric'
+                    });
+                }
+            }
+            
+            // 设置当前游戏得分
+            setCurrentScore(game, score, level = 1, stage = 1) {
+                this.currentGame = game;
+                this.currentScore = score;
+                this.currentLevel = level;
+                this.currentStage = stage;
+            }
+        }
+        
+        // 创建排行榜系统实例
+        let leaderboardSystem;
+        
+        // 初始化排行榜系统
+        function initLeaderboardSystem() {
+            leaderboardSystem = new LeaderboardSystem();
+            
+            // 在游戏结束时触发事件
+            function triggerGameOver(game, score, level, stage) {
+                const event = new CustomEvent('gameOver', {
+                    detail: { game, score, level, stage }
+                });
+                document.dispatchEvent(event);
+            }
+            
+            // 修改游戏结束处理函数
+            const originalCreateGameOverEffect = window.createGameOverEffect;
+            window.createGameOverEffect = function(gameType, score) {
+                // 调用原始函数
+                if (originalCreateGameOverEffect) {
+                    originalCreateGameOverEffect(gameType, score);
+                }
+                
+                // 触发游戏结束事件
+                let level = 1;
+                let stage = 1;
+                
+                if (gameType === 'tetris' && window.tetrisGame) {
+                    level = window.tetrisGame.level || 1;
+                } else if (gameType === 'danmaku' && window.danmakuGame) {
+                    stage = window.danmakuGame.stage || 1;
+                }
+                
+                // 设置当前得分
+                if (leaderboardSystem) {
+                    leaderboardSystem.setCurrentScore(gameType, score, level, stage);
+                }
+                
+                // 显示保存提示
+                setTimeout(() => {
+                    if (confirm(`游戏结束！得分: ${score}\n是否保存到排行榜？`)) {
+                        if (leaderboardSystem) {
+                            leaderboardSystem.openLeaderboard();
+                            // 自动切换到当前游戏标签页
+                            leaderboardSystem.switchTab(gameType);
+                        }
+                    }
+                }, 1000);
+            };
+        }
         
         // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', () => {
+            // 初始化视觉效果
             createStars();
             createFloatingParticles();
+            addEarthInteraction();
             
             // 初始化游戏实例
-            snakeGame = new SnakeGame();
-            tetrisGame = new TetrisGame();
-            danmakuGame = new DanmakuGame();
+            let snakeGame, tetrisGame, danmakuGame;
             
-            // 游戏按钮事件
-            document.getElementById('snakeGameBtn').addEventListener('click', function() {
-                openGame('snake');
+            // 初始化排行榜系统
+            initLeaderboardSystem();
+            
+            // 游戏按钮事件处理
+            document.getElementById('snakeGameBtn').addEventListener('click', () => {
+                const container = document.getElementById('snakeGameContainer');
+                container.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                if (!snakeGame) {
+                    snakeGame = new SnakeGame();
+                }
+                
+                snakeGame.restart();
+                snakeGame.start();
+                currentGame = snakeGame;
+                enableGameKeyListeners('snake');
             });
             
-            document.getElementById('tetrisGameBtn').addEventListener('click', function() {
-                openGame('tetris');
+            document.getElementById('tetrisGameBtn').addEventListener('click', () => {
+                const container = document.getElementById('tetrisGameContainer');
+                container.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                if (!tetrisGame) {
+                    tetrisGame = new TetrisGame();
+                }
+                
+                tetrisGame.restart();
+                tetrisGame.start();
+                currentGame = tetrisGame;
+                enableGameKeyListeners('tetris');
             });
             
-            document.getElementById('danmakuGameBtn').addEventListener('click', function() {
-                openGame('danmaku');
+            document.getElementById('danmakuGameBtn').addEventListener('click', () => {
+                const container = document.getElementById('danmakuGameContainer');
+                container.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                
+                if (!danmakuGame) {
+                    danmakuGame = new DanmakuGame();
+                }
+                
+                danmakuGame.restart();
+                danmakuGame.start();
+                currentGame = danmakuGame;
+                enableGameKeyListeners('danmaku');
             });
             
             // 关闭游戏按钮事件
-            document.getElementById('closeSnakeGame').addEventListener('click', function() {
-                closeGame('snake');
-            });
-            
-            document.getElementById('closeTetrisGame').addEventListener('click', function() {
-                closeGame('tetris');
-            });
-            
-            document.getElementById('closeDanmakuGame').addEventListener('click', function() {
-                closeGame('danmaku');
-            });
-            
-            // 自动播放一个音效（延迟一点时间）
-            setTimeout(() => {
-                // 检查用户是否已经与页面交互过
-                if (document.querySelector('.container')) {
-                    // 在页面加载后自动播放一个轻微的音效
-                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioContext.createOscillator();
-                    const gainNode = audioContext.createGain();
-                    
-                    oscillator.connect(gainNode);
-                    gainNode.connect(audioContext.destination);
-                    
-                    oscillator.frequency.value = 523.25; // C5
-                    oscillator.type = 'sine';
-                    
-                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
-                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 0.1);
-                    gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.5);
-                    
-                    oscillator.start();
-                    oscillator.stop(audioContext.currentTime + 0.6);
-                }
-            }, 1500);
-        });
-        
-        // 打开游戏
-        function openGame(game) {
-            // 首先关闭当前游戏
-            if (currentGame) {
-                closeGame(currentGame);
-            }
-            
-            currentGame = game;
-            
-            if (game === 'snake') {
-                document.getElementById('snakeGameContainer').style.display = 'flex';
-                snakeGame.start();
-                enableGameKeyListeners('snake');
-            } else if (game === 'tetris') {
-                document.getElementById('tetrisGameContainer').style.display = 'flex';
-                tetrisGame.start();
-                enableGameKeyListeners('tetris');
-            } else if (game === 'danmaku') {
-                document.getElementById('danmakuGameContainer').style.display = 'flex';
-                danmakuGame.start();
-                enableGameKeyListeners('danmaku');
-            }
-        }
-        
-        // 关闭游戏
-        function closeGame(game) {
-            // 禁用该游戏的按键监听器
-            activeKeyListeners.delete(game);
-            currentGame = null;
-            
-            if (game === 'snake') {
+            document.getElementById('closeSnakeGame').addEventListener('click', () => {
                 document.getElementById('snakeGameContainer').style.display = 'none';
-                snakeGame.stop();
-                // 隐藏Game Over效果
-                document.getElementById('snakeGameOverEffect').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('snakeGameOverEffect').innerHTML = '';
-                }, 500);
-            } else if (game === 'tetris') {
+                document.body.style.overflow = 'auto';
+                if (snakeGame) {
+                    snakeGame.stop();
+                }
+                currentGame = null;
+                activeKeyListeners.clear();
+            });
+            
+            document.getElementById('closeTetrisGame').addEventListener('click', () => {
                 document.getElementById('tetrisGameContainer').style.display = 'none';
-                tetrisGame.stop();
-                // 隐藏Game Over效果
-                document.getElementById('tetrisGameOverEffect').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('tetrisGameOverEffect').innerHTML = '';
-                }, 500);
-            } else if (game === 'danmaku') {
+                document.body.style.overflow = 'auto';
+                if (tetrisGame) {
+                    tetrisGame.stop();
+                }
+                currentGame = null;
+                activeKeyListeners.clear();
+            });
+            
+            document.getElementById('closeDanmakuGame').addEventListener('click', () => {
                 document.getElementById('danmakuGameContainer').style.display = 'none';
-                danmakuGame.stop();
-                // 隐藏Game Over效果和BOSS血条
-                document.getElementById('danmakuGameOverEffect').style.opacity = '0';
-                document.getElementById('bossHealthBar').style.display = 'none';
-                setTimeout(() => {
-                    document.getElementById('danmakuGameOverEffect').innerHTML = '';
-                }, 500);
-            }
-        }
+                document.body.style.overflow = 'auto';
+                if (danmakuGame) {
+                    danmakuGame.stop();
+                }
+                currentGame = null;
+                activeKeyListeners.clear();
+            });
+            
+            // 添加ESC键退出游戏
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    const snakeContainer = document.getElementById('snakeGameContainer');
+                    const tetrisContainer = document.getElementById('tetrisGameContainer');
+                    const danmakuContainer = document.getElementById('danmakuGameContainer');
+                    
+                    if (snakeContainer.style.display === 'flex') {
+                        document.getElementById('closeSnakeGame').click();
+                    } else if (tetrisContainer.style.display === 'flex') {
+                        document.getElementById('closeTetrisGame').click();
+                    } else if (danmakuContainer.style.display === 'flex') {
+                        document.getElementById('closeDanmakuGame').click();
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
