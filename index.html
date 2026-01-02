@@ -2050,6 +2050,142 @@
                 font-size: 0.8rem;
             }
         }
+        
+        /* 弹幕游戏模式选择和完成界面样式 */
+        .game-mode-select {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #4a90e2;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .game-mode-select h3 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(74, 144, 226, 0.8);
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
+            background: linear-gradient(135deg, #5b9ef3, #4a90e2);
+        }
+        
+        /* 任务完成界面样式 */
+        .mission-complete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 3px solid #4caf50;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            z-index: 200;
+            animation: fadeIn 1s ease;
+        }
+        
+        .mission-complete-text {
+            color: #4caf50;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .thumbs-up {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 1s ease;
+        }
+        
+        .next-level-text {
+            color: #fff;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        
+        /* 全部关卡完成界面样式 */
+        .all-levels-complete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ffeb3b;
+            border-radius: 25px;
+            padding: 60px;
+            text-align: center;
+            z-index: 200;
+            animation: fadeIn 1s ease;
+        }
+        
+        .all-levels-text {
+            color: #ffeb3b;
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
+            animation: pulse 2s infinite;
+        }
+        
+        .thumbs-up-big {
+            font-size: 120px;
+            margin: 30px 0;
+            animation: bounce 1.5s ease infinite;
+        }
+        
+        .final-score-text {
+            color: #fff;
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
     </style>
 </head>
 <body>
@@ -2133,7 +2269,7 @@
             在此向秋海BW大人致以最崇高的敬意！<br>
             愿您的光辉如星辰般永恒闪耀，指引我们前行。<br>
             *海门*<br>
-            有点意思
+            新年快乐！
         </p>
         
         <!-- 游戏选择按钮 -->
@@ -2146,7 +2282,7 @@
     
     <!-- 页脚 -->
     <div class="footer">
-        <p>页面第一版设计于2025年12月28日</p>
+        <p>特别致敬页面 | 设计于2025年12月28日</p>
     </div>
         <!-- 贪吃蛇游戏容器 -->
     <div class="game-container" id="snakeGameContainer">
@@ -2313,7 +2449,16 @@
             <button class="close-game" id="closeDanmakuGame">×</button>
         </div>
         
-        <div class="game-canvas-container">
+        <!-- 游戏模式选择界面 -->
+        <div class="game-mode-select" id="danmakuGameModeSelect">
+            <h3>选择游戏模式</h3>
+            <div class="mode-buttons">
+                <button class="mode-btn" id="danmakuEndlessMode">无尽模式</button>
+                <button class="mode-btn" id="danmakuClassicMode">经典模式</button>
+            </div>
+        </div>
+        
+        <div class="game-canvas-container" id="danmakuGameCanvasContainer" style="display: none;">
             <!-- BOSS血条 -->
             <div class="boss-health-bar" id="bossHealthBar">
                 <div class="boss-health-fill" id="bossHealthFill"></div>
@@ -2321,6 +2466,18 @@
             </div>
             <canvas id="danmakuCanvas" class="game-canvas" width="800" height="600"></canvas>
             <div class="game-over-effect" id="danmakuGameOverEffect"></div>
+            <!-- 任务完成界面 -->
+            <div class="mission-complete" id="danmakuMissionComplete" style="display: none;">
+                <div class="mission-complete-text">MISSION COMPLETE</div>
+                <div class="thumbs-up">👍</div>
+                <div class="next-level-text">准备进入下一关...</div>
+            </div>
+            <!-- 全部关卡完成界面 -->
+            <div class="all-levels-complete" id="danmakuAllLevelsComplete" style="display: none;">
+                <div class="all-levels-text">恭喜通关！</div>
+                <div class="thumbs-up-big">👍</div>
+                <div class="final-score-text">最终得分: <span id="danmakuFinalScore"></span></div>
+            </div>
         </div>
         
         <div class="game-controls">
@@ -4121,6 +4278,10 @@
                 this.bossActive = false;
                 this.bossHealth = 0;
                 this.bossMaxHealth = 0;
+                this.gameMode = 'endless'; // 游戏模式：endless（无尽模式）或 classic（经典模式）
+                this.missionComplete = false;
+                this.allLevelsComplete = false;
+                this.missionCompleteTimer = 0;
                 
                 // 玩家属性
                 this.player = {
@@ -4519,6 +4680,61 @@
                     return;
                 }
                 
+                // 检查任务完成状态
+                if (this.missionComplete) {
+                    this.missionCompleteTimer++;
+                    
+                    // 显示任务完成界面
+                    const missionCompleteElem = document.getElementById('danmakuMissionComplete');
+                    const allLevelsCompleteElem = document.getElementById('danmakuAllLevelsComplete');
+                    
+                    if (this.allLevelsComplete) {
+                        // 全部关卡完成
+                        allLevelsCompleteElem.style.display = 'block';
+                        document.getElementById('danmakuFinalScore').textContent = this.score;
+                        
+                        // 播放通关音效
+                        this.playCompletionSound();
+                        
+                        // 5秒后自动返回主页
+                        if (this.missionCompleteTimer > 300) {
+                            this.allLevelsComplete = false;
+                            this.missionComplete = false;
+                            this.missionCompleteTimer = 0;
+                            allLevelsCompleteElem.style.display = 'none';
+                            document.getElementById('danmakuGameContainer').style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                            this.stop();
+                        }
+                    } else {
+                        // 单关卡完成
+                        missionCompleteElem.style.display = 'block';
+                        
+                        // 3秒后自动进入下一关
+                        if (this.missionCompleteTimer > 180) {
+                            this.missionComplete = false;
+                            this.missionCompleteTimer = 0;
+                            missionCompleteElem.style.display = 'none';
+                            
+                            // 检查是否达到最高关卡
+                            if (this.stage > 6) {
+                                this.allLevelsComplete = true;
+                                this.missionComplete = true;
+                                this.missionCompleteTimer = 0;
+                                
+                                // 保存通关记录
+                                this.saveCompletionRecord();
+                            } else {
+                                // 继续游戏
+                                this.needsRedraw = true;
+                                this.draw();
+                            }
+                        }
+                    }
+                    
+                    return;
+                }
+                
                 this.frameCount++;
                 // 每帧更新空间分区索引，用于优化后续碰撞检测
                 if (this.usePooling) {
@@ -4741,7 +4957,11 @@
                             } else if (enemy.type === 'boss') {
                                 this.score += 5000;
                                 this.bossActive = false;
+                                if (this.bossHealthBar) {
+                                if (this.bossHealthBar) {
                                 this.bossHealthBar.style.display = 'none';
+                            }
+                            }
                             }
                         }
                     }
@@ -4856,7 +5076,16 @@
                         if (enemy.type === 'boss') {
                             this.bossActive = false;
                             this.bossHealthBar.style.display = 'none';
+                            
+                            // 无论什么模式，击败BOSS后都增加关卡数
                             this.stage++;
+                            
+                            // 经典模式下触发任务完成
+                            if (this.gameMode === 'classic') {
+                                this.missionComplete = true;
+                                this.missionCompleteTimer = 0;
+                            }
+                            
                             this.updateDisplay();
                         }
                     }
@@ -5041,7 +5270,9 @@
                     this.bossActive = true;
                     
                     // 显示BOSS血条
-                    this.bossHealthBar.style.display = 'block';
+                    if (this.bossHealthBar) {
+                        this.bossHealthBar.style.display = 'block';
+                    }
                     
                     // 创建BOSS
                     this.bossMaxHealth = 100 + this.stage * 50;
@@ -5251,6 +5482,12 @@
                 // 检查游戏是否结束
                 if (this.lives <= 0) {
                     this.gameOver = true;
+                    
+                    // 设置当前游戏得分，包含游戏模式
+                    if (window.leaderboardSystem) {
+                        window.leaderboardSystem.setCurrentScore('danmaku', this.score, 1, this.stage, this.gameMode);
+                    }
+                    
                     createGameOverEffect('danmaku', this.score);
                 }
             }
@@ -5332,12 +5569,80 @@
                 );
             }
             
+            // 播放通关音效
+            playCompletionSound() {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const masterGain = audioContext.createGain();
+                masterGain.gain.value = 0.3;
+                masterGain.connect(audioContext.destination);
+                
+                // 通关音效：上升音阶
+                const frequencies = [523.25, 659.25, 783.99, 987.77, 1318.51, 1567.98, 1975.53];
+                
+                frequencies.forEach((freq, index) => {
+                    setTimeout(() => {
+                        const oscillator = audioContext.createOscillator();
+                        oscillator.type = 'sine';
+                        oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                        
+                        const gainNode = audioContext.createGain();
+                        gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                        gainNode.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+                        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(masterGain);
+                        
+                        oscillator.start();
+                        oscillator.stop(audioContext.currentTime + 0.4);
+                    }, index * 100);
+                });
+            }
+            
+            // 保存通关记录
+            saveCompletionRecord() {
+                // 使用现有的排行榜系统保存记录
+                if (window.leaderboardSystem) {
+                    window.leaderboardSystem.setCurrentScore('danmaku', this.score, 1, this.stage);
+                    
+                    // 创建记录对象
+                    const record = {
+                        id: Date.now(),
+                        game: 'danmaku',
+                        score: this.score,
+                        level: 1,
+                        stage: this.stage,
+                        date: new Date().toISOString(),
+                        mode: this.gameMode,
+                        completed: this.gameMode === 'classic' && this.stage > 6
+                    };
+                    
+                    // 保存到本地存储
+                    const leaderboardData = JSON.parse(localStorage.getItem('danmakuLeaderboard') || '[]');
+                    leaderboardData.push(record);
+                    localStorage.setItem('danmakuLeaderboard', JSON.stringify(leaderboardData));
+                }
+            }
+            
             updateDisplay() {
+                // 无敌时间显示（秒）
+                const invincibleTime = Math.ceil(this.player.invincibleTimer / 60);
+                const invincibleText = this.player.invincible ? `无敌: ${invincibleTime}s` : '';
+                
                 this.scoreElement.textContent = `得分: ${this.score} | 等级: ${this.stage}`;
                 this.livesElement.textContent = `生命: ${this.lives}`;
                 this.powerElement.textContent = `火力: ${this.power}`;
                 this.bombsElement.textContent = `炸弹: ${this.bombs}`;
                 this.stageElement.textContent = `关卡: ${this.stage}`;
+                
+                // 如果无敌状态，添加无敌时间显示
+                if (this.player.invincible) {
+                    // 可以在玩家周围添加无敌时间显示
+                    this.ctx.fillStyle = '#ffff00';
+                    this.ctx.font = 'bold 16px Arial';
+                    this.ctx.textAlign = 'center';
+                    this.ctx.fillText(`无敌: ${invincibleTime}s`, this.player.x, this.player.y + this.player.height + 20);
+                }
             }
             
             bindControls() {
@@ -5576,6 +5881,7 @@
                 this.currentScore = 0;
                 this.currentLevel = 1;
                 this.currentStage = 1;
+                this.currentGameMode = 'endless'; // 当前游戏模式
                 this.playerName = localStorage.getItem('playerName') || '玩家';
                 
                 this.initializeLeaderboard();
@@ -5594,8 +5900,13 @@
                     localStorage.setItem('tetrisLeaderboard', JSON.stringify([]));
                 }
                 
-                if (!localStorage.getItem('danmakuLeaderboard')) {
-                    localStorage.setItem('danmakuLeaderboard', JSON.stringify([]));
+                // 为弹幕游戏的不同模式初始化不同的排行榜
+                if (!localStorage.getItem('danmakuLeaderboard_endless')) {
+                    localStorage.setItem('danmakuLeaderboard_endless', JSON.stringify([]));
+                }
+                
+                if (!localStorage.getItem('danmakuLeaderboard_classic')) {
+                    localStorage.setItem('danmakuLeaderboard_classic', JSON.stringify([]));
                 }
                 
                 // 设置玩家名字输入框的默认值
@@ -5810,13 +6121,35 @@
                     }).catch(err => {
                         console.error('远程排行榜加载失败，回退到本地：', err);
                         // 回退到本地加载
-                        const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
-                        if (leaderboardData.length === 0) {
+                        // 获取该游戏所有模式的排行榜键名
+                        const getLeaderboardKeys = (gameType) => {
+                            if (gameType === 'danmaku') {
+                                // 弹幕游戏有经典模式和无尽模式
+                                return [
+                                    `${gameType}Leaderboard_classic`,
+                                    `${gameType}Leaderboard_endless`,
+                                    `${gameType}Leaderboard` // 兼容旧版数据
+                                ];
+                            }
+                            return [`${gameType}Leaderboard`];
+                        };
+                        
+                        // 合并所有模式的排行榜数据
+                        const keys = getLeaderboardKeys(game);
+                        let allRecords = [];
+                        keys.forEach(key => {
+                            const records = JSON.parse(localStorage.getItem(key) || '[]');
+                            allRecords = allRecords.concat(records);
+                        });
+                        
+                        if (allRecords.length === 0) {
                             tableBody.innerHTML = '<div class="no-records">暂无记录，快来成为第一名吧！</div>';
                             return;
                         }
-                        leaderboardData.sort((a, b) => b.score - a.score);
-                        const displayData = leaderboardData.slice(0, 50);
+                        
+                        // 按得分排序
+                        allRecords.sort((a, b) => b.score - a.score);
+                        const displayData = allRecords.slice(0, 50);
                         displayData.forEach((record, index) => {
                             const row = document.createElement('div');
                             row.className = `leaderboard-row rank-${index + 1}`;
@@ -5938,13 +6271,30 @@
                 let allRecords = [];
                 
                 games.forEach(game => {
-                    const gameRecords = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
-                    gameRecords.forEach(record => {
-                        record.game = game === 'snake' ? '贪吃蛇' : 
-                                     game === 'tetris' ? '俄罗斯方块' : '弹幕射击';
-                        record.gameType = game;
+                    // 获取该游戏所有模式的排行榜键名
+                    const getLeaderboardKeys = (gameType) => {
+                        if (gameType === 'danmaku') {
+                            // 弹幕游戏有经典模式和无尽模式
+                            return [
+                                `${gameType}Leaderboard_classic`,
+                                `${gameType}Leaderboard_endless`,
+                                `${gameType}Leaderboard` // 兼容旧版数据
+                            ];
+                        }
+                        return [`${gameType}Leaderboard`];
+                    };
+                    
+                    // 加载所有模式的数据
+                    const keys = getLeaderboardKeys(game);
+                    keys.forEach(key => {
+                        const gameRecords = JSON.parse(localStorage.getItem(key) || '[]');
+                        gameRecords.forEach(record => {
+                            record.game = game === 'snake' ? '贪吃蛇' : 
+                                         game === 'tetris' ? '俄罗斯方块' : '弹幕射击';
+                            record.gameType = game;
+                        });
+                        allRecords = allRecords.concat(gameRecords);
                     });
-                    allRecords = allRecords.concat(gameRecords);
                 });
                 
                 // 按得分排序
@@ -5988,8 +6338,29 @@
             
             // 查找记录索引
             findRecordIndex(game, recordId) {
-                const records = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
-                return records.findIndex(record => record.id === recordId);
+                // 获取该游戏所有模式的排行榜键名
+                const getLeaderboardKeys = (gameType) => {
+                    if (gameType === 'danmaku') {
+                        // 弹幕游戏有经典模式和无尽模式
+                        return [
+                            `${gameType}Leaderboard_classic`,
+                            `${gameType}Leaderboard_endless`,
+                            `${gameType}Leaderboard` // 兼容旧版数据
+                        ];
+                    }
+                    return [`${gameType}Leaderboard`];
+                };
+                
+                // 遍历所有模式的排行榜
+                const keys = getLeaderboardKeys(game);
+                for (const key of keys) {
+                    const records = JSON.parse(localStorage.getItem(key) || '[]');
+                    const index = records.findIndex(record => record.id === recordId);
+                    if (index !== -1) {
+                        return index;
+                    }
+                }
+                return -1;
             }
             
             // 保存当前得分（保存到本地并尝试同步到远程 Firestore）
@@ -6014,7 +6385,8 @@
                     id: Date.now() + Math.random().toString(36).substr(2, 9),
                     name: playerName,
                     score: this.currentScore,
-                    date: new Date().toISOString()
+                    date: new Date().toISOString(),
+                    mode: this.currentGameMode // 添加游戏模式
                 };
 
                 // 添加游戏特定数据
@@ -6024,12 +6396,22 @@
                     record.stage = this.currentStage;
                 }
 
+                // 获取排行榜键名，根据游戏模式区分
+                let leaderboardKey;
+                if (this.currentGame === 'danmaku') {
+                    // 弹幕游戏根据模式使用不同的排行榜
+                    leaderboardKey = `${this.currentGame}Leaderboard_${this.currentGameMode}`;
+                } else {
+                    // 其他游戏使用默认排行榜
+                    leaderboardKey = `${this.currentGame}Leaderboard`;
+                }
+
                 // 获取现有排行榜数据
-                const leaderboardData = JSON.parse(localStorage.getItem(`${this.currentGame}Leaderboard`) || '[]');
+                const leaderboardData = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
 
                 // 添加新记录并保存到本地
                 leaderboardData.push(record);
-                localStorage.setItem(`${this.currentGame}Leaderboard`, JSON.stringify(leaderboardData));
+                localStorage.setItem(leaderboardKey, JSON.stringify(leaderboardData));
 
                 // 重新加载排行榜与统计
                 this.loadLeaderboard(this.currentGame);
@@ -6175,18 +6557,49 @@
                     return;
                 }
                 
-                const leaderboardData = JSON.parse(localStorage.getItem(`${game}Leaderboard`) || '[]');
-                leaderboardData.splice(index, 1);
-                localStorage.setItem(`${game}Leaderboard`, JSON.stringify(leaderboardData));
+                // 获取该游戏所有模式的排行榜键名
+                const getLeaderboardKeys = (gameType) => {
+                    if (gameType === 'danmaku') {
+                        // 弹幕游戏有经典模式和无尽模式
+                        return [
+                            `${gameType}Leaderboard_classic`,
+                            `${gameType}Leaderboard_endless`,
+                            `${gameType}Leaderboard` // 兼容旧版数据
+                        ];
+                    }
+                    return [`${gameType}Leaderboard`];
+                };
                 
-                // 重新加载排行榜
-                this.loadLeaderboard(game);
-                this.loadAllLeaderboard();
+                let recordDeleted = false;
+                const keys = getLeaderboardKeys(game);
                 
-                // 更新统计数据
-                this.updateStats();
+                // 遍历所有模式的排行榜，查找并删除记录
+                keys.forEach(key => {
+                    const leaderboardData = JSON.parse(localStorage.getItem(key) || '[]');
+                    
+                    if (index < leaderboardData.length) {
+                        // 找到了要删除的记录
+                        leaderboardData.splice(index, 1);
+                        localStorage.setItem(key, JSON.stringify(leaderboardData));
+                        recordDeleted = true;
+                    } else {
+                        // 调整索引，继续在其他模式中查找
+                        index -= leaderboardData.length;
+                    }
+                });
                 
-                alert('记录已删除！');
+                if (recordDeleted) {
+                    // 重新加载排行榜
+                    this.loadLeaderboard(game);
+                    this.loadAllLeaderboard();
+                    
+                    // 更新统计数据
+                    this.updateStats();
+                    
+                    alert('记录已删除！');
+                } else {
+                    alert('未找到要删除的记录！');
+                }
             }
             
             // 清空所有排行榜
@@ -6218,14 +6631,14 @@
                 };
                 
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = 网站.createObjectURL(blob);
+                const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = `游戏排行榜_${new Date().toISOString().split('T')[0]}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                网站.revokeObjectURL(url);
+                URL.revokeObjectURL(url);
                 
                 alert('排行榜数据已导出！');
             }
@@ -6329,11 +6742,12 @@
             }
             
             // 设置当前游戏得分
-            setCurrentScore(game, score, level = 1, stage = 1) {
+            setCurrentScore(game, score, level = 1, stage = 1, mode = 'endless') {
                 this.currentGame = game;
                 this.currentScore = score;
                 this.currentLevel = level;
                 this.currentStage = stage;
+                this.currentGameMode = mode; // 保存游戏模式
             }
         }
         
@@ -6370,9 +6784,14 @@
                     stage = window.danmakuGame.stage || 1;
                 }
                 
-                // 设置当前得分
+                // 设置当前得分，包含游戏模式
                 if (leaderboardSystem) {
-                    leaderboardSystem.setCurrentScore(gameType, score, level, stage);
+                    // 获取游戏模式
+                    let gameMode = 'endless'; // 默认无尽模式
+                    if (gameType === 'danmaku' && window.danmakuGame) {
+                        gameMode = window.danmakuGame.gameMode || 'endless';
+                    }
+                    leaderboardSystem.setCurrentScore(gameType, score, level, stage, gameMode);
                 }
                 
                 // 显示保存提示
@@ -6437,15 +6856,41 @@
                 container.style.display = 'flex';
                 document.body.style.overflow = 'hidden';
                 
+                // 显示游戏模式选择界面，隐藏游戏画布
+                document.getElementById('danmakuGameModeSelect').style.display = 'block';
+                document.getElementById('danmakuGameCanvasContainer').style.display = 'none';
+                
+                if (!danmakuGame) {
+                    danmakuGame = new DanmakuGame();
+                }
+            });
+            
+            // 无尽模式按钮事件
+            document.getElementById('danmakuEndlessMode').addEventListener('click', () => {
+                startDanmakuGame('endless');
+            });
+            
+            // 经典模式按钮事件
+            document.getElementById('danmakuClassicMode').addEventListener('click', () => {
+                startDanmakuGame('classic');
+            });
+            
+            // 开始弹幕游戏函数
+            function startDanmakuGame(mode) {
+                // 隐藏游戏模式选择界面，显示游戏画布
+                document.getElementById('danmakuGameModeSelect').style.display = 'none';
+                document.getElementById('danmakuGameCanvasContainer').style.display = 'block';
+                
                 if (!danmakuGame) {
                     danmakuGame = new DanmakuGame();
                 }
                 
+                danmakuGame.gameMode = mode;
                 danmakuGame.restart();
                 danmakuGame.start();
                 currentGame = danmakuGame;
                 enableGameKeyListeners('danmaku');
-            });
+            }
             
             // 关闭游戏按钮事件
             document.getElementById('closeSnakeGame').addEventListener('click', () => {
