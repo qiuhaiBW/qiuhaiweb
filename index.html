@@ -4668,8 +4668,12 @@
             drawBossHealth() {
                 // 更新BOSS血条显示
                 const healthPercent = (this.bossHealth / this.bossMaxHealth) * 100;
-                this.bossHealthFill.style.width = `${healthPercent}%`;
-                this.bossHealthText.textContent = `BOSS: ${Math.round(healthPercent)}%`;
+                if (this.bossHealthFill) {
+                    this.bossHealthFill.style.width = `${healthPercent}%`;
+                }
+                if (this.bossHealthText) {
+                    this.bossHealthText.textContent = `BOSS: ${Math.round(healthPercent)}%`;
+                }
             }
             
             update() {
@@ -4958,10 +4962,8 @@
                                 this.score += 5000;
                                 this.bossActive = false;
                                 if (this.bossHealthBar) {
-                                if (this.bossHealthBar) {
-                                this.bossHealthBar.style.display = 'none';
-                            }
-                            }
+                                    this.bossHealthBar.style.display = 'none';
+                                }
                             }
                         }
                     }
@@ -5075,7 +5077,9 @@
                         // 如果是BOSS，更新游戏状态
                         if (enemy.type === 'boss') {
                             this.bossActive = false;
-                            this.bossHealthBar.style.display = 'none';
+                            if (this.bossHealthBar) {
+                                this.bossHealthBar.style.display = 'none';
+                            }
                             
                             // 无论什么模式，击败BOSS后都增加关卡数
                             this.stage++;
@@ -6820,6 +6824,192 @@
             // 初始化排行榜系统
             initLeaderboardSystem();
             
+            // 动态缩放游戏容器内容
+            function resizeGameContainer(container) {
+                if (!container) return;
+                
+                // 获取容器可用尺寸
+                const availableWidth = window.innerWidth - 40; // 减去左右padding
+                const availableHeight = window.innerHeight - 40; // 减去上下padding
+                
+                // 找到画布容器
+                const canvasContainer = container.querySelector('.game-canvas-container');
+                if (!canvasContainer) return;
+                
+                // 获取原始画布尺寸
+                const canvas = canvasContainer.querySelector('.game-canvas');
+                if (!canvas) return;
+                
+                const originalWidth = canvas.width;
+                const originalHeight = canvas.height;
+                
+                // 确保控制按钮可见
+                const header = container.querySelector('.game-header');
+                const controls = container.querySelector('.game-controls');
+                const infoPanel = container.querySelector('.game-info');
+                
+                // 确保所有元素可见
+                if (header) {
+                    header.style.display = 'block';
+                    header.style.width = '100%';
+                    header.style.textAlign = 'center';
+                    header.style.marginBottom = '10px';
+                }
+                
+                if (controls) {
+                    controls.style.display = 'flex';
+                    controls.style.flexDirection = 'column';
+                    controls.style.alignItems = 'center';
+                    controls.style.justifyContent = 'center';
+                    controls.style.width = '100%';
+                    controls.style.marginTop = '10px';
+                    controls.style.zIndex = '1001';
+                }
+                
+                if (canvasContainer) {
+                    canvasContainer.style.display = 'block';
+                    canvasContainer.style.margin = '0 auto';
+                    canvasContainer.style.zIndex = '1000';
+                }
+                
+                if (infoPanel) {
+                    infoPanel.style.display = 'block';
+                    infoPanel.style.width = '100%';
+                    infoPanel.style.textAlign = 'center';
+                    infoPanel.style.marginTop = '10px';
+                }
+                
+                // 特殊处理弹幕游戏的模式选择界面
+                const modeSelect = container.querySelector('#danmakuGameModeSelect');
+                if (modeSelect) {
+                    modeSelect.style.display = modeSelect.style.display || 'block';
+                    modeSelect.style.position = 'relative';
+                    modeSelect.style.zIndex = '1001';
+                    modeSelect.style.margin = '20px auto';
+                }
+                
+                // 确保关闭按钮可见
+                const closeBtn = container.querySelector('[id^="close"]');
+                if (closeBtn) {
+                    closeBtn.style.position = 'absolute';
+                    closeBtn.style.top = '10px';
+                    closeBtn.style.right = '10px';
+                    closeBtn.style.zIndex = '1004';
+                    closeBtn.style.cursor = 'pointer';
+                }
+                
+                // 确保控制说明可见
+                const controlInstructions = container.querySelector('.control-instructions');
+                if (controlInstructions) {
+                    controlInstructions.style.display = 'block';
+                    controlInstructions.style.width = '100%';
+                    controlInstructions.style.marginTop = '15px';
+                    controlInstructions.style.textAlign = 'center';
+                    controlInstructions.style.zIndex = '1001';
+                }
+                
+                // 确保游戏说明可见
+                const gameInstructions = container.querySelector('.game-instructions');
+                if (gameInstructions) {
+                    gameInstructions.style.display = 'block';
+                    gameInstructions.style.width = '100%';
+                    gameInstructions.style.marginTop = '15px';
+                    gameInstructions.style.textAlign = 'center';
+                    gameInstructions.style.zIndex = '1001';
+                }
+                
+                // 特殊处理弹幕游戏的BOSS血条
+                const bossHealthBar = container.querySelector('.boss-health-bar');
+                if (bossHealthBar) {
+                    bossHealthBar.style.display = 'block';
+                    bossHealthBar.style.position = 'absolute';
+                    bossHealthBar.style.top = '10px';
+                    bossHealthBar.style.left = '50%';
+                    bossHealthBar.style.transform = 'translateX(-50%)';
+                    bossHealthBar.style.zIndex = '1001';
+                }
+                
+                // 特殊处理任务完成和关卡完成界面
+                const missionComplete = container.querySelector('.mission-complete');
+                if (missionComplete) {
+                    missionComplete.style.zIndex = '1003';
+                }
+                
+                const allLevelsComplete = container.querySelector('.all-levels-complete');
+                if (allLevelsComplete) {
+                    allLevelsComplete.style.zIndex = '1003';
+                }
+                
+                // 计算所有非画布元素的总高度
+                let nonCanvasHeight = 0;
+                if (header) {
+                    nonCanvasHeight += header.offsetHeight + 10; // 标题高度 + 间距
+                }
+                if (controls) {
+                    nonCanvasHeight += controls.offsetHeight + 10; // 控制按钮高度 + 间距
+                }
+                if (infoPanel) {
+                    nonCanvasHeight += infoPanel.offsetHeight + 10; // 信息面板高度 + 间距
+                }
+                
+                // 计算画布可用高度
+                let canvasAvailableHeight = availableHeight - nonCanvasHeight;
+                canvasAvailableHeight = Math.max(canvasAvailableHeight, 300); // 确保至少有300px可用高度
+                
+                // 确保画布容器有合适的最大尺寸
+                canvasContainer.style.maxWidth = '100%';
+                canvasContainer.style.maxHeight = `${canvasAvailableHeight}px`;
+                canvasContainer.style.margin = '0 auto';
+                
+                // 计算缩放比例，确保完全适配
+                const scaleX = availableWidth / originalWidth;
+                const scaleY = canvasAvailableHeight / originalHeight;
+                const scale = Math.min(scaleX, scaleY, 1); // 最大缩放比例为1，不放大
+                
+                // 应用缩放变换
+                canvas.style.transform = `scale(${scale})`;
+                canvas.style.transformOrigin = 'top center';
+                canvas.style.maxWidth = `${originalWidth}px`;
+                canvas.style.maxHeight = `${originalHeight}px`;
+                canvas.style.width = '100%';
+                canvas.style.height = 'auto';
+                canvas.style.display = 'block';
+                canvas.style.margin = '0 auto';
+                
+                // 确保画布容器有合适的高度
+                canvasContainer.style.height = `${originalHeight * scale}px`;
+                canvasContainer.style.width = `${originalWidth * scale}px`;
+                
+                // 确保整个容器使用合适的布局
+                container.style.justifyContent = 'flex-start';
+                container.style.alignItems = 'center';
+                container.style.padding = '20px';
+                container.style.overflow = 'visible';
+                container.style.height = '100vh';
+                container.style.width = '100vw';
+                container.style.position = 'fixed';
+                container.style.top = '0';
+                container.style.left = '0';
+                container.style.zIndex = '1000';
+            }
+            
+            // 监听窗口大小变化，动态调整游戏容器
+            function addResizeListener(containerId) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    window.addEventListener('resize', () => {
+                        if (container.style.display === 'flex') {
+                            resizeGameContainer(container);
+                        }
+                    });
+                }
+            }
+            
+            // 添加所有游戏容器的 resize 监听
+            addResizeListener('snakeGameContainer');
+            addResizeListener('tetrisGameContainer');
+            addResizeListener('danmakuGameContainer');
+            
             // 游戏按钮事件处理
             document.getElementById('snakeGameBtn').addEventListener('click', () => {
                 const container = document.getElementById('snakeGameContainer');
@@ -6834,6 +7024,9 @@
                 snakeGame.start();
                 currentGame = snakeGame;
                 enableGameKeyListeners('snake');
+                
+                // 延迟调用，确保容器已显示
+                setTimeout(() => resizeGameContainer(container), 100);
             });
             
             document.getElementById('tetrisGameBtn').addEventListener('click', () => {
@@ -6849,6 +7042,9 @@
                 tetrisGame.start();
                 currentGame = tetrisGame;
                 enableGameKeyListeners('tetris');
+                
+                // 延迟调用，确保容器已显示
+                setTimeout(() => resizeGameContainer(container), 100);
             });
             
             document.getElementById('danmakuGameBtn').addEventListener('click', () => {
@@ -6863,6 +7059,9 @@
                 if (!danmakuGame) {
                     danmakuGame = new DanmakuGame();
                 }
+                
+                // 延迟调用，确保容器已显示
+                setTimeout(() => resizeGameContainer(container), 100);
             });
             
             // 无尽模式按钮事件
@@ -6890,6 +7089,10 @@
                 danmakuGame.start();
                 currentGame = danmakuGame;
                 enableGameKeyListeners('danmaku');
+                
+                // 延迟调用，确保画布已显示
+                const container = document.getElementById('danmakuGameContainer');
+                setTimeout(() => resizeGameContainer(container), 100);
             }
             
             // 关闭游戏按钮事件
