@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>秋海BW大人</title>
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" type='image/svg+xml'>
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" sizes="32x32" type='image/svg+xml'>
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" sizes="16x16" type='image/svg+xml'>
+    <link rel="shortcut icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" type='image/svg+xml'>
+    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E">
     <style>
         * {
             margin: 0;
@@ -2126,7 +2133,7 @@
             在此向秋海BW大人致以最崇高的敬意！<br>
             愿您的光辉如星辰般永恒闪耀，指引我们前行。<br>
             *海门*<br>
-            新年快乐！
+            有点意思
         </p>
         
         <!-- 游戏选择按钮 -->
@@ -2139,7 +2146,7 @@
     
     <!-- 页脚 -->
     <div class="footer">
-        <p>特别致敬页面 | 设计于2025年12月28日</p>
+        <p>页面第一版设计于2025年12月28日</p>
     </div>
         <!-- 贪吃蛇游戏容器 -->
     <div class="game-container" id="snakeGameContainer">
@@ -6211,14 +6218,14 @@
                 };
                 
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
+                const url = 网站.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = `游戏排行榜_${new Date().toISOString().split('T')[0]}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+                网站.revokeObjectURL(url);
                 
                 alert('排行榜数据已导出！');
             }
