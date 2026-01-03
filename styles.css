@@ -2174,6 +2174,7 @@
             50% { transform: translateY(-20px); }
         }
     
+
 /* 2048游戏样式 */
 .game-board {
     display: grid;
@@ -2294,7 +2295,7 @@
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3;
 }
 
 .control-btn:hover {
