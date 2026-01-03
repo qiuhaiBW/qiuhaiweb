@@ -1,0 +1,2304 @@
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            cursor: default;
+        }
+        
+        /* 星空背景 */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite alternate;
+        }
+        
+        /* 像素飞机样式 */
+        .pixel-plane {
+            position: fixed;
+            z-index: 1000;
+            pointer-events: none;
+            width: 160px;
+            height: 120px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* 简单的飞机飞行动画 */
+        @keyframes simple-fly {
+            0% {
+                transform: translate(-100px, 300px);
+            }
+            100% {
+                transform: translate(calc(100vw + 100px), 300px);
+            }
+        }
+        
+        /* 飞机1样式 - 主色调红色，向右飞行 */
+        .plane-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="120" viewBox="0 0 60 40"><rect x="20" y="15" width="35" height="8" fill="red" stroke="white" stroke-width="1"/><rect x="25" y="17" width="25" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="25" y="22" width="25" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="5,15 20,20 5,25" fill="red" stroke="white" stroke-width="1"/><polygon points="8,17 20,19 8,23" fill="white" stroke="white" stroke-width="1"/><polygon points="50,10 58,19 50,28" fill="red" stroke="white" stroke-width="1"/><polygon points="52,13 56,18 52,23" fill="white" stroke="white" stroke-width="1"/><rect x="30" y="10" width="10" height="18" fill="red" stroke="white" stroke-width="1"/><rect x="34" y="12" width="2" height="14" fill="white" stroke="white" stroke-width="1"/><circle cx="42" cy="19" r="4" fill="white" stroke="white" stroke-width="1"/><circle cx="42" cy="19" r="1.5" fill="black" stroke="black" stroke-width="1"/><polygon points="30,10 35,5 40,10" fill="red" stroke="white" stroke-width="1"/><polygon points="30,28 35,33 40,28" fill="red" stroke="white" stroke-width="1"/></svg>');
+            animation: plane-fly-1 10s linear infinite;
+        }
+        
+        /* 飞机2样式 - 主色调蓝色，向下飞行 */
+        .plane-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="120" viewBox="0 0 40 60"><rect x="15" y="20" width="8" height="35" fill="blue" stroke="white" stroke-width="1"/><rect x="17" y="25" width="4" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="17" y="38" width="4" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="19,5 15,20 23,20" fill="blue" stroke="white" stroke-width="1"/><polygon points="17,10 15,18 21,15" fill="white" stroke="white" stroke-width="1"/><polygon points="10,50 19,58 28,50" fill="blue" stroke="white" stroke-width="1"/><polygon points="12,53 17,56 16,52" fill="white" stroke="white" stroke-width="1"/><polygon points="26,53 21,56 22,52" fill="white" stroke="white" stroke-width="1"/><rect x="10" y="30" width="18" height="10" fill="blue" stroke="white" stroke-width="1"/><rect x="12" y="33" width="3" height="3" fill="white" stroke="white" stroke-width="1"/><rect x="23" y="33" width="3" height="3" fill="white" stroke="white" stroke-width="1"/><circle cx="19" y="42" r="4" fill="white" stroke="white" stroke-width="1"/><circle cx="19" y="42" r="1.5" fill="black" stroke="black" stroke-width="1"/><polygon points="10,30 5,35 10,40" fill="blue" stroke="white" stroke-width="1"/><polygon points="28,30 33,35 28,40" fill="blue" stroke="white" stroke-width="1"/></svg>');
+            animation: plane-fly-2 12s linear infinite;
+        }
+        
+        /* 飞机3样式 - 主色调绿色，向左飞行 */
+        .plane-3 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="120" viewBox="0 0 40 60"><rect x="15" y="5" width="8" height="35" fill="green" stroke="white" stroke-width="1"/><rect x="17" y="10" width="4" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="17" y="24" width="4" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="19,45 15,30 23,30" fill="green" stroke="white" stroke-width="1"/><polygon points="17,42 15,34 21,37" fill="white" stroke="white" stroke-width="1"/><polygon points="10,5 19,13 28,5" fill="green" stroke="white" stroke-width="1"/><polygon points="12,8 17,11 16,7" fill="white" stroke="white" stroke-width="1"/><polygon points="26,8 21,11 22,7" fill="white" stroke="white" stroke-width="1"/><rect x="10" y="12" width="18" height="10" fill="green" stroke="white" stroke-width="1"/><rect x="12" y="15" width="3" height="3" fill="white" stroke="white" stroke-width="1"/><rect x="23" y="15" width="3" height="3" fill="white" stroke="white" stroke-width="1"/><circle cx="19" cy="25" r="4" fill="white" stroke="white" stroke-width="1"/><circle cx="19" cy="25" r="1.5" fill="black" stroke="black" stroke-width="1"/><polygon points="10,12 5,17 10,22" fill="green" stroke="white" stroke-width="1"/><polygon points="28,12 33,17 28,22" fill="green" stroke="white" stroke-width="1"/></svg>');
+            animation: plane-fly-3 15s linear infinite;
+        }
+        
+        /* 飞机4样式 - 主色调黄色，向上飞行 */
+        .plane-4 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="120" viewBox="0 0 40 60"><rect x="15" y="5" width="8" height="35" fill="yellow" stroke="white" stroke-width="1"/><rect x="17" y="10" width="4" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="17" y="24" width="4" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="19,45 15,30 23,30" fill="yellow" stroke="white" stroke-width="1"/><polygon points="17,42 15,34 21,37" fill="white" stroke="white" stroke-width="1"/><polygon points="10,5 19,13 28,5" fill="yellow" stroke="white" stroke-width="1"/><polygon points="12,8 17,11 16,7" fill="white" stroke="white" stroke-width="1"/><polygon points="26,8 21,11 22,7" fill="white" stroke="white" stroke-width="1"/><rect x="10" y="12" width="18" height="10" fill="yellow" stroke="white" stroke-width="1"/><rect x="12" y="15" width="3" height="3" fill="white" stroke="white" stroke-width="1"/><rect x="23" y="15" width="3" height="3" fill="white" stroke="white" stroke-width="1"/><circle cx="19" cy="25" r="4" fill="white" stroke="white" stroke-width="1"/><circle cx="19" cy="25" r="1.5" fill="black" stroke="black" stroke-width="1"/><polygon points="10,12 5,17 10,22" fill="yellow" stroke="white" stroke-width="1"/><polygon points="28,12 33,17 28,22" fill="yellow" stroke="white" stroke-width="1"/></svg>');
+            animation: plane-fly-4 18s linear infinite;
+        }
+        
+        /* 飞机飞行动画1 - 从左到右，扩大运动范围，带轻微上下浮动 */
+        @keyframes plane-fly-1 {
+            0% {
+                transform: translate(-150px, 150px) rotate(0deg);
+            }
+            25% {
+                transform: translate(calc(25vw - 75px), 120px) rotate(0deg);
+            }
+            50% {
+                transform: translate(calc(50vw - 75px), 150px) rotate(0deg);
+            }
+            75% {
+                transform: translate(calc(75vw - 75px), 180px) rotate(0deg);
+            }
+            100% {
+                transform: translate(calc(100vw + 150px), 150px) rotate(0deg);
+            }
+        }
+        
+        /* 飞机飞行动画2 - 从上到下，扩大水平运动范围，带轻微左右浮动 */
+        @keyframes plane-fly-2 {
+            0% {
+                transform: translate(350px, -150px) rotate(0deg);
+            }
+            25% {
+                transform: translate(320px, calc(25vh - 75px)) rotate(0deg);
+            }
+            50% {
+                transform: translate(350px, calc(50vh - 75px)) rotate(0deg);
+            }
+            75% {
+                transform: translate(380px, calc(75vh - 75px)) rotate(0deg);
+            }
+            100% {
+                transform: translate(350px, calc(100vh + 150px)) rotate(0deg);
+            }
+        }
+        
+        /* 飞机飞行动画3 - 从右到左，扩大垂直运动范围，带轻微上下浮动 */
+        @keyframes plane-fly-3 {
+            0% {
+                transform: translate(calc(100vw + 150px), 500px) rotate(90deg);
+            }
+            25% {
+                transform: translate(calc(75vw - 75px), 530px) rotate(90deg);
+            }
+            50% {
+                transform: translate(calc(50vw - 75px), 500px) rotate(90deg);
+            }
+            75% {
+                transform: translate(calc(25vw - 75px), 470px) rotate(90deg);
+            }
+            100% {
+                transform: translate(-150px, 500px) rotate(90deg);
+            }
+        }
+        
+        /* 飞机飞行动画4 - 从下到上，移动到屏幕左侧，扩大水平运动范围，带轻微左右浮动 */
+        @keyframes plane-fly-4 {
+            0% {
+                transform: translate(150px, calc(100vh + 150px)) rotate(180deg);
+            }
+            25% {
+                transform: translate(130px, calc(75vh - 75px)) rotate(180deg);
+            }
+            50% {
+                transform: translate(150px, calc(50vh - 75px)) rotate(180deg);
+            }
+            75% {
+                transform: translate(170px, calc(25vh - 75px)) rotate(180deg);
+            }
+            100% {
+                transform: translate(150px, -150px) rotate(180deg);
+            }
+        }
+        
+        /* 小飞机样式 - 用于围绕标题飞行 */
+        .small-plane {
+            position: absolute;
+            z-index: 2000;
+            pointer-events: none;
+            width: 80px;
+            height: 53px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+        
+        /* 小飞机1 - 紫色 */
+        .small-plane-1 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="40" viewBox="0 0 40 30"><polygon points="3,14 15,12 15,18" fill="purple" stroke="white" stroke-width="1"/><polygon points="6,15 15,13 6,17" fill="white" stroke="white" stroke-width="1"/><rect x="15" y="12" width="18" height="6" rx="2" fill="purple" stroke="white" stroke-width="1"/><rect x="18" y="13" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="17" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="30,8 37,15 30,22" fill="purple" stroke="white" stroke-width="1"/><polygon points="32,10 35,14 32,16" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="10" width="8" height="10" rx="1" fill="purple" stroke="white" stroke-width="1"/><rect x="22" y="11" width="1" height="8" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="2.5" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="1" fill="black" stroke="black" stroke-width="1"/><polygon points="18,10 22,6 26,10" fill="purple" stroke="white" stroke-width="1"/><polygon points="18,20 22,24 26,20" fill="purple" stroke="white" stroke-width="1"/><polygon points="3,14 8,10 8,18" fill="purple" stroke="white" stroke-width="1"/></svg>');
+            width: 72px;
+            height: 48px;
+            animation: orbit-title-1 15s linear infinite;
+        }
+        
+        /* 小飞机2 - 粉色 */
+        .small-plane-2 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="40" viewBox="0 0 40 30"><polygon points="3,14 15,12 15,18" fill="pink" stroke="white" stroke-width="1"/><polygon points="6,15 15,13 6,17" fill="white" stroke="white" stroke-width="1"/><rect x="15" y="12" width="18" height="6" rx="2" fill="pink" stroke="white" stroke-width="1"/><rect x="18" y="13" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="17" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="30,8 37,15 30,22" fill="pink" stroke="white" stroke-width="1"/><polygon points="32,10 35,14 32,16" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="10" width="8" height="10" rx="1" fill="pink" stroke="white" stroke-width="1"/><rect x="22" y="11" width="1" height="8" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="2.5" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="1" fill="black" stroke="black" stroke-width="1"/><polygon points="18,10 22,6 26,10" fill="pink" stroke="white" stroke-width="1"/><polygon points="18,20 22,24 26,20" fill="pink" stroke="white" stroke-width="1"/><polygon points="3,14 8,10 8,18" fill="pink" stroke="white" stroke-width="1"/></svg>');
+            width: 66px;
+            height: 44px;
+            animation: orbit-title-2 18s linear infinite;
+        }
+        
+        /* 小飞机3 - 橙色 */
+        .small-plane-3 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="40" viewBox="0 0 40 30"><polygon points="3,14 15,12 15,18" fill="orange" stroke="white" stroke-width="1"/><polygon points="6,15 15,13 6,17" fill="white" stroke="white" stroke-width="1"/><rect x="15" y="12" width="18" height="6" rx="2" fill="orange" stroke="white" stroke-width="1"/><rect x="18" y="13" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="17" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="30,8 37,15 30,22" fill="orange" stroke="white" stroke-width="1"/><polygon points="32,10 35,14 32,16" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="10" width="8" height="10" rx="1" fill="orange" stroke="white" stroke-width="1"/><rect x="22" y="11" width="1" height="8" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="2.5" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="1" fill="black" stroke="black" stroke-width="1"/><polygon points="18,10 22,6 26,10" fill="orange" stroke="white" stroke-width="1"/><polygon points="18,20 22,24 26,20" fill="orange" stroke="white" stroke-width="1"/><polygon points="3,14 8,10 8,18" fill="orange" stroke="white" stroke-width="1"/></svg>');
+            width: 78px;
+            height: 52px;
+            animation: orbit-title-3 20s linear infinite;
+        }
+        
+        /* 小飞机4 - 青色 */
+        .small-plane-4 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="40" viewBox="0 0 40 30"><polygon points="3,14 15,12 15,18" fill="cyan" stroke="white" stroke-width="1"/><polygon points="6,15 15,13 6,17" fill="white" stroke="white" stroke-width="1"/><rect x="15" y="12" width="18" height="6" rx="2" fill="cyan" stroke="white" stroke-width="1"/><rect x="18" y="13" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="17" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="30,8 37,15 30,22" fill="cyan" stroke="white" stroke-width="1"/><polygon points="32,10 35,14 32,16" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="10" width="8" height="10" rx="1" fill="cyan" stroke="white" stroke-width="1"/><rect x="22" y="11" width="1" height="8" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="2.5" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="1" fill="black" stroke="black" stroke-width="1"/><polygon points="18,10 22,6 26,10" fill="cyan" stroke="white" stroke-width="1"/><polygon points="18,20 22,24 26,20" fill="cyan" stroke="white" stroke-width="1"/><polygon points="3,14 8,10 8,18" fill="cyan" stroke="white" stroke-width="1"/></svg>');
+            width: 63px;
+            height: 42px;
+            animation: orbit-title-4 16s linear infinite;
+        }
+        
+        /* 小飞机5 - 灰色 */
+        .small-plane-5 {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="40" viewBox="0 0 40 30"><polygon points="3,14 15,12 15,18" fill="gray" stroke="white" stroke-width="1"/><polygon points="6,15 15,13 6,17" fill="white" stroke="white" stroke-width="1"/><rect x="15" y="12" width="18" height="6" rx="2" fill="gray" stroke="white" stroke-width="1"/><rect x="18" y="13" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="17" width="12" height="1" fill="white" stroke="white" stroke-width="1"/><polygon points="30,8 37,15 30,22" fill="gray" stroke="white" stroke-width="1"/><polygon points="32,10 35,14 32,16" fill="white" stroke="white" stroke-width="1"/><rect x="18" y="10" width="8" height="10" rx="1" fill="gray" stroke="white" stroke-width="1"/><rect x="22" y="11" width="1" height="8" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="2.5" fill="white" stroke="white" stroke-width="1"/><circle cx="27" cy="15" r="1" fill="black" stroke="black" stroke-width="1"/><polygon points="18,10 22,6 26,10" fill="gray" stroke="white" stroke-width="1"/><polygon points="18,20 22,24 26,20" fill="gray" stroke="white" stroke-width="1"/><polygon points="3,14 8,10 8,18" fill="gray" stroke="white" stroke-width="1"/></svg>');
+            width: 84px;
+            height: 56px;
+            animation: orbit-title-5 17s linear infinite;
+        }
+        
+        /* 围绕标题飞行的动画 - 小飞机1 - 左到右水平飞行，扩大运动范围，带轻微上下浮动 */
+        @keyframes orbit-title-1 {
+            0% {
+                transform: translate(-600px, -250px) rotate(0deg);
+            }
+            100% {
+                transform: translate(calc(100vw + 600px), -250px) rotate(0deg);
+            }
+        }
+        
+        /* 围绕标题飞行的动画 - 小飞机2 - 右到左水平飞行，扩大运动范围，带轻微上下浮动 */
+        @keyframes orbit-title-2 {
+            0% {
+                transform: translate(calc(100vw + 600px), 250px) rotate(180deg);
+            }
+            100% {
+                transform: translate(-600px, 250px) rotate(180deg);
+            }
+        }
+        
+        /* 围绕标题飞行的动画 - 小飞机3 - 右上到左下对角线飞行，扩大运动范围 */
+        @keyframes orbit-title-3 {
+            0% {
+                transform: translate(calc(100vw + 500px), -400px) rotate(135deg);
+            }
+            100% {
+                transform: translate(-500px, calc(100vh + 400px)) rotate(135deg);
+            }
+        }
+        
+        /* 围绕标题飞行的动画 - 小飞机4 - 右下到左上对角线飞行，扩大运动范围 */
+        @keyframes orbit-title-4 {
+            0% {
+                transform: translate(calc(100vw + 600px), calc(100vh + 500px)) rotate(-135deg);
+            }
+            100% {
+                transform: translate(-600px, -500px) rotate(-135deg);
+            }
+        }
+        
+        /* 围绕标题飞行的动画 - 小飞机5 - 环形飞行，扩大运动范围 */
+        @keyframes orbit-title-5 {
+            0% {
+                transform: translate(0, -600px) rotate(0deg);
+            }
+            25% {
+                transform: translate(600px, 0) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 600px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-600px, 0) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, -600px) rotate(360deg);
+            }
+        }
+        
+        /* 旋转地球球体 */
+        .earth-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            perspective: 2000px;
+            transform-style: preserve-3d;
+        }
+
+        .earth {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300px;
+            height: 300px;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            animation: earthOrbit 40s linear infinite;
+        }
+
+        .earth-left {
+            transform: translate(-120%, -50%) rotateY(15deg);
+            animation: earthOrbitLeft 40s linear infinite;
+        }
+
+        .earth-right {
+            transform: translate(20%, -50%) rotateY(-15deg);
+            animation: earthOrbitRight 40s linear infinite;
+        }
+
+        /* 控制器样式（用于替换地球装饰） */
+        .controller { pointer-events: none; display:flex; align-items:center; justify-content:center; }
+        .controller-left, .controller-right { width: 260px; height: 160px; }
+
+        /* 游戏机外观 */
+        .console {
+            width: 240px;
+            height: 140px;
+            border-radius: 18px;
+            background: linear-gradient(180deg,#111827,#0b1220);
+            box-shadow: 0 18px 40px rgba(0,0,0,0.6), inset 0 2px 8px rgba(255,255,255,0.02);
+            display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative;
+        }
+
+        .console-screen {
+            width: 180px; height: 80px; border-radius:8px;
+            background: linear-gradient(180deg,#05223a,#031827);
+            box-shadow: inset 0 6px 18px rgba(0,160,255,0.08), 0 6px 18px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.03);
+            margin-bottom:8px;
+        }
+
+        .console-details { display:flex; gap:8px; align-items:center; }
+        .console-vent { width:40px; height:8px; background:linear-gradient(90deg,#0f1720,#0b1220); border-radius:4px; box-shadow: inset 0 1px 2px rgba(255,255,255,0.02); }
+        .console-logo { color:#ffd166; font-weight:700; margin-left:8px; font-size:14px; opacity:0.9; }
+
+        /* 游戏键（ABXY）——十字排布 */
+        .game-keys { position:relative; width:140px; height:140px; }
+        .gkey { position:absolute; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:18px; box-shadow: 0 10px 24px rgba(0,0,0,0.6); }
+        .gkey-x { top:6px; left:50%; transform:translate(-50%,0); }
+        .gkey-y { bottom:6px; left:50%; transform:translate(-50%,0); }
+        .gkey-a { right:6px; top:50%; transform:translate(0,-50%); }
+        .gkey-b { left:6px; top:50%; transform:translate(0,-50%); }
+        .gkey-a { background: linear-gradient(180deg,#ff6b75,#ff3b30); }
+        .gkey-b { background: linear-gradient(180deg,#7fffb1,#2bd97b); }
+        .gkey-x { background: linear-gradient(180deg,#80b8ff,#379bff); }
+        .gkey-y { background: linear-gradient(180deg,#ffe89a,#ffd166); }
+
+        /* 将左右控制器更靠两侧（保留旋转动画逻辑） */
+        .earth-left { transform: translate(-140%, -50%) rotateY(15deg); }
+        .earth-right { transform: translate(140%, -50%) rotateY(-15deg); }
+
+        /* 地球球体 */
+        .earth-sphere {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+            background: 
+                radial-gradient(circle at 30% 40%, 
+                    rgba(0, 120, 255, 0.9) 0%,
+                    rgba(0, 100, 200, 0.85) 10%,
+                    rgba(0, 80, 180, 0.8) 20%,
+                    rgba(0, 60, 160, 0.75) 30%,
+                    rgba(0, 40, 140, 0.7) 40%,
+                    rgba(0, 20, 120, 0.65) 50%,
+                    rgba(0, 10, 100, 0.6) 60%,
+                    rgba(0, 0, 80, 0.55) 70%,
+                    rgba(0, 0, 60, 0.5) 80%,
+                    rgba(0, 0, 40, 0.45) 90%,
+                    rgba(0, 0, 20, 0.4) 100%
+                ),
+                radial-gradient(circle at 70% 60%, 
+                    rgba(34, 139, 34, 0.8) 0%,
+                    rgba(30, 130, 30, 0.75) 5%,
+                    rgba(26, 120, 26, 0.7) 10%,
+                    rgba(22, 110, 22, 0.65) 15%,
+                    rgba(18, 100, 18, 0.6) 20%,
+                    rgba(14, 90, 14, 0.55) 25%,
+                    rgba(10, 80, 10, 0.5) 30%,
+                    rgba(6, 70, 6, 0.45) 35%,
+                    rgba(2, 60, 2, 0.4) 40%,
+                    transparent 45%
+                ),
+                radial-gradient(circle at 40% 70%, 
+                    rgba(34, 139, 34, 0.7) 0%,
+                    rgba(30, 130, 30, 0.65) 5%,
+                    rgba(26, 120, 26, 0.6) 10%,
+                    rgba(22, 110, 22, 0.55) 15%,
+                    rgba(18, 100, 18, 0.5) 20%,
+                    rgba(14, 90, 14, 0.45) 25%,
+                    rgba(10, 80, 10, 0.4) 30%,
+                    rgba(6, 70, 6, 0.35) 35%,
+                    rgba(2, 60, 2, 0.3) 40%,
+                    transparent 45%
+                ),
+                radial-gradient(circle at 60% 30%, 
+                    rgba(200, 150, 50, 0.6) 0%,
+                    rgba(190, 140, 45, 0.55) 5%,
+                    rgba(180, 130, 40, 0.5) 10%,
+                    rgba(170, 120, 35, 0.45) 15%,
+                    rgba(160, 110, 30, 0.4) 20%,
+                    rgba(150, 100, 25, 0.35) 25%,
+                    rgba(140, 90, 20, 0.3) 30%,
+                    rgba(130, 80, 15, 0.25) 35%,
+                    rgba(120, 70, 10, 0.2) 40%,
+                    transparent 45%
+                );
+            box-shadow: 
+                inset -30px -30px 60px rgba(0, 0, 0, 0.7),
+                inset 30px 30px 60px rgba(255, 255, 255, 0.1),
+                0 0 100px rgba(0, 217, 255, 0.4);
+            overflow: hidden;
+        }
+
+        /* 地球纹理细节 */
+        .earth-detail {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 110%;
+            height: 110%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: 
+                radial-gradient(circle at 30% 30%, 
+                    rgba(0, 100, 200, 0.3) 0%,
+                    transparent 20%
+                ),
+                radial-gradient(circle at 70% 50%, 
+                    rgba(0, 150, 200, 0.2) 0%,
+                    transparent 15%
+                ),
+                radial-gradient(circle at 50% 70%, 
+                    rgba(0, 80, 180, 0.25) 0%,
+                    transparent 18%
+                );
+            opacity: 0.5;
+        }
+
+        /* 地球云层 */
+        .earth-clouds {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 115%;
+            height: 115%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: 
+                radial-gradient(circle at 40% 60%, 
+                    rgba(255, 255, 255, 0.25) 0%,
+                    rgba(255, 255, 255, 0.2) 5%,
+                    rgba(255, 255, 255, 0.15) 10%,
+                    rgba(255, 255, 255, 0.1) 15%,
+                    rgba(255, 255, 255, 0.05) 20%,
+                    transparent 25%
+                ),
+                radial-gradient(circle at 60% 40%, 
+                    rgba(255, 255, 255, 0.2) 0%,
+                    rgba(255, 255, 255, 0.15) 5%,
+                    rgba(255, 255, 255, 0.1) 10%,
+                    rgba(255, 255, 255, 0.05) 15%,
+                    transparent 20%
+                ),
+                radial-gradient(circle at 20% 80%, 
+                    rgba(255, 255, 255, 0.15) 0%,
+                    rgba(255, 255, 255, 0.1) 5%,
+                    rgba(255, 255, 255, 0.05) 10%,
+                    transparent 15%
+                );
+            opacity: 0.6;
+            animation: cloudRotate 60s linear infinite;
+        }
+
+        /* 地球大气层 */
+        .earth-atmosphere {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 120%;
+            height: 120%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle at center, 
+                rgba(135, 206, 235, 0.2) 0%,
+                rgba(135, 206, 235, 0.1) 20%,
+                rgba(135, 206, 235, 0.05) 40%,
+                transparent 70%
+            );
+            box-shadow: 
+                inset 0 0 100px rgba(135, 206, 235, 0.1),
+                0 0 150px rgba(135, 206, 235, 0.2);
+            animation: atmospherePulse 8s ease-in-out infinite;
+        }
+
+        /* 地球光晕 */
+        .earth-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 130%;
+            height: 130%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, 
+                rgba(0, 217, 255, 0.15) 0%,
+                rgba(0, 217, 255, 0.1) 20%,
+                rgba(0, 217, 255, 0.05) 40%,
+                transparent 70%
+            );
+            animation: glowPulse 5s ease-in-out infinite alternate;
+            z-index: -1;
+        }
+
+        /* 地球经纬线 */
+        .earth-grid {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transform-style: preserve-3d;
+        }
+
+        .grid-line {
+            position: absolute;
+            background: transparent;
+            transform-origin: center;
+        }
+
+        .equator {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            transform: rotateX(90deg);
+        }
+
+        .meridian {
+            top: 0;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateX(-50%);
+        }
+
+        .meridian:nth-child(3) { transform: translateX(-50%) rotateY(45deg); }
+        .meridian:nth-child(4) { transform: translateX(-50%) rotateY(90deg); }
+        .meridian:nth-child(5) { transform: translateX(-50%) rotateY(135deg); }
+
+        /* 地球环绕轨道 */
+        .earth-orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 400px;
+            height: 400px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid rgba(0, 217, 255, 0.2);
+            z-index: -1;
+        }
+
+        /* 地球环绕粒子 */
+        .orbit-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(0, 217, 255, 0.8);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 1);
+            top: 0;
+            left: 50%;
+            transform-origin: center 200px;
+            animation: orbitParticle 10s linear infinite;
+        }
+
+        .orbit-particle:nth-child(2) { 
+            animation-delay: -2.5s;
+            background: rgba(255, 0, 100, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 100, 1);
+        }
+        
+        .orbit-particle:nth-child(3) { 
+            animation-delay: -5s;
+            background: rgba(255, 204, 0, 0.8);
+            box-shadow: 0 0 15px rgba(255, 204, 0, 1);
+        }
+        
+        .orbit-particle:nth-child(4) { 
+            animation-delay: -7.5s;
+            background: rgba(74, 0, 255, 0.8);
+            box-shadow: 0 0 15px rgba(74, 0, 255, 1);
+        }
+        
+        /* 优雅边框 */
+        .elegant-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* 边框线条 */
+        .border-line {
+            position: absolute;
+            background: transparent;
+            z-index: 0;
+        }
+        
+        .border-top, .border-bottom {
+            height: 1px;
+            width: 100%;
+            left: 0;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 0, 100, 0.3) 20%, 
+                rgba(255, 0, 100, 0.7) 50%, 
+                rgba(255, 0, 100, 0.3) 80%, 
+                transparent 100%);
+        }
+        
+        .border-top {
+            top: 30px;
+        }
+        
+        .border-bottom {
+            bottom: 30px;
+        }
+        
+        .border-left, .border-right {
+            width: 1px;
+            height: 100%;
+            top: 0;
+            background: linear-gradient(180deg, 
+                transparent 0%, 
+                rgba(255, 0, 100, 0.3) 20%, 
+                rgba(255, 0, 100, 0.7) 50%, 
+                rgba(255, 0, 100, 0.3) 80%, 
+                transparent 100%);
+        }
+        
+        .border-left {
+            left: 30px;
+        }
+        
+        .border-right {
+            right: 30px;
+        }
+        
+        /* 角标装饰 */
+        .corner {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            z-index: 1;
+        }
+        
+        .corner-tl {
+            top: 20px;
+            left: 20px;
+            border-top: 2px solid #ff0064;
+            border-left: 2px solid #ff0064;
+            animation: cornerGlow 3s infinite alternate;
+        }
+        
+        .corner-tr {
+            top: 20px;
+            right: 20px;
+            border-top: 2px solid #00d9ff;
+            border-right: 2px solid #00d9ff;
+            animation: cornerGlow 3s infinite alternate 0.5s;
+        }
+        
+        .corner-bl {
+            bottom: 20px;
+            left: 20px;
+            border-bottom: 2px solid #4a00ff;
+            border-left: 2px solid #4a00ff;
+            animation: cornerGlow 3s infinite alternate 1s;
+        }
+        
+        .corner-br {
+            bottom: 20px;
+            right: 20px;
+            border-bottom: 2px solid #ffcc00;
+            border-right: 2px solid #ffcc00;
+            animation: cornerGlow 3s infinite alternate 1.5s;
+        }
+        
+        /* 主容器 */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+            z-index: 1;
+            position: relative;
+        }
+        
+        /* 主要标题 */
+        .main-title {
+            font-size: 4.5rem;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 0, 100, 0.8);
+            letter-spacing: 3px;
+            position: relative;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 0, 100, 0.2);
+            box-shadow: 0 0 30px rgba(255, 0, 100, 0.2),
+                        inset 0 0 30px rgba(255, 0, 100, 0.1);
+        }
+        
+        .heart {
+            color: #ff0064;
+            display: inline-block;
+            animation: heartbeat 1.2s infinite;
+            text-shadow: 0 0 20px rgba(255, 0, 100, 0.9);
+        }
+        
+        /* 副标题 */
+        .subtitle {
+            font-size: 1.8rem;
+            margin-top: 20px;
+            color: #b0b0ff;
+            max-width: 800px;
+            line-height: 1.5;
+            opacity: 0.9;
+            padding: 25px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 0, 100, 0.3);
+            box-shadow: 0 0 20px rgba(255, 0, 100, 0.2);
+        }
+        
+        /* 装饰元素 */
+        .decoration {
+            margin: 40px 0;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+        }
+        
+        .circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #ff0064;
+            animation: pulse 2s infinite;
+        }
+        
+        .circle:nth-child(2) {
+            animation-delay: 0.5s;
+            background-color: #4a00ff;
+        }
+        
+        .circle:nth-child(3) {
+            animation-delay: 1s;
+            background-color: #00d9ff;
+        }
+        
+        /* 悬浮粒子效果 */
+        .floating-particle {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* 底部信息 */
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            width: 100%;
+            color: #666;
+            font-size: 1rem;
+            z-index: 2;
+        }
+        
+        /* 音效提示 */
+        .sound-hint {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 0, 100, 0.3);
+            border: 1px solid rgba(255, 0, 100, 0.5);
+            border-radius: 10px;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            color: #ff99cc;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+            animation: hint-pulse 2s infinite;
+        }
+        
+        /* 游戏选择按钮 */
+        .game-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .game-btn {
+            background: linear-gradient(135deg, rgba(255, 0, 100, 0.8), rgba(74, 0, 255, 0.8));
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 0, 100, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .game-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 0, 100, 0.5);
+            background: linear-gradient(135deg, rgba(255, 0, 100, 1), rgba(74, 0, 255, 1));
+        }
+        
+        .game-btn:active {
+            transform: translateY(1px);
+        }
+        
+        /* 游戏容器 */
+        .game-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 90%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        
+        .game-title {
+            font-size: 2.5rem;
+            color: #ff0064;
+            text-shadow: 0 0 10px rgba(255, 0, 100, 0.8);
+        }
+        
+        .close-game {
+            background: rgba(255, 0, 100, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .close-game:hover {
+            background: rgba(255, 0, 100, 1);
+            transform: scale(1.1);
+        }
+        
+        /* 游戏画布 */
+        .game-canvas-container {
+            position: relative;
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .game-canvas {
+            display: block;
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(255, 0, 100, 0.7);
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 0, 100, 0.3);
+            margin: 0 auto;
+        }
+        
+        /* 游戏控制面板 */
+        .game-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .score-display {
+            font-size: 1.5rem;
+            color: #00d9ff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
+        }
+        
+        .stats-display {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+        
+        .stat {
+            font-size: 1.2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 5px rgba(255, 204, 0, 0.8);
+        }
+        
+        .control-buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background: rgba(255, 0, 100, 0.7);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+        
+        .control-btn:hover {
+            background: rgba(255, 0, 100, 0.9);
+        }
+        
+        .control-btn:active {
+            background: rgba(255, 0, 100, 1);
+            transform: scale(0.95);
+        }
+        
+        .special-btn {
+            background: rgba(74, 0, 255, 0.7);
+            width: 100px;
+            height: 50px;
+            font-size: 1rem;
+        }
+        
+        .special-btn:hover {
+            background: rgba(74, 0, 255, 0.9);
+        }
+        
+        .pause-btn {
+            background: rgba(74, 0, 255, 0.7);
+            width: 120px;
+            height: 50px;
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+        
+        .pause-btn:hover {
+            background: rgba(74, 0, 255, 0.9);
+        }
+        
+        /* 控制说明面板 */
+        .control-instructions {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(255, 0, 100, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            width: 90%;
+            max-width: 800px;
+        }
+        
+        .control-title {
+            color: #ffcc00;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .control-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+        }
+        
+        .key {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #00d9ff;
+            margin-bottom: 5px;
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .function {
+            font-size: 0.85rem;
+            color: #b0b0ff;
+            text-align: center;
+        }
+        
+        /* 游戏说明 */
+        .game-instructions {
+            margin-top: 20px;
+            color: #b0b0ff;
+            font-size: 1rem;
+            text-align: center;
+            max-width: 800px;
+            line-height: 1.5;
+        }
+        
+        /* 华丽的Game Over效果 */
+        .game-over-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .game-over-text {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 5rem;
+            font-weight: bold;
+            text-align: center;
+            z-index: 11;
+            width: 100%;
+            text-shadow: 
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 30px currentColor;
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        .game-over-main {
+            top: 25%;
+            color: #ff0064;
+            font-size: 4.5rem;
+            animation: fadeIn 0.5s forwards, pulse-glow 1.5s infinite alternate;
+        }
+        
+        .game-over-cai {
+            top: 40%;
+            color: #ff0000;
+            font-size: 6rem;
+            animation: fadeIn 0.5s forwards 0.3s, pulse-red 1.2s infinite alternate;
+            opacity: 0;
+        }
+        
+        .game-over-score {
+            top: 60%;
+            color: #00d9ff;
+            font-size: 2.5rem;
+            animation: fadeIn 0.5s forwards 0.6s;
+            opacity: 0;
+        }
+        
+        .game-over-restart {
+            top: 75%;
+            color: #b0b0ff;
+            font-size: 1.8rem;
+            animation: fadeIn 0.5s forwards 0.9s, blink 1.5s infinite;
+            opacity: 0;
+        }
+        
+        .game-over-particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9;
+        }
+        
+        /* 弹幕游戏特定样式 */
+        .boss-health-bar {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff0064;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .boss-health-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00);
+            transition: width 0.3s;
+        }
+        
+        .boss-health-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+            line-height: 20px;
+            font-size: 0.9rem;
+        }
+                /* 动画 */
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.5); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+        
+        @keyframes hint-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes cornerGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 100, 0.3); }
+            100% { box-shadow: 0 0 20px rgba(255, 0, 100, 0.8); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-20px) translateX(10px); }
+        }
+        
+        @keyframes pulse-red {
+            0% { transform: translateX(-50%) scale(1); opacity: 0.8; }
+            100% { transform: translateX(-50%) scale(1.15); opacity: 1; }
+        }
+        
+        @keyframes pulse-glow {
+            0% { transform: translateX(-50%) scale(1); text-shadow: 0 0 10px #ff0064, 0 0 20px #ff0064, 0 0 30px #ff0064; }
+            100% { transform: translateX(-50%) scale(1.05); text-shadow: 0 0 15px #ff0064, 0 0 30px #ff0064, 0 0 45px #ff0064; }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes explode {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        @keyframes bulletGlow {
+            0% { box-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+            50% { box-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+            100% { box-shadow: 0 0 5px currentColor, 0 0 10px currentColor; }
+        }
+        
+        @keyframes powerupFloat {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
+        
+        /* 地球动画 */
+        @keyframes earthOrbit {
+            0% {
+                transform: translate(-50%, -50%) rotateY(0deg) rotateX(10deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotateY(360deg) rotateX(10deg);
+            }
+        }
+
+        @keyframes earthOrbitLeft {
+            0% {
+                transform: translate(-120%, -50%) rotateY(15deg) rotateX(0deg);
+            }
+            100% {
+                transform: translate(-120%, -50%) rotateY(375deg) rotateX(0deg);
+            }
+        }
+
+        @keyframes earthOrbitRight {
+            0% {
+                transform: translate(20%, -50%) rotateY(-15deg) rotateX(0deg);
+            }
+            100% {
+                transform: translate(20%, -50%) rotateY(345deg) rotateX(0deg);
+            }
+        }
+
+        @keyframes cloudRotate {
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
+        }
+
+        @keyframes atmospherePulse {
+            0%, 100% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+        }
+
+        @keyframes glowPulse {
+            0% {
+                opacity: 0.6;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0.8;
+                transform: translate(-50%, -50%) scale(1.05);
+            }
+        }
+
+        @keyframes orbitParticle {
+            0% {
+                transform: rotate(0deg) translateY(-200px);
+            }
+            100% {
+                transform: rotate(360deg) translateY(-200px);
+            }
+        }
+        
+        /* =============== 排行榜CSS =============== */
+        /* 排行榜按钮 */
+        .leaderboard-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.9), rgba(255, 102, 0, 0.9));
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 204, 0, 0.3);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .leaderboard-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.5);
+            background: linear-gradient(135deg, rgba(255, 204, 0, 1), rgba(255, 102, 0, 1));
+        }
+
+        .leaderboard-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* 排行榜容器 */
+        .leaderboard-container {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 2px solid rgba(255, 204, 0, 0.7);
+            border-radius: 15px;
+            box-shadow: 0 0 50px rgba(255, 204, 0, 0.3);
+            z-index: 1001;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: linear-gradient(90deg, rgba(255, 0, 100, 0.3), rgba(255, 204, 0, 0.3));
+            border-bottom: 1px solid rgba(255, 204, 0, 0.5);
+        }
+
+        .leaderboard-title {
+            font-size: 2.2rem;
+            color: #ffcc00;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+            margin: 0;
+        }
+
+        .close-leaderboard {
+            background: rgba(255, 0, 100, 0.7);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.8rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .close-leaderboard:hover {
+            background: rgba(255, 0, 100, 1);
+            transform: scale(1.1);
+        }
+
+        /* 排行榜标签页 */
+        .leaderboard-tabs {
+            display: flex;
+            background-color: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid rgba(255, 204, 0, 0.3);
+            padding: 0 30px;
+        }
+
+        .leaderboard-tab {
+            padding: 15px 25px;
+            background: transparent;
+            color: #b0b0ff;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .leaderboard-tab:hover {
+            color: #ffcc00;
+            background-color: rgba(255, 204, 0, 0.1);
+        }
+
+        .leaderboard-tab.active {
+            color: #ffcc00;
+            border-bottom: 3px solid #ffcc00;
+            background-color: rgba(255, 204, 0, 0.05);
+        }
+
+        /* 排行榜内容区域 */
+        .leaderboard-content {
+            padding: 20px 30px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        /* 隐藏滚动条但保持功能 */
+        .leaderboard-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 4px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 0, 0.5);
+            border-radius: 4px;
+        }
+
+        .leaderboard-content::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 204, 0, 0.8);
+        }
+
+        /* 排行榜表格 */
+        .leaderboard-table {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .leaderboard-table.active {
+            display: block;
+        }
+
+        .table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+            background-color: rgba(255, 204, 0, 0.1);
+            padding: 12px 15px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            color: #ffcc00;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        #tetrisLeaderboard .table-header {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #danmakuLeaderboard .table-header {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #allLeaderboard .table-header {
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+        }
+
+        .table-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .table-body::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .table-body::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .table-body::-webkit-scrollbar-thumb {
+            background: rgba(255, 204, 0, 0.4);
+            border-radius: 3px;
+        }
+
+        /* 排行榜行 */
+        .leaderboard-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+            padding: 15px;
+            margin-bottom: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s;
+            align-items: center;
+        }
+
+        .leaderboard-row:hover {
+            background-color: rgba(255, 204, 0, 0.1);
+            transform: translateX(5px);
+        }
+
+        #tetrisLeaderboard .leaderboard-row {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #danmakuLeaderboard .leaderboard-row {
+            grid-template-columns: 80px 1fr 120px 100px 180px 100px;
+        }
+
+        #allLeaderboard .leaderboard-row {
+            grid-template-columns: 80px 1fr 120px 120px 180px 100px;
+        }
+
+        /* 排名样式 */
+        .rank-cell {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .rank-1 {
+            color: #ffcc00;
+            border-left-color: #ffcc00;
+        }
+
+        .rank-2 {
+            color: #c0c0c0;
+            border-left-color: #c0c0c0;
+        }
+
+        .rank-3 {
+            color: #cd7f32;
+            border-left-color: #cd7f32;
+        }
+
+        .rank-1 .rank-cell::before {
+            content: "🥇 ";
+        }
+
+        .rank-2 .rank-cell::before {
+            content: "🥈 ";
+        }
+
+        .rank-3 .rank-cell::before {
+            content: "🥉 ";
+        }
+
+        .name-cell {
+            font-size: 1.2rem;
+            color: #00d9ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .name-cell .player-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff0064, #4a00ff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .score-cell {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffcc00;
+            text-align: center;
+        }
+
+        .level-cell, .stage-cell, .game-cell {
+            text-align: center;
+            color: #b0b0ff;
+        }
+
+        .date-cell {
+            text-align: center;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .action-btn {
+            background: rgba(255, 0, 100, 0.7);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 0, 100, 1);
+            transform: scale(1.05);
+        }
+
+        .action-btn.delete {
+            background: rgba(255, 0, 0, 0.7);
+        }
+
+        .action-btn.delete:hover {
+            background: rgba(255, 0, 0, 1);
+        }
+
+        /* 无记录提示 */
+        .no-records {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border: 2px dashed rgba(255, 204, 0, 0.3);
+        }
+
+        /* 排行榜控制区域 */
+        .leaderboard-controls {
+            padding: 20px 30px;
+            border-top: 1px solid rgba(255, 204, 0, 0.3);
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .player-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        #playerNameInput {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 204, 0, 0.5);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        #playerNameInput:focus {
+            outline: none;
+            border-color: #ffcc00;
+            box-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+        }
+
+        .save-btn, .clear-btn, .export-btn, .import-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.8), rgba(74, 0, 255, 0.8));
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 1), rgba(74, 0, 255, 1));
+            transform: translateY(-2px);
+        }
+
+        .leaderboard-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .clear-btn {
+            background: linear-gradient(135deg, rgba(255, 0, 100, 0.8), rgba(255, 0, 0, 0.8));
+            color: white;
+        }
+
+        .clear-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 0, 100, 1), rgba(255, 0, 0, 1));
+            transform: translateY(-2px);
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 0.8), rgba(255, 102, 0, 0.8));
+            color: white;
+        }
+
+        .export-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 204, 0, 1), rgba(255, 102, 0, 1));
+            transform: translateY(-2px);
+        }
+
+        .import-btn {
+            background: linear-gradient(135deg, rgba(0, 255, 100, 0.8), rgba(0, 180, 100, 0.8));
+            color: white;
+        }
+
+        .import-btn:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 100, 1), rgba(0, 180, 100, 1));
+            transform: translateY(-2px);
+        }
+
+        /* 排行榜统计 */
+        .leaderboard-stats {
+            display: flex;
+            justify-content: space-around;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 204, 0, 0.3);
+        }
+
+        .stat-item {
+            color: #b0b0ff;
+            font-size: 1.1rem;
+        }
+
+        .stat-item span {
+            color: #ffcc00;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+                /* 响应式设计 */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 3rem;
+                padding: 15px;
+            }
+            
+            .subtitle {
+                font-size: 1.4rem;
+                padding: 15px;
+            }
+            
+            .border-top, .border-bottom {
+                top: 20px;
+                bottom: 20px;
+            }
+            
+            .border-left, .border-right {
+                left: 20px;
+                right: 20px;
+            }
+            
+            .corner {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .sound-hint {
+                top: 10px;
+                right: 10px;
+                font-size: 0.8rem;
+                padding: 6px 10px;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+            
+            .special-btn {
+                width: 80px;
+                height: 40px;
+                font-size: 0.9rem;
+            }
+            
+            .control-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .game-over-main {
+                font-size: 3.5rem;
+                top: 20%;
+            }
+            
+            .game-over-cai {
+                font-size: 4.5rem;
+                top: 35%;
+            }
+            
+            .game-over-score {
+                font-size: 2rem;
+                top: 55%;
+            }
+            
+            .game-over-restart {
+                font-size: 1.5rem;
+                top: 70%;
+            }
+            
+            /* 响应式设计中的地球样式 */
+            .earth {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .earth-sphere {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .earth-orbit {
+                width: 280px;
+                height: 280px;
+            }
+            
+            .orbit-particle {
+                transform-origin: center 140px;
+            }
+            
+            .earth-left {
+                transform: translate(-120%, -50%) rotateY(15deg);
+            }
+            
+            .earth-right {
+                transform: translate(20%, -50%) rotateY(-15deg);
+            }
+            
+            /* 排行榜响应式 */
+            .leaderboard-container {
+                width: 95%;
+                max-height: 95vh;
+            }
+            
+            .leaderboard-title {
+                font-size: 1.8rem;
+            }
+            
+            .leaderboard-tabs {
+                padding: 0 15px;
+                flex-wrap: wrap;
+            }
+            
+            .leaderboard-tab {
+                padding: 12px 15px;
+                font-size: 1rem;
+                flex: 1;
+                min-width: 120px;
+            }
+            
+            .leaderboard-content {
+                padding: 15px;
+                max-height: 50vh;
+            }
+            
+            .table-header, .leaderboard-row {
+                grid-template-columns: 60px 1fr 100px 100px 120px 80px !important;
+                font-size: 0.9rem;
+                padding: 10px;
+            }
+            
+            .date-cell {
+                font-size: 0.8rem;
+            }
+            
+            .leaderboard-controls {
+                padding: 15px;
+            }
+            
+            .player-input, .leaderboard-actions {
+                flex-direction: column;
+            }
+            
+            #playerNameInput {
+                min-width: 100%;
+            }
+            
+            .leaderboard-stats {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-title {
+                font-size: 2.5rem;
+                padding: 10px;
+            }
+            
+            .subtitle {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
+            
+            .border-top, .border-bottom {
+                top: 15px;
+                bottom: 15px;
+            }
+            
+            .border-left, .border-right {
+                left: 15px;
+                right: 15px;
+            }
+            
+            .corner {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .sound-hint {
+                display: none;
+            }
+            
+            .game-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .game-btn {
+                width: 200px;
+            }
+            
+            .control-grid {
+                grid-template-columns: repeat(2, 1fr);
+                font-size: 0.8rem;
+            }
+            
+            .key {
+                font-size: 0.8rem;
+                padding: 3px 6px;
+            }
+            
+            .function {
+                font-size: 0.75rem;
+            }
+            
+            .game-over-main {
+                font-size: 2.8rem;
+                top: 20%;
+            }
+            
+            .game-over-cai {
+                font-size: 3.8rem;
+                top: 35%;
+            }
+            
+            .game-over-score {
+                font-size: 1.8rem;
+                top: 55%;
+            }
+            
+            .game-over-restart {
+                font-size: 1.3rem;
+                top: 70%;
+            }
+            
+            /* 响应式设计中的地球样式 */
+            .earth {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .earth-sphere {
+                width: 160px;
+                height: 160px;
+            }
+            
+            .earth-orbit {
+                width: 220px;
+                height: 220px;
+            }
+            
+            .orbit-particle {
+                transform-origin: center 110px;
+            }
+            
+            .earth-left {
+                transform: translate(-120%, -50%) rotateY(15deg);
+            }
+            
+            .earth-right {
+                transform: translate(20%, -50%) rotateY(-15deg);
+            }
+            
+            /* 排行榜响应式 */
+            .leaderboard-title {
+                font-size: 1.5rem;
+            }
+            
+            .table-header, .leaderboard-row {
+                grid-template-columns: 50px 1fr 80px 80px 100px 70px !important;
+                font-size: 0.8rem;
+                padding: 8px;
+            }
+            
+            .name-cell {
+                font-size: 1rem;
+            }
+            
+            .score-cell {
+                font-size: 1.1rem;
+            }
+            
+            .actions-cell {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .action-btn {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+            }
+        }
+        
+        /* 弹幕游戏模式选择和完成界面样式 */
+        .game-mode-select {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            border: 2px solid #4a90e2;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .game-mode-select h3 {
+            color: #fff;
+            font-size: 24px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(74, 144, 226, 0.8);
+        }
+        
+        .mode-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .mode-btn {
+            background: linear-gradient(135deg, #4a90e2, #357abd);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        }
+        
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 144, 226, 0.5);
+            background: linear-gradient(135deg, #5b9ef3, #4a90e2);
+        }
+        
+        /* 任务完成界面样式 */
+        .mission-complete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 3px solid #4caf50;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            z-index: 200;
+            animation: fadeIn 1s ease;
+        }
+        
+        .mission-complete-text {
+            color: #4caf50;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+            animation: pulse 1.5s infinite;
+        }
+        
+        .thumbs-up {
+            font-size: 80px;
+            margin: 20px 0;
+            animation: bounce 1s ease;
+        }
+        
+        .next-level-text {
+            color: #fff;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+        
+        /* 全部关卡完成界面样式 */
+        .all-levels-complete {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.95);
+            border: 4px solid #ffeb3b;
+            border-radius: 25px;
+            padding: 60px;
+            text-align: center;
+            z-index: 200;
+            animation: fadeIn 1s ease;
+        }
+        
+        .all-levels-text {
+            color: #ffeb3b;
+            font-size: 42px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
+            animation: pulse 2s infinite;
+        }
+        
+        .thumbs-up-big {
+            font-size: 120px;
+            margin: 30px 0;
+            animation: bounce 1.5s ease infinite;
+        }
+        
+        .final-score-text {
+            color: #fff;
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    
+
+/* 2048游戏样式 */
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+    background-color: #bbada0;
+    padding: 15px;
+    border-radius: 10px;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.game-cell {
+    background-color: rgba(238, 228, 218, 0.35);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: bold;
+    color: #776e65;
+    transition: all 0.3s ease;
+}
+
+.game-cell-2 {
+    background-color: #eee4da;
+}
+
+.game-cell-4 {
+    background-color: #ede0c8;
+}
+
+.game-cell-8 {
+    background-color: #f2b179;
+    color: #f9f6f2;
+}
+
+.game-cell-16 {
+    background-color: #f59563;
+    color: #f9f6f2;
+}
+
+.game-cell-32 {
+    background-color: #f67c5f;
+    color: #f9f6f2;
+}
+
+.game-cell-64 {
+    background-color: #f65e3b;
+    color: #f9f6f2;
+}
+
+.game-cell-128 {
+    background-color: #edcf72;
+    color: #f9f6f2;
+    font-size: 32px;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.2381), inset 0 0 0 1px rgba(255, 255, 255, 0.1429);
+}
+
+.game-cell-256 {
+    background-color: #edcc61;
+    color: #f9f6f2;
+    font-size: 32px;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.3175), inset 0 0 0 1px rgba(255, 255, 255, 0.1905);
+}
+
+.game-cell-512 {
+    background-color: #edc850;
+    color: #f9f6f2;
+    font-size: 32px;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.3968), inset 0 0 0 1px rgba(255, 255, 255, 0.2381);
+}
+
+.game-cell-1024 {
+    background-color: #edc53f;
+    color: #f9f6f2;
+    font-size: 24px;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.4762), inset 0 0 0 1px rgba(255, 255, 255, 0.2857);
+}
+
+.game-cell-2048 {
+    background-color: #edc22e;
+    color: #f9f6f2;
+    font-size: 24px;
+    box-shadow: 0 0 30px 10px rgba(243, 215, 116, 0.5556), inset 0 0 0 1px rgba(255, 255, 255, 0.3333);
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.score-display,
+.best-display {
+    background-color: #bbada0;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.game-controls {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.control-btn {
+    background-color: #8f7a66;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.control-btn:hover {
+    background-color: #9f8b77;
+    transform: translateY(-2px);
+}
