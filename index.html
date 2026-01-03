@@ -4805,8 +4805,10 @@
                                 this.missionComplete = true;
                                 this.missionCompleteTimer = 0;
                                 
-                                // 保存通关记录
-                                this.saveCompletionRecord();
+                                // 调用游戏结束效果，弹出保存分数提示
+                                setTimeout(() => {
+                                    createGameOverEffect('danmaku', this.score);
+                                }, 2000);
                             } else {
                                 // 继续游戏
                                 this.needsRedraw = true;
@@ -5814,22 +5816,25 @@
                 }
             }
             
-            // 保存通关记录
+
             saveCompletionRecord() {
                 // 使用现有的排行榜系统保存记录
                 if (window.leaderboardSystem) {
-                    window.leaderboardSystem.setCurrentScore('danmaku', this.score, 1, this.stage);
+                    // 调用setCurrentScore并传递completed参数
+                    window.leaderboardSystem.setCurrentScore('danmaku', this.score, 1, this.stage, this.gameMode, true);
                     
                     // 创建记录对象
+                    const playerName = localStorage.getItem('playerName') || '玩家';
                     const record = {
                         id: Date.now(),
+                        name: playerName,
                         game: 'danmaku',
                         score: this.score,
                         level: 1,
                         stage: this.stage,
                         date: new Date().toISOString(),
                         mode: this.gameMode,
-                        completed: this.gameMode === 'classic' && this.stage > 10
+                        completed: true // 直接标记为通关
                     };
                     
                     // 保存到本地存储
@@ -6682,6 +6687,7 @@
                                     </div>
                                 `;
                             } else if (game === 'danmaku' || game === 'danmaku_classic' || game === 'danmaku_endless') {
+
                         rowContent = `
                             <div class="rank-cell">${index + 1}</div>
                             <div class="name-cell">
@@ -7393,7 +7399,14 @@
             
             // 修改游戏结束处理函数
             const originalCreateGameOverEffect = window.createGameOverEffect;
+            let lastGameOverCall = 0; // 记录上次调用时间，防止重复提示
             window.createGameOverEffect = function(gameType, score) {
+                // 防止短时间内重复调用，避免多次弹出保存提示
+                const now = Date.now();
+                if (now - lastGameOverCall < 2000) {
+                    return;
+                }
+                lastGameOverCall = now;
                 // 调用原始函数
                 if (originalCreateGameOverEffect) {
                     originalCreateGameOverEffect(gameType, score);
@@ -7440,6 +7453,25 @@
             // 初始化视觉效果
             createStars();
             createFloatingParticles();
+            
+            // 添加测试通关记录（用于验证功能）
+            const testRecord = {
+                id: 'test-' + Date.now(),
+                name: '测试玩家',
+                score: 9999,
+                date: new Date().toISOString(),
+                mode: 'classic',
+                completed: true,
+                stage: 10
+            };
+            const leaderboardKey = 'danmakuLeaderboard';
+            const leaderboardData = JSON.parse(localStorage.getItem(leaderboardKey) || '[]');
+            // 检查是否已有测试记录
+            const hasTestRecord = leaderboardData.some(record => record.id.startsWith('test-'));
+            if (!hasTestRecord) {
+                leaderboardData.push(testRecord);
+                localStorage.setItem(leaderboardKey, JSON.stringify(leaderboardData));
+            }
             
             // 初始化游戏实例
             let snakeGame, tetrisGame, danmakuGame;
