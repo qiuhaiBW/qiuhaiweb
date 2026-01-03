@@ -4205,33 +4205,73 @@
                 table.insertBefore(modeTabs, tableHeader);
             }
             
-            loadAllLeaderboard() {
+            async loadAllLeaderboard() {
                 const games = ['snake', 'tetris', 'danmaku', 'twentyFortyEight'];
                 let allRecords = [];
                 
-                games.forEach(game => {
-                    // 获取该游戏所有模式的排行榜键名
-                    const getLeaderboardKeys = (gameType) => {
-                        if (gameType === 'danmaku') {
-                            // 弹幕游戏所有模式共用一个排行榜
-                            return [`${gameType}Leaderboard`];
+                if (firebaseEnabled) {
+                    // 如果启用了 Firebase，从远程加载所有游戏的数据
+                    for (const game of games) {
+                        try {
+                            const remoteData = await loadLeaderboardRemote(game);
+                            if (remoteData && remoteData.length > 0) {
+                                const gameName = game === 'snake' ? '贪吃蛇' : 
+                                               game === 'tetris' ? '俄罗斯方块' : 
+                                               game === 'danmaku' ? '弹幕射击' : '2048';
+                                
+                                // 处理远程数据，添加游戏名称
+                                const processedRecords = remoteData.map(record => ({
+                                    ...record,
+                                    game: gameName,
+                                    gameType: game
+                                }));
+                                allRecords = allRecords.concat(processedRecords);
+                            }
+                        } catch (error) {
+                            console.error(`加载${game}远程数据失败:`, error);
                         }
-                        return [`${gameType}Leaderboard`];
-                    };
-                    
-                    // 加载所有模式的数据
-                    const keys = getLeaderboardKeys(game);
-                    keys.forEach(key => {
-                        const gameRecords = JSON.parse(localStorage.getItem(key) || '[]');
-                        gameRecords.forEach(record => {
-                            record.game = game === 'snake' ? '贪吃蛇' : 
-                                     game === 'tetris' ? '俄罗斯方块' : 
-                                     game === 'danmaku' ? '弹幕射击' : '2048';
-                            record.gameType = game;
+                    }
+                } else {
+                    // 从本地存储加载数据（fallback）
+                    games.forEach(game => {
+                        // 获取该游戏所有模式的排行榜键名
+                        const getLeaderboardKeys = (gameType) => {
+                            if (gameType === 'danmaku') {
+                                // 弹幕游戏所有模式共用一个排行榜
+                                return [`${gameType}Leaderboard`];
+                            }
+                            return [`${gameType}Leaderboard`];
+                        };
+                        
+                        // 加载所有模式的数据
+                        const keys = getLeaderboardKeys(game);
+                        keys.forEach(key => {
+                            const gameRecords = JSON.parse(localStorage.getItem(key) || '[]');
+                            gameRecords.forEach(record => {
+                                record.game = game === 'snake' ? '贪吃蛇' : 
+                                         game === 'tetris' ? '俄罗斯方块' : 
+                                         game === 'danmaku' ? '弹幕射击' : '2048';
+                                record.gameType = game;
+                            });
+                            allRecords = allRecords.concat(gameRecords);
                         });
-                        allRecords = allRecords.concat(gameRecords);
                     });
+                }
+                
+                // 去重处理：根据id、name、score、date组合去重
+                const uniqueRecords = [];
+                const seen = new Set();
+                
+                allRecords.forEach(record => {
+                    const key = `${record.id || ''}-${record.name}-${record.score}-${record.date}`;
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        uniqueRecords.push(record);
+                    }
                 });
+                
+                // 使用去重后的记录
+                allRecords = uniqueRecords;
                 
                 // 按得分排序
                 allRecords.sort((a, b) => b.score - a.score);
