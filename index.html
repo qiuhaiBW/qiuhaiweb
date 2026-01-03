@@ -3641,6 +3641,10 @@
                     head.y >= this.canvas.height / this.gridSize
                 ) {
                     this.gameOver = true;
+                    // 设置当前游戏得分，用于排行榜
+                    if (window.leaderboardSystem) {
+                        window.leaderboardSystem.setCurrentScore('snake', this.score);
+                    }
                     createGameOverEffect('snake', this.score);
                     return;
                 }
@@ -4058,10 +4062,14 @@
                             // 如果方块超出顶部，游戏结束
                             if (boardY < 0) {
                                 this.gameOver = true;
-                                this.needsRedraw = true;
-                                this.draw();
-                                createGameOverEffect('tetris', this.score);
-                                return;
+                            this.needsRedraw = true;
+                            this.draw();
+                            // 设置当前游戏得分，用于排行榜
+                            if (window.leaderboardSystem) {
+                                window.leaderboardSystem.setCurrentScore('tetris', this.score, this.level);
+                            }
+                            createGameOverEffect('tetris', this.score);
+                            return;
                             }
                             
                             this.board[boardY][boardX] = this.currentPiece.color;
@@ -4080,6 +4088,10 @@
                     this.gameOver = true;
                     this.needsRedraw = true;
                     this.draw();
+                    // 设置当前游戏得分，用于排行榜
+                    if (window.leaderboardSystem) {
+                        window.leaderboardSystem.setCurrentScore('tetris', this.score, this.level);
+                    }
                     createGameOverEffect('tetris', this.score);
                 }
                 
@@ -4778,14 +4790,17 @@
                         // 单关卡完成
                         missionCompleteElem.style.display = 'block';
                         
+                        // 播放通关音效
+                        this.playCompletionSound();
+                        
                         // 3秒后自动进入下一关
                         if (this.missionCompleteTimer > 180) {
                             this.missionComplete = false;
                             this.missionCompleteTimer = 0;
                             missionCompleteElem.style.display = 'none';
                             
-                            // 检查是否达到最高关卡
-                            if (this.stage > 6) {
+                            // 检查是否达到最高关卡（经典模式10关）
+                            if (this.stage > 10) {
                                 this.allLevelsComplete = true;
                                 this.missionComplete = true;
                                 this.missionCompleteTimer = 0;
@@ -5009,6 +5024,7 @@
                     if (enemy.type === 'small') {
                         this.score += 100;
                         this.createExplosion(enemy.x, enemy.y, 20);
+                        this.playEnemyDeathSound();
                         enemy.health = 0; // 立即消灭小型敌机
                     } else {
                         // 对中型敌机和BOSS造成大量伤害
@@ -5028,12 +5044,14 @@
                         if (enemy.health <= 0) {
                             if (enemy.type === 'medium') {
                                 this.score += 500;
+                                this.playMediumEnemyDeathSound();
                             } else if (enemy.type === 'boss') {
                                 this.score += 5000;
                                 this.bossActive = false;
                                 if (this.bossHealthBar) {
                                     this.bossHealthBar.style.display = 'none';
                                 }
+                                this.playBossDeathSound();
                             }
                         }
                     }
@@ -5437,8 +5455,10 @@
                                 // 增加得分
                                 if (enemy.type === 'small') {
                                     this.score += 100;
+                                    this.playEnemyDeathSound();
                                 } else if (enemy.type === 'medium') {
                                     this.score += 500;
+                                    this.playMediumEnemyDeathSound();
                                 } else if (enemy.type === 'boss') {
                                     this.score += 5000;
                                     this.bossActive = false;
@@ -5446,6 +5466,7 @@
                                         this.bossHealthBar.style.display = 'none';
                                     }
                                     this.stage++;
+                                    this.playBossDeathSound();
                                 }
                                 
                                 // 创建爆炸特效
@@ -5520,6 +5541,14 @@
                             
                             if (enemy.health <= 0) {
                                 this.createExplosion(enemy.x, enemy.y, 20);
+                                // 播放敌人死亡音效
+                                if (enemy.type === 'small') {
+                                    this.playEnemyDeathSound();
+                                } else if (enemy.type === 'medium') {
+                                    this.playMediumEnemyDeathSound();
+                                } else if (enemy.type === 'boss') {
+                                    this.playBossDeathSound();
+                                }
                                 this.enemies.splice(i, 1);
                             }
                         }
@@ -5559,8 +5588,9 @@
                 if (this.lives <= 0) {
                     this.gameOver = true;
                     
-                    // 停止音乐
+                    // 停止音乐并播放游戏失败音效
                     this.stopMusic();
+                    this.playGameOverSound();
                     
                     // 设置当前游戏得分，包含游戏模式
                     if (window.leaderboardSystem) {
@@ -5652,11 +5682,11 @@
             playCompletionSound() {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const masterGain = audioContext.createGain();
-                masterGain.gain.value = 0.3;
+                masterGain.gain.value = 0.2;
                 masterGain.connect(audioContext.destination);
                 
-                // 通关音效：上升音阶
-                const frequencies = [523.25, 659.25, 783.99, 987.77, 1318.51, 1567.98, 1975.53];
+                // 通关音效：更柔和的上升音阶，使用更低的频率
+                const frequencies = [392.00, 493.88, 587.33, 698.46, 880.00, 1046.50, 1318.51];
                 
                 frequencies.forEach((freq, index) => {
                     setTimeout(() => {
@@ -5678,6 +5708,112 @@
                 });
             }
             
+            // 播放小型敌机死亡音效
+            playEnemyDeathSound() {
+                try {
+                    const audioContext = this.audioContext || new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // 设置小型敌机死亡音效的音色和频率
+                    oscillator.type = 'square';
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
+                    oscillator.frequency.exponentialRampToValueAtTime(220, audioContext.currentTime + 0.1); // A3
+                    
+                    // 设置音量包络
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.2);
+                } catch (error) {
+                    console.error('无法播放小型敌机死亡音效:', error);
+                }
+            }
+            
+            // 播放中型敌机死亡音效
+            playMediumEnemyDeathSound() {
+                try {
+                    const audioContext = this.audioContext || new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    // 设置中型敌机死亡音效的音色和频率
+                    oscillator.type = 'sawtooth';
+                    oscillator.frequency.setValueAtTime(330, audioContext.currentTime); // E4
+                    oscillator.frequency.exponentialRampToValueAtTime(165, audioContext.currentTime + 0.15); // E3
+                    
+                    // 设置音量包络
+                    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 0.3);
+                } catch (error) {
+                    console.error('无法播放中型敌机死亡音效:', error);
+                }
+            }
+            
+            // 播放BOSS死亡音效
+            playBossDeathSound() {
+                try {
+                    const audioContext = this.audioContext || new (window.AudioContext || window.webkitAudioContext)();
+                    const masterGain = audioContext.createGain();
+                    masterGain.gain.value = 0.5;
+                    masterGain.connect(audioContext.destination);
+                    
+                    // BOSS死亡音效：爆炸音效 + 结束音效
+                    
+                    // 爆炸音效（低频）
+                    const explosionOsc = audioContext.createOscillator();
+                    const explosionGain = audioContext.createGain();
+                    explosionOsc.connect(explosionGain);
+                    explosionGain.connect(masterGain);
+                    
+                    explosionOsc.type = 'sawtooth';
+                    explosionOsc.frequency.setValueAtTime(110, audioContext.currentTime); // A2
+                    explosionOsc.frequency.exponentialRampToValueAtTime(55, audioContext.currentTime + 0.5); // A1
+                    
+                    explosionGain.gain.setValueAtTime(0, audioContext.currentTime);
+                    explosionGain.gain.linearRampToValueAtTime(0.8, audioContext.currentTime + 0.1);
+                    explosionGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
+                    
+                    explosionOsc.start(audioContext.currentTime);
+                    explosionOsc.stop(audioContext.currentTime + 0.6);
+                    
+                    // 结束音效（胜利旋律）
+                    setTimeout(() => {
+                        const victoryOsc = audioContext.createOscillator();
+                        const victoryGain = audioContext.createGain();
+                        victoryOsc.connect(victoryGain);
+                        victoryGain.connect(masterGain);
+                        
+                        victoryOsc.type = 'sine';
+                        victoryOsc.frequency.setValueAtTime(261.63, audioContext.currentTime); // C4
+                        victoryOsc.frequency.setValueAtTime(329.63, audioContext.currentTime + 0.3); // E4
+                        victoryOsc.frequency.setValueAtTime(392.00, audioContext.currentTime + 0.6); // G4
+                        victoryOsc.frequency.setValueAtTime(523.25, audioContext.currentTime + 0.9); // C5
+                        
+                        victoryGain.gain.setValueAtTime(0, audioContext.currentTime);
+                        victoryGain.gain.linearRampToValueAtTime(0.5, audioContext.currentTime + 0.1);
+                        victoryGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1.5);
+                        
+                        victoryOsc.start(audioContext.currentTime);
+                        victoryOsc.stop(audioContext.currentTime + 1.5);
+                    }, 200);
+                } catch (error) {
+                    console.error('无法播放BOSS死亡音效:', error);
+                }
+            }
+            
             // 保存通关记录
             saveCompletionRecord() {
                 // 使用现有的排行榜系统保存记录
@@ -5693,7 +5829,7 @@
                         stage: this.stage,
                         date: new Date().toISOString(),
                         mode: this.gameMode,
-                        completed: this.gameMode === 'classic' && this.stage > 6
+                        completed: this.gameMode === 'classic' && this.stage > 10
                     };
                     
                     // 保存到本地存储
@@ -5771,6 +5907,18 @@
                             break;
                         case 'r':
                             if (this.gameOver) this.restart();
+                            e.preventDefault();
+                            break;
+                        case 'g':
+                            // 隐藏功能：获得999个炸弹
+                            this.bombs = 999;
+                            this.updateDisplay();
+                            e.preventDefault();
+                            break;
+                        case 'k':
+                            // 隐藏功能：血量变为999
+                            this.lives = 999;
+                            this.updateDisplay();
                             e.preventDefault();
                             break;
                     }
@@ -6049,6 +6197,42 @@
                     
                 } catch (error) {
                     console.error('无法播放炸弹爆炸音效:', error);
+                }
+            }
+            
+            // 播放游戏失败音效
+            playGameOverSound() {
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const gainNode = audioContext.createGain();
+                    gainNode.gain.value = 0.3;
+                    gainNode.connect(audioContext.destination);
+                    
+                    // 游戏失败音效：悲伤的下降音阶
+                    const frequencies = [392.00, 349.23, 293.66, 261.63]; // G4, F4, D4, C4 - 下降音阶
+                    const noteDuration = 0.4;
+                    
+                    frequencies.forEach((freq, index) => {
+                        setTimeout(() => {
+                            const oscillator = audioContext.createOscillator();
+                            const noteGain = audioContext.createGain();
+                            oscillator.connect(noteGain);
+                            noteGain.connect(gainNode);
+                            
+                            oscillator.type = 'sine';
+                            oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+                            
+                            noteGain.gain.setValueAtTime(0, audioContext.currentTime);
+                            noteGain.gain.exponentialRampToValueAtTime(0.3, audioContext.currentTime + 0.1);
+                            noteGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + noteDuration);
+                            
+                            oscillator.start(audioContext.currentTime);
+                            oscillator.stop(audioContext.currentTime + noteDuration);
+                        }, index * noteDuration * 1000);
+                    });
+                    
+                } catch (error) {
+                    console.error('无法播放游戏失败音效:', error);
                 }
             }
             
@@ -7239,6 +7423,9 @@
                 setTimeout(() => {
                     if (confirm(`游戏结束！得分: ${score}\n是否保存到排行榜？`)) {
                         if (leaderboardSystem) {
+                            // 直接保存当前得分
+                            leaderboardSystem.saveCurrentScore();
+                            // 然后打开排行榜
                             leaderboardSystem.openLeaderboard();
                             // 自动切换到当前游戏标签页
                             leaderboardSystem.switchTab(gameType);
