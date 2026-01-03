@@ -37,9 +37,23 @@
         async function saveScoreRemote(gameType, record) {
             if (!firebaseEnabled || !db) return false;
             try {
-                await db.collection('scores_' + gameType).add(Object.assign({}, record, {
-                    date: firebase.firestore.Timestamp.fromDate(new Date(record.date))
-                }));
+                console.log(`开始保存${gameType}游戏的记录到Firebase: ${JSON.stringify(record)}`);
+                
+                // 确保record对象包含必要的字段
+                const validRecord = {
+                    name: record.name || '未知用户',
+                    score: record.score || 0,
+                    date: firebase.firestore.Timestamp.fromDate(new Date(record.date || new Date())),
+                    level: record.level || 1,
+                    stage: record.stage || 1,
+                    mode: record.mode || 'endless'
+                };
+                
+                const collectionName = 'scores_' + gameType;
+                console.log(`Firebase集合名称: ${collectionName}`);
+                
+                await db.collection(collectionName).add(validRecord);
+                console.log('记录保存成功');
                 return true;
             } catch (e) {
                 console.error('saveScoreRemote 错误', e);
