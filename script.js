@@ -20,6 +20,13 @@
                     db = firebase.firestore();
                     firebaseEnabled = true;
                     console.log('Firebase 已初始化（排行榜远程存储）');
+                    // 测试Firebase连接
+                    db.collection('scores_snake').limit(1).get()
+                        .then(() => console.log('Firebase连接成功'))
+                        .catch(err => {
+                            console.warn('Firebase连接测试失败：', err);
+                            // 即使测试失败，也保留firebaseEnabled为true，让实际请求时处理错误
+                        });
                 }
             } catch (e) {
                 console.warn('Firebase 初始化失败：', e);
@@ -43,18 +50,33 @@
         async function loadLeaderboardRemote(gameType, limit = 50) {
             if (!firebaseEnabled || !db) return [];
             try {
-                const snap = await db.collection('scores_' + gameType).orderBy('score', 'desc').limit(limit).get();
-                return snap.docs.map(d => {
+                console.log(`开始从Firebase加载${gameType}游戏的排行榜数据`);
+                const collectionName = 'scores_' + gameType;
+                console.log(`Firebase集合名称: ${collectionName}`);
+                
+                // 直接获取所有用户的记录，不进行任何过滤
+                const snap = await db.collection(collectionName)
+                    .orderBy('score', 'desc')
+                    .limit(limit)
+                    .get();
+                
+                console.log(`Firebase查询结果: ${snap.size}条记录`);
+                
+                const result = snap.docs.map(d => {
                     const data = d.data();
+                    console.log(`处理记录: ${JSON.stringify(data)}`);
                     return {
                         id: d.id,
-                        name: data.name,
-                        score: data.score,
-                        level: data.level,
-                        stage: data.stage,
-                        date: data.date && data.date.toDate ? data.date.toDate().toISOString() : data.date
+                        name: data.name || '未知用户',
+                        score: data.score || 0,
+                        level: data.level || 1,
+                        stage: data.stage || 1,
+                        date: data.date && data.date.toDate ? data.date.toDate().toISOString() : new Date().toISOString()
                     };
                 });
+                
+                console.log(`返回的排行榜数据: ${JSON.stringify(result)}`);
+                return result;
             } catch (e) {
                 console.error('loadLeaderboardRemote 错误', e);
                 return [];
