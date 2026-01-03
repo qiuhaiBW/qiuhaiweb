@@ -1,4 +1,6 @@
 
+
+
         // Firebase 配置
         const firebaseConfig = {
             apiKey: "AIzaSyDk3ZOVIX-D1KoE1EoW0veXYnr_P4115FU",
@@ -5142,5 +5144,416 @@
                     }
                     }
             });
+        });
+    
+
+        // 2048游戏实现
+        class TwentyFortyEightGame {
+            constructor() {
+                this.board = [];
+                this.score = 0;
+                this.best = parseInt(localStorage.getItem('2048Best')) || 0;
+                this.history = [];
+                this.isGameOver = false;
+                this.isGameWon = false;
+                
+                this.init();
+            }
+
+            init() {
+                // 初始化棋盘
+                this.board = Array(4).fill().map(() => Array(4).fill(0));
+                this.score = 0;
+                this.history = [];
+                this.isGameOver = false;
+                this.isGameWon = false;
+                
+                // 添加两个初始方块
+                this.addRandomTile();
+                this.addRandomTile();
+                
+                // 更新显示
+                this.updateDisplay();
+            }
+
+            addRandomTile() {
+                // 找到所有空白格子
+                const emptyCells = [];
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (this.board[i][j] === 0) {
+                            emptyCells.push({ x: i, y: j });
+                        }
+                    }
+                }
+
+                if (emptyCells.length > 0) {
+                    // 随机选择一个空白格子
+                    const { x, y } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                    // 90%概率生成2，10%概率生成4
+                    this.board[x][y] = Math.random() < 0.9 ? 2 : 4;
+                }
+            }
+
+            move(direction) {
+                if (this.isGameOver || this.isGameWon) return false;
+                
+                // 保存当前状态到历史记录
+                this.saveState();
+                
+                let moved = false;
+                
+                switch (direction) {
+                    case 'up':
+                        moved = this.moveUp();
+                        break;
+                    case 'down':
+                        moved = this.moveDown();
+                        break;
+                    case 'left':
+                        moved = this.moveLeft();
+                        break;
+                    case 'right':
+                        moved = this.moveRight();
+                        break;
+                }
+                
+                if (moved) {
+                    // 添加新方块
+                    this.addRandomTile();
+                    // 更新显示
+                    this.updateDisplay();
+                    // 检查游戏结束
+                    this.checkGameOver();
+                    // 检查游戏胜利
+                    this.checkGameWon();
+                }
+                
+                return moved;
+            }
+
+            moveLeft() {
+                let moved = false;
+                
+                for (let i = 0; i < 4; i++) {
+                    const row = this.board[i];
+                    const newRow = this.mergeRow(row);
+                    
+                    if (!this.arraysEqual(row, newRow)) {
+                        this.board[i] = newRow;
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            moveRight() {
+                let moved = false;
+                
+                for (let i = 0; i < 4; i++) {
+                    const row = this.board[i].reverse();
+                    const newRow = this.mergeRow(row).reverse();
+                    row.reverse(); // 恢复原数组
+                    
+                    if (!this.arraysEqual(this.board[i], newRow)) {
+                        this.board[i] = newRow;
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            moveUp() {
+                let moved = false;
+                
+                for (let j = 0; j < 4; j++) {
+                    // 提取列
+                    const column = [];
+                    for (let i = 0; i < 4; i++) {
+                        column.push(this.board[i][j]);
+                    }
+                    
+                    const newColumn = this.mergeRow(column);
+                    
+                    if (!this.arraysEqual(column, newColumn)) {
+                        // 放回列
+                        for (let i = 0; i < 4; i++) {
+                            this.board[i][j] = newColumn[i];
+                        }
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            moveDown() {
+                let moved = false;
+                
+                for (let j = 0; j < 4; j++) {
+                    // 提取列
+                    const column = [];
+                    for (let i = 0; i < 4; i++) {
+                        column.push(this.board[i][j]);
+                    }
+                    
+                    const reversedColumn = column.reverse();
+                    const newReversedColumn = this.mergeRow(reversedColumn);
+                    const newColumn = newReversedColumn.reverse();
+                    
+                    if (!this.arraysEqual(column, newColumn)) {
+                        // 放回列
+                        for (let i = 0; i < 4; i++) {
+                            this.board[i][j] = newColumn[i];
+                        }
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            mergeRow(row) {
+                // 移除空格
+                const filtered = row.filter(cell => cell !== 0);
+                
+                // 合并相同数字
+                for (let i = 0; i < filtered.length - 1; i++) {
+                    if (filtered[i] === filtered[i + 1]) {
+                        filtered[i] *= 2;
+                        this.score += filtered[i];
+                        filtered.splice(i + 1, 1);
+                    }
+                }
+                
+                // 补零
+                while (filtered.length < 4) {
+                    filtered.push(0);
+                }
+                
+                return filtered;
+            }
+
+            arraysEqual(a, b) {
+                if (a.length !== b.length) return false;
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) return false;
+                }
+                return true;
+            }
+
+            saveState() {
+                this.history.push({
+                    board: this.board.map(row => [...row]),
+                    score: this.score
+                });
+                
+                // 限制历史记录长度
+                if (this.history.length > 10) {
+                    this.history.shift();
+                }
+            }
+
+            undo() {
+                if (this.history.length > 0) {
+                    const state = this.history.pop();
+                    this.board = state.board.map(row => [...row]);
+                    this.score = state.score;
+                    this.isGameOver = false;
+                    this.isGameWon = false;
+                    this.updateDisplay();
+                }
+            }
+
+            checkGameWon() {
+                if (this.isGameWon) return;
+                
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (this.board[i][j] === 2048) {
+                            this.isGameWon = true;
+                            this.showGameWon();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            checkGameOver() {
+                if (this.isGameOver) return;
+                
+                // 检查是否还有空白格子
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (this.board[i][j] === 0) {
+                            return;
+                        }
+                    }
+                }
+                
+                // 检查是否还能合并
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const current = this.board[i][j];
+                        
+                        // 检查右侧
+                        if (j < 3 && current === this.board[i][j + 1]) {
+                            return;
+                        }
+                        
+                        // 检查下方
+                        if (i < 3 && current === this.board[i + 1][j]) {
+                            return;
+                        }
+                    }
+                }
+                
+                // 游戏结束
+                this.isGameOver = true;
+                this.showGameOver();
+            }
+
+            showGameWon() {
+                // 设置当前分数到排行榜系统
+                if (window.leaderboardSystem) {
+                    window.leaderboardSystem.setCurrentScore('twentyFortyEight', this.score);
+                }
+                // 使用全局的Game Over效果
+                createGameOverEffect('twentyFortyEight', this.score);
+            }
+
+            showGameOver() {
+                // 设置当前分数到排行榜系统
+                if (window.leaderboardSystem) {
+                    window.leaderboardSystem.setCurrentScore('twentyFortyEight', this.score);
+                }
+                // 使用全局的Game Over效果
+                createGameOverEffect('twentyFortyEight', this.score);
+            }
+
+            updateDisplay() {
+                // 更新分数
+                document.getElementById('twentyFortyEightScore').textContent = this.score;
+                
+                // 更新最高分
+                if (this.score > this.best) {
+                    this.best = this.score;
+                    localStorage.setItem('2048Best', this.best);
+                }
+                document.getElementById('twentyFortyEightBest').textContent = this.best;
+                
+                // 更新棋盘
+                const boardElement = document.getElementById('twentyFortyEightBoard');
+                boardElement.innerHTML = '';
+                
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = `game-cell ${this.board[i][j] !== 0 ? 'game-cell-' + this.board[i][j] : ''}`;
+                        cell.textContent = this.board[i][j] || '';
+                        boardElement.appendChild(cell);
+                    }
+                }
+                
+                // 移除已存在的游戏结束效果
+                const existingOverlay = document.querySelector('.game-over-overlay');
+                if (existingOverlay) {
+                    existingOverlay.remove();
+                }
+            }
+
+            newGame() {
+                this.init();
+            }
+
+            stop() {
+                // 2048游戏不需要停止循环
+            }
+        }
+
+        // 初始化2048游戏
+        let twentyFortyEightGame;
+        
+        // 添加键盘事件监听器
+        function enable2048KeyListeners() {
+            document.addEventListener('keydown', handle2048KeyDown);
+        }
+        
+        function handle2048KeyDown(e) {
+            if (!twentyFortyEightGame) return;
+            
+            let moved = false;
+            const key = e.key.toLowerCase();
+            switch (key) {
+                case 'arrowup':
+                case 'w':
+                    moved = twentyFortyEightGame.move('up');
+                    break;
+                case 'arrowdown':
+                case 's':
+                    moved = twentyFortyEightGame.move('down');
+                    break;
+                case 'arrowleft':
+                case 'a':
+                    moved = twentyFortyEightGame.move('left');
+                    break;
+                case 'arrowright':
+                case 'd':
+                    moved = twentyFortyEightGame.move('right');
+                    break;
+            }
+            
+            if (moved) {
+                e.preventDefault();
+            }
+        }
+        
+        // 游戏按钮事件
+        document.getElementById('twentyFortyEightGameBtn').addEventListener('click', () => {
+            document.getElementById('twentyFortyEightGameContainer').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            if (!twentyFortyEightGame) {
+                twentyFortyEightGame = new TwentyFortyEightGame();
+            } else {
+                twentyFortyEightGame.newGame();
+            }
+            
+            enable2048KeyListeners();
+        });
+        
+        // 关闭游戏按钮事件
+        document.getElementById('closeTwentyFortyEightGame').addEventListener('click', () => {
+            document.getElementById('twentyFortyEightGameContainer').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // 移除键盘事件监听器
+            document.removeEventListener('keydown', handle2048KeyDown);
+        });
+        
+        // 新游戏按钮事件
+        document.getElementById('twentyFortyEightNewGame').addEventListener('click', () => {
+            if (twentyFortyEightGame) {
+                twentyFortyEightGame.newGame();
+            }
+        });
+        
+        // 撤销按钮事件
+        document.getElementById('twentyFortyEightUndo').addEventListener('click', () => {
+            if (twentyFortyEightGame) {
+                twentyFortyEightGame.undo();
+            }
+        });
+        
+        // ESC键关闭游戏
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const container = document.getElementById('twentyFortyEightGameContainer');
+                if (container.style.display === 'flex') {
+                    document.getElementById('closeTwentyFortyEightGame').click();
+                }
+            }
         });
     
