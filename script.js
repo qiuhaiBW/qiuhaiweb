@@ -576,14 +576,6 @@
             container.style.opacity = '1';
             
             // 添加点击重新开始事件
-            const canvas = gameType === 'snake' ? document.getElementById('snakeCanvas') : 
-                          gameType === 'tetris' ? document.getElementById('tetrisCanvas') : 
-                          gameType === 'danmaku' ? document.getElementById('danmakuCanvas') :
-                          document.getElementById('twentyFortyEightBoard');
-            const game = gameType === 'snake' ? (window.snakeGame || undefined) : 
-                         gameType === 'tetris' ? (window.tetrisGame || undefined) : 
-                         (window.danmakuGame || undefined);
-            
             const restartHandler = function() {
                 const liveGame = gameType === 'snake' ? window.snakeGame :
                                  gameType === 'tetris' ? window.tetrisGame :
@@ -609,12 +601,12 @@
                     setTimeout(() => {
                         container.innerHTML = '';
                     }, 500);
-                    canvas.removeEventListener('click', restartHandler);
+                    container.removeEventListener('click', restartHandler);
                 }
             };
             
             setTimeout(() => {
-                canvas.addEventListener('click', restartHandler);
+                container.addEventListener('click', restartHandler);
             }, 500);
         }
         
