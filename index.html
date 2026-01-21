@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>秋海BW大人</title>
+    <meta name="msapplication-TileColor" content="#000000">
+    <meta name="theme-color" content="#000000">
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" type='image/svg+xml'>
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" sizes="32x32" type='image/svg+xml'>
+    <link rel="icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" sizes="16x16" type='image/svg+xml'>
+    <link rel="shortcut icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E" type='image/svg+xml'>
+    <link rel="apple-touch-icon" href="data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff0064'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- 星空背景 -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- 像素飞机 -->
+    <div class="pixel-plane plane-1"></div>
+    <div class="pixel-plane plane-2"></div>
+    <div class="pixel-plane plane-3"></div>
+    <div class="pixel-plane plane-4"></div>
+    
+    <!-- 控制器装饰（左侧为游戏机，右侧为 ABXY 键） -->
+    <div class="earth-container">
+        <div class="earth earth-left">
+            <div class="controller controller-left" aria-hidden="true">
+                <div class="console">
+                    <div class="console-screen"></div>
+                    <div class="console-details">
+                        <div class="console-vent"></div>
+                        <div class="console-vent"></div>
+                        <div class="console-logo">GAME</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="earth earth-right">
+            <div class="controller controller-right" aria-hidden="true">
+                <div class="game-keys" aria-hidden="true">
+                    <div class="gkey gkey-a">A</div>
+                    <div class="gkey gkey-b">B</div>
+                    <div class="gkey gkey-x">X</div>
+                    <div class="gkey gkey-y">Y</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 优雅边框 -->
+    <div class="elegant-border">
+        <div class="border-line border-top"></div>
+        <div class="border-line border-bottom"></div>
+        <div class="border-line border-left"></div>
+        <div class="border-line border-right"></div>
+        
+        <!-- 角标装饰 -->
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+    </div>
+    
+    <!-- 音效提示 -->
+    <div class="sound-hint" id="soundHint">
+        🔊 点击任意位置播放音效
+    </div>
+    
+    <!-- 主要内容 -->
+    <div class="container">
+        <!-- 围绕标题飞行的小飞机容器 -->
+        <div style="position: relative; display: inline-block;">
+            <h1 class="main-title">
+                <span class="heart">❤</span>秋海BW大人<span class="heart">❤</span>
+            </h1>
+            <!-- 小飞机元素 -->
+            <div class="small-plane small-plane-1"></div>
+            <div class="small-plane small-plane-2"></div>
+            <div class="small-plane small-plane-3"></div>
+            <div class="small-plane small-plane-4"></div>
+            <div class="small-plane small-plane-5"></div>
+        </div>
+        
+        <div class="decoration">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+        
+        <p class="subtitle">
+            在此向秋海BW大人致以最崇高的敬意！<br>
+            愿您的光辉如星辰般永恒闪耀，指引我们前行。<br>
+            *海门*<br>
+            PC端体验更佳！
+        </p>
+        
+        <!-- 游戏选择按钮 -->
+        <div class="game-buttons">
+            <button class="game-btn" id="snakeGameBtn">贪吃蛇游戏</button>
+            <button class="game-btn" id="tetrisGameBtn">俄罗斯方块</button>
+            <button class="game-btn" id="twentyFortyEightGameBtn">2048游戏</button>
+            <button class="game-btn" id="danmakuClassicGameBtn">弹幕射击-经典模式</button>
+            <button class="game-btn" id="danmakuEndlessGameBtn">弹幕射击-无尽模式</button>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <div class="footer">
+        <p>特别致敬页面 | 设计于2025年12月28日</p>
+    </div>
+        <!-- 贪吃蛇游戏容器 -->
+    <div class="game-container" id="snakeGameContainer">
+        <div class="game-header">
+            <h2 class="game-title">贪吃蛇</h2>
+            <button class="close-game" id="closeSnakeGame">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <canvas id="snakeCanvas" class="game-canvas" width="800" height="600"></canvas>
+            <div class="game-over-effect" id="snakeGameOverEffect"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="snakeScore">得分: 0</div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="snakeUp">↑</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="snakeLeft">←</button>
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="snakeRight">→</button>
+                </div>
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="snakeDown">↓</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <button class="control-btn pause-btn" id="snakePause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 贪吃蛇控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">向上移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">向下移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">向左移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">向右移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            使用方向键或WASD控制蛇移动，吃到食物增加长度和得分，撞到墙壁或自己身体游戏结束。
+        </div>
+    </div>
+    
+    <!-- 俄罗斯方块游戏容器 -->
+    <div class="game-container" id="tetrisGameContainer">
+        <div class="game-header">
+            <h2 class="game-title">俄罗斯方块</h2>
+            <button class="close-game" id="closeTetrisGame">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <canvas id="tetrisCanvas" class="game-canvas" width="300" height="600"></canvas>
+            <div class="game-over-effect" id="tetrisGameOverEffect"></div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="tetrisScore">得分: 0 | 等级: 1</div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <button class="control-btn" id="tetrisRotateLeft">Q/↶</button>
+                    <div style="width: 10px;"></div>
+                    <button class="control-btn" id="tetrisRotate">↻</button>
+                    <div style="width: 10px;"></div>
+                    <button class="control-btn" id="tetrisRotateRight">E/↷</button>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="tetrisLeft">←</button>
+                    <div style="width: 10px;"></div>
+                    <button class="control-btn" id="tetrisDown">↓</button>
+                    <div style="width: 10px;"></div>
+                    <button class="control-btn" id="tetrisRight">→</button>
+                </div>
+                <div class="control-row">
+                    <div style="width: 80px;"></div>
+                    <button class="control-btn" id="tetrisHardDrop">硬降</button>
+                    <div style="width: 80px;"></div>
+                </div>
+                <button class="control-btn pause-btn" id="tetrisPause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 俄罗斯方块控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">左移</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">右移</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">加速下落</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">旋转方块</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Q / Z</div>
+                    <div class="function">逆时针旋转</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">E / X</div>
+                    <div class="function">顺时针旋转</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">空格键</div>
+                    <div class="function">硬降落</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="game-instructions">
+            使用方向键或WASD控制方块移动和旋转，填满一行即可消除并得分，方块堆到顶部游戏结束。
+        </div>
+    </div>
+    
+    <!-- 弹幕游戏容器 -->
+    <div class="game-container" id="danmakuGameContainer">
+        <div class="game-header">
+            <h2 class="game-title">弹幕射击</h2>
+            <button class="close-game" id="closeDanmakuGame">×</button>
+        </div>
+        
+        <!-- 游戏模式选择界面 -->
+        <div class="game-mode-select" id="danmakuGameModeSelect">
+            <h3>选择游戏模式</h3>
+            <div class="mode-buttons">
+                <button class="mode-btn" id="danmakuEndlessMode">无尽模式</button>
+                <button class="mode-btn" id="danmakuClassicMode">经典模式</button>
+            </div>
+        </div>
+        
+        <div class="game-canvas-container" id="danmakuGameCanvasContainer" style="display: none;">
+            <!-- BOSS血条 -->
+            <div class="boss-health-bar" id="bossHealthBar">
+                <div class="boss-health-fill" id="bossHealthFill"></div>
+                <div class="boss-health-text" id="bossHealthText">BOSS: 100%</div>
+            </div>
+            <canvas id="danmakuCanvas" class="game-canvas" width="800" height="600"></canvas>
+            <div class="game-over-effect" id="danmakuGameOverEffect"></div>
+            <!-- 任务完成界面 -->
+            <div class="mission-complete" id="danmakuMissionComplete" style="display: none;">
+                <div class="mission-complete-text">MISSION COMPLETE</div>
+                <div class="thumbs-up">👍</div>
+                <div class="next-level-text">准备进入下一关...</div>
+            </div>
+            <!-- 全部关卡完成界面 -->
+            <div class="all-levels-complete" id="danmakuAllLevelsComplete" style="display: none;">
+                <div class="all-levels-text">恭喜通关！</div>
+                <div class="thumbs-up-big">👍</div>
+                <div class="final-score-text">最终得分: <span id="danmakuFinalScore"></span></div>
+            </div>
+        </div>
+        
+        <div class="game-controls">
+            <div class="score-display" id="danmakuScore">得分: 0 | 等级: 1</div>
+            <div class="stats-display">
+                <div class="stat" id="danmakuLives">生命: 3</div>
+                <div class="stat" id="danmakuPower">火力: 1</div>
+                <div class="stat" id="danmakuBombs">炸弹: 3</div>
+                <div class="stat" id="danmakuStage">关卡: 1</div>
+            </div>
+            
+            <div class="control-buttons">
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="danmakuUp">↑</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn" id="danmakuLeft">←</button>
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="danmakuRight">→</button>
+                </div>
+                <div class="control-row">
+                    <div style="width: 60px;"></div>
+                    <button class="control-btn" id="danmakuDown">↓</button>
+                    <div style="width: 60px;"></div>
+                </div>
+                <div class="control-row">
+                    <button class="control-btn special-btn" id="danmakuShoot">射击</button>
+                    <button class="control-btn special-btn" id="danmakuBomb">炸弹</button>
+                    <button class="control-btn special-btn" id="danmakuSlow">低速</button>
+                </div>
+                <button class="control-btn pause-btn" id="danmakuPause">暂停/继续</button>
+            </div>
+        </div>
+        
+        <!-- 弹幕游戏控制说明 -->
+        <div class="control-instructions">
+            <div class="control-title">控制说明</div>
+            <div class="control-grid">
+                <div class="control-item">
+                    <div class="key">↑ / W</div>
+                    <div class="function">向上移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">↓ / S</div>
+                    <div class="function">向下移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">← / A</div>
+                    <div class="function">向左移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">→ / D</div>
+                    <div class="function">向右移动</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Z / 空格</div>
+                    <div class="function">射击</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">X</div>
+                    <div class="function">炸弹</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">Shift</div>
+                    <div class="function">低速</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">P</div>
+                    <div class="function">暂停/继续</div>
+                </div>
+                <div class="control-item">
+                    <div class="key">R</div>
+                    <div class="function">重新开始</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 排行榜入口按钮 -->
+    <button class="leaderboard-btn" id="openLeaderboardBtn">🏆 排行榜</button>
+    
+    <!-- 排行榜容器 -->
+    <div class="leaderboard-container" id="leaderboardContainer">
+        <div class="leaderboard-header">
+            <h2 class="leaderboard-title">🎮 游戏排行榜 🏆</h2>
+            <button class="close-leaderboard" id="closeLeaderboard">×</button>
+        </div>
+        
+        <div class="leaderboard-tabs">
+            <button class="leaderboard-tab active" data-game="snake">贪吃蛇</button>
+            <button class="leaderboard-tab" data-game="tetris">俄罗斯方块</button>
+            <button class="leaderboard-tab" data-game="danmaku">弹幕射击</button>
+            <button class="leaderboard-tab" data-game="twentyFortyEight">2048</button>
+            <button class="leaderboard-tab" data-game="all">总排行榜</button>
+        </div>
+        
+        <div class="leaderboard-content">
+            <!-- 贪吃蛇排行榜 -->
+            <div class="leaderboard-table active" id="snakeLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="snakeLeaderboardBody">
+                    <!-- 排行榜数据将动态加载 -->
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 俄罗斯方块排行榜 -->
+            <div class="leaderboard-table" id="tetrisLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="level-header">等级</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="tetrisLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 弹幕射击经典模式排行榜 -->
+            <div class="leaderboard-table" id="danmaku_classicLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="stage-header">关卡</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="danmaku_classicLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 弹幕射击无尽模式排行榜 -->
+            <div class="leaderboard-table" id="danmaku_endlessLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="stage-header">关卡</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="danmaku_endlessLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 弹幕射击排行榜（兼容旧版数据） -->
+            <div class="leaderboard-table" id="danmakuLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="stage-header">关卡</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="danmakuLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 2048排行榜 -->
+            <div class="leaderboard-table" id="twentyFortyEightLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="score-header">得分</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="twentyFortyEightLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+            
+            <!-- 总排行榜 -->
+            <div class="leaderboard-table" id="allLeaderboard">
+                <div class="table-header">
+                    <div class="rank-header">排名</div>
+                    <div class="name-header">玩家名称</div>
+                    <div class="game-header">游戏</div>
+                    <div class="score-header">得分</div>
+                    <div class="date-header">日期</div>
+                    <div class="actions-header">操作</div>
+                </div>
+                <div class="table-body" id="allLeaderboardBody">
+                    <div class="no-records">暂无记录，快来成为第一名吧！</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="leaderboard-controls">
+            <div class="player-input">
+                <input type="text" id="playerNameInput" placeholder="输入你的名字（默认：玩家）" maxlength="12">
+                <button id="saveScoreBtn" class="save-btn">保存当前得分</button>
+            </div>
+            <div class="leaderboard-actions">
+                <button id="exportLeaderboardBtn" class="export-btn">导出排行榜</button>
+                <input type="file" id="importFileInput" accept=".json" style="display: none;">
+            </div>
+            <div class="leaderboard-stats">
+                <div class="stat-item">总记录数: <span id="totalRecords">0</span></div>
+                <div class="stat-item">今日新增: <span id="todayRecords">0</span></div>
+                <div class="stat-item">最高分: <span id="highestScore">0</span></div>
+            </div>
+        </div>
+    </div>
+        <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+        <script src="script.js"></script>
+
+    <!-- 2048游戏容器 -->
+    <div class="game-container" id="twentyFortyEightGameContainer">
+        <div class="game-header">
+            <h2 class="game-title">2048</h2>
+            <button class="close-game" id="closeTwentyFortyEightGame">×</button>
+        </div>
+        
+        <div class="game-canvas-container">
+            <div class="game-stats">
+                <div class="score-display">得分: <span id="twentyFortyEightScore">0</span></div>
+                <div class="best-display">最高分: <span id="twentyFortyEightBest">0</span></div>
+            </div>
+            <div class="game-board" id="twentyFortyEightBoard"></div>
+            <div class="game-controls">
+                <button class="control-btn" id="twentyFortyEightNewGame">新游戏</button>
+                <button class="control-btn" id="twentyFortyEightUndo">撤销</button>
+            </div>
+            <div class="game-instructions">
+                <p>使用方向键控制方块移动，相同数字的方块会合并，目标是得到2048！</p>
+            </div>
+            <div class="game-over-effect" id="twentyFortyEightGameOverEffect"></div>
+        </div>
+    </div>
+
+    <style>
+        /* 2048游戏样式 */
+        #twentyFortyEightBoard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(4, 1fr);
+            gap: 10px;
+            background-color: #bbada0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px auto;
+            width: 400px;
+            height: 400px;
+        }
+
+        .game-cell {
+            background-color: #cdc1b4;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #776e65;
+            transition: all 0.3s ease;
+        }
+
+        /* 不同数值方块的样式 */
+        .game-cell-2 {
+            background-color: #eee4da;
+            font-size: 32px;
+        }
+        .game-cell-4 {
+            background-color: #ede0c8;
+            font-size: 32px;
+        }
+        .game-cell-8 {
+            background-color: #f2b179;
+            color: white;
+            font-size: 32px;
+        }
+        .game-cell-16 {
+            background-color: #f59563;
+            color: white;
+            font-size: 32px;
+        }
+        .game-cell-32 {
+            background-color: #f67c5f;
+            color: white;
+            font-size: 32px;
+        }
+        .game-cell-64 {
+            background-color: #f65e3b;
+            color: white;
+            font-size: 28px;
+        }
+        .game-cell-128 {
+            background-color: #edcf72;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 0 10px rgba(237, 207, 114, 0.5);
+        }
+        .game-cell-256 {
+            background-color: #edcc61;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 0 15px rgba(237, 204, 97, 0.6);
+        }
+        .game-cell-512 {
+            background-color: #edc850;
+            color: white;
+            font-size: 28px;
+            box-shadow: 0 0 15px rgba(237, 200, 80, 0.7);
+        }
+        .game-cell-1024 {
+            background-color: #edc53f;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(237, 197, 63, 0.8);
+        }
+        .game-cell-2048 {
+            background-color: #edc22e;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 0 20px rgba(237, 194, 46, 1);
+        }
+
+        /* 游戏统计信息 */
+        .game-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .score-display, .best-display {
+            font-size: 1.5rem;
+            color: #00d9ff;
+            text-shadow: 0 0 10px rgba(0, 217, 255, 0.8);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 100, 0.3);
+        }
+
+        /* 游戏控制按钮 */
+        .game-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .control-btn {
+            background: rgba(74, 144, 226, 0.8);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            background: rgba(74, 144, 226, 1);
+            transform: translateY(-2px);
+        }
+
+        /* 游戏结束效果 */
+        .game-over-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .game-over-text {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff0064;
+            text-shadow: 0 0 20px rgba(255, 0, 100, 0.8);
+            margin-bottom: 20px;
+        }
+
+        .game-over-score {
+            font-size: 2rem;
+            color: #00d9ff;
+            margin-bottom: 30px;
+        }
+
+        .game-over-restart {
+            background: rgba(74, 144, 226, 0.8);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .game-over-restart:hover {
+            background: rgba(74, 144, 226, 1);
+            transform: translateY(-2px);
+        }
+    </style>
+
+    <script>
+        // 2048游戏实现
+        class TwentyFortyEightGame {
+            constructor() {
+                this.board = [];
+                this.score = 0;
+                this.best = parseInt(localStorage.getItem('2048Best')) || 0;
+                this.history = [];
+                this.isGameOver = false;
+                this.isGameWon = false;
+                
+                this.init();
+            }
+
+            init() {
+                // 初始化棋盘
+                this.board = Array(4).fill().map(() => Array(4).fill(0));
+                this.score = 0;
+                this.history = [];
+                this.isGameOver = false;
+                this.isGameWon = false;
+                
+                // 添加两个初始方块
+                this.addRandomTile();
+                this.addRandomTile();
+                
+                // 更新显示
+                this.updateDisplay();
+            }
+
+            addRandomTile() {
+                // 找到所有空白格子
+                const emptyCells = [];
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (this.board[i][j] === 0) {
+                            emptyCells.push({ x: i, y: j });
+                        }
+                    }
+                }
+
+                if (emptyCells.length > 0) {
+                    // 随机选择一个空白格子
+                    const { x, y } = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                    // 90%概率生成2，10%概率生成4
+                    this.board[x][y] = Math.random() < 0.9 ? 2 : 4;
+                }
+            }
+
+            move(direction) {
+                if (this.isGameOver || this.isGameWon) return false;
+                
+                // 保存当前状态到历史记录
+                this.saveState();
+                
+                let moved = false;
+                
+                switch (direction) {
+                    case 'up':
+                        moved = this.moveUp();
+                        break;
+                    case 'down':
+                        moved = this.moveDown();
+                        break;
+                    case 'left':
+                        moved = this.moveLeft();
+                        break;
+                    case 'right':
+                        moved = this.moveRight();
+                        break;
+                }
+                
+                if (moved) {
+                    // 添加新方块
+                    this.addRandomTile();
+                    // 更新显示
+                    this.updateDisplay();
+                    // 检查游戏结束
+                    this.checkGameOver();
+                    // 检查游戏胜利
+                    this.checkGameWon();
+                }
+                
+                return moved;
+            }
+
+            moveLeft() {
+                let moved = false;
+                
+                for (let i = 0; i < 4; i++) {
+                    const row = this.board[i];
+                    const newRow = this.mergeRow(row);
+                    
+                    if (!this.arraysEqual(row, newRow)) {
+                        this.board[i] = newRow;
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            moveRight() {
+                let moved = false;
+                
+                for (let i = 0; i < 4; i++) {
+                    const row = this.board[i].reverse();
+                    const newRow = this.mergeRow(row).reverse();
+                    row.reverse(); // 恢复原数组
+                    
+                    if (!this.arraysEqual(this.board[i], newRow)) {
+                        this.board[i] = newRow;
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            moveUp() {
+                let moved = false;
+                
+                for (let j = 0; j < 4; j++) {
+                    // 提取列
+                    const column = [];
+                    for (let i = 0; i < 4; i++) {
+                        column.push(this.board[i][j]);
+                    }
+                    
+                    const newColumn = this.mergeRow(column);
+                    
+                    if (!this.arraysEqual(column, newColumn)) {
+                        // 放回列
+                        for (let i = 0; i < 4; i++) {
+                            this.board[i][j] = newColumn[i];
+                        }
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            moveDown() {
+                let moved = false;
+                
+                for (let j = 0; j < 4; j++) {
+                    // 提取列
+                    const column = [];
+                    for (let i = 0; i < 4; i++) {
+                        column.push(this.board[i][j]);
+                    }
+                    
+                    const reversedColumn = column.reverse();
+                    const newReversedColumn = this.mergeRow(reversedColumn);
+                    const newColumn = newReversedColumn.reverse();
+                    
+                    if (!this.arraysEqual(column, newColumn)) {
+                        // 放回列
+                        for (let i = 0; i < 4; i++) {
+                            this.board[i][j] = newColumn[i];
+                        }
+                        moved = true;
+                    }
+                }
+                
+                return moved;
+            }
+
+            mergeRow(row) {
+                // 移除空格
+                const filtered = row.filter(cell => cell !== 0);
+                
+                // 合并相同数字
+                for (let i = 0; i < filtered.length - 1; i++) {
+                    if (filtered[i] === filtered[i + 1]) {
+                        filtered[i] *= 2;
+                        this.score += filtered[i];
+                        filtered.splice(i + 1, 1);
+                    }
+                }
+                
+                // 补零
+                while (filtered.length < 4) {
+                    filtered.push(0);
+                }
+                
+                return filtered;
+            }
+
+            arraysEqual(a, b) {
+                if (a.length !== b.length) return false;
+                for (let i = 0; i < a.length; i++) {
+                    if (a[i] !== b[i]) return false;
+                }
+                return true;
+            }
+
+            saveState() {
+                this.history.push({
+                    board: this.board.map(row => [...row]),
+                    score: this.score
+                });
+                
+                // 限制历史记录长度
+                if (this.history.length > 10) {
+                    this.history.shift();
+                }
+            }
+
+            undo() {
+                if (this.history.length > 0) {
+                    const state = this.history.pop();
+                    this.board = state.board.map(row => [...row]);
+                    this.score = state.score;
+                    this.isGameOver = false;
+                    this.isGameWon = false;
+                    this.updateDisplay();
+                }
+            }
+
+            checkGameWon() {
+                if (this.isGameWon) return;
+                
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (this.board[i][j] === 2048) {
+                            this.isGameWon = true;
+                            this.showGameWon();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            checkGameOver() {
+                if (this.isGameOver) return;
+                
+                // 检查是否还有空白格子
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (this.board[i][j] === 0) {
+                            return;
+                        }
+                    }
+                }
+                
+                // 检查是否还能合并
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const current = this.board[i][j];
+                        
+                        // 检查右侧
+                        if (j < 3 && current === this.board[i][j + 1]) {
+                            return;
+                        }
+                        
+                        // 检查下方
+                        if (i < 3 && current === this.board[i + 1][j]) {
+                            return;
+                        }
+                    }
+                }
+                
+                // 游戏结束
+                this.isGameOver = true;
+                this.showGameOver();
+            }
+
+            showGameWon() {
+                // 设置当前分数到排行榜系统
+                if (window.leaderboardSystem) {
+                    window.leaderboardSystem.setCurrentScore('twentyFortyEight', this.score);
+                }
+                // 使用全局的Game Over效果
+                createGameOverEffect('twentyFortyEight', this.score);
+            }
+
+            showGameOver() {
+                // 设置当前分数到排行榜系统
+                if (window.leaderboardSystem) {
+                    window.leaderboardSystem.setCurrentScore('twentyFortyEight', this.score);
+                }
+                // 使用全局的Game Over效果
+                createGameOverEffect('twentyFortyEight', this.score);
+            }
+
+            updateDisplay() {
+                // 更新分数
+                document.getElementById('twentyFortyEightScore').textContent = this.score;
+                
+                // 更新最高分
+                if (this.score > this.best) {
+                    this.best = this.score;
+                    localStorage.setItem('2048Best', this.best);
+                }
+                document.getElementById('twentyFortyEightBest').textContent = this.best;
+                
+                // 更新棋盘
+                const boardElement = document.getElementById('twentyFortyEightBoard');
+                boardElement.innerHTML = '';
+                
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const cell = document.createElement('div');
+                        cell.className = `game-cell ${this.board[i][j] !== 0 ? 'game-cell-' + this.board[i][j] : ''}`;
+                        cell.textContent = this.board[i][j] || '';
+                        boardElement.appendChild(cell);
+                    }
+                }
+                
+                // 移除已存在的游戏结束效果
+                const existingOverlay = document.querySelector('.game-over-overlay');
+                if (existingOverlay) {
+                    existingOverlay.remove();
+                }
+            }
+
+            newGame() {
+                this.init();
+            }
+
+            stop() {
+                // 2048游戏不需要停止循环
+            }
+        }
+
+        // 初始化2048游戏
+        let twentyFortyEightGame;
+        
+        // 添加键盘事件监听器
+        function enable2048KeyListeners() {
+            document.addEventListener('keydown', handle2048KeyDown);
+        }
+        
+        function handle2048KeyDown(e) {
+            if (!twentyFortyEightGame) return;
+            
+            let moved = false;
+            const key = e.key.toLowerCase();
+            switch (key) {
+                case 'arrowup':
+                case 'w':
+                    moved = twentyFortyEightGame.move('up');
+                    break;
+                case 'arrowdown':
+                case 's':
+                    moved = twentyFortyEightGame.move('down');
+                    break;
+                case 'arrowleft':
+                case 'a':
+                    moved = twentyFortyEightGame.move('left');
+                    break;
+                case 'arrowright':
+                case 'd':
+                    moved = twentyFortyEightGame.move('right');
+                    break;
+            }
+            
+            if (moved) {
+                e.preventDefault();
+            }
+        }
+        
+        // 游戏按钮事件
+        document.getElementById('twentyFortyEightGameBtn').addEventListener('click', () => {
+            document.getElementById('twentyFortyEightGameContainer').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            
+            if (!twentyFortyEightGame) {
+                twentyFortyEightGame = new TwentyFortyEightGame();
+            } else {
+                twentyFortyEightGame.newGame();
+            }
+            
+            enable2048KeyListeners();
+        });
+        
+        // 关闭游戏按钮事件
+        document.getElementById('closeTwentyFortyEightGame').addEventListener('click', () => {
+            document.getElementById('twentyFortyEightGameContainer').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // 移除键盘事件监听器
+            document.removeEventListener('keydown', handle2048KeyDown);
+        });
+        
+        // 新游戏按钮事件
+        document.getElementById('twentyFortyEightNewGame').addEventListener('click', () => {
+            if (twentyFortyEightGame) {
+                twentyFortyEightGame.newGame();
+            }
+        });
+        
+        // 撤销按钮事件
+        document.getElementById('twentyFortyEightUndo').addEventListener('click', () => {
+            if (twentyFortyEightGame) {
+                twentyFortyEightGame.undo();
+            }
+        });
+        
+        // ESC键关闭游戏
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const container = document.getElementById('twentyFortyEightGameContainer');
+                if (container.style.display === 'flex') {
+                    document.getElementById('closeTwentyFortyEightGame').click();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
